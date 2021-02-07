@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#712E19</color>
+    <color name="colorPrimaryDark">#712E19</color>
+    <color name="text">#FFFFFF</color>
+    <color name="dimtext">#65FFFFFF</color>
+    <color name="nothing">#00000000</color>
+    <color name="colorAccent">#59F3FF</color>
+    <color name="bg_color">#000000</color>
+    <color name="variableAccent">#9E4B31</color>
+    <color name="coloAccent2">#5B2EC5</color>
+</resources>

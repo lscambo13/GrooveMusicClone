@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:id="@+id/fragmentContainerMain"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/ContainerMiniPlayer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ContainerMiniPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+        android:background="@color/variableAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="-40dp">
+
+        <TextView
+            android:id="@+id/tvSongName"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/segoeuisl"
+            android:gravity="bottom"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:textColor="@color/text"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/verticalcentre"
+            app:layout_constraintStart_toStartOf="@+id/padding_left"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvArtistName"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:fontFamily="@font/segoeuib"
+            android:gravity="top"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:textColor="@color/text"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/verticalcentre"
+            app:layout_constraintStart_toStartOf="@+id/padding_left"
+            app:layout_constraintTop_toBottomOf="@+id/tvSongName" />
+
+        <ImageButton
+            android:id="@+id/btnPrev"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/prevbtn"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toTopOf="@+id/seekbar"
+            app:layout_constraintEnd_toStartOf="@+id/btnPlay"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageButton
+            android:id="@+id/btnPlay"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/playbtn"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toTopOf="@+id/seekbar"
+            app:layout_constraintEnd_toStartOf="@+id/btnNext"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnNext"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/nextbtn"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toTopOf="@+id/seekbar"
+            app:layout_constraintEnd_toStartOf="@+id/imgBtnThreeDot"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/imgBtnThreeDot"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/threedot"
+            app:layout_constraintBottom_toTopOf="@+id/seekbar"
+            app:layout_constraintEnd_toStartOf="@+id/padding_right"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTimeCode"
+            android:layout_width="35dp"
+            android:layout_height="25dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="00:00"
+            android:textColor="@color/text"
+            android:textSize="9sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/padding_left" />
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/seekbar"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:progressDrawable="@drawable/progress"
+            android:thumb="@drawable/thumb"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvTrackLength"
+            app:layout_constraintStart_toEndOf="@id/tvTimeCode" />
+
+        <TextView
+            android:id="@+id/tvTrackLength"
+            android:layout_width="35dp"
+            android:layout_height="25dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="00:00"
+            android:textColor="@color/text"
+            android:textSize="9sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/padding_right" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalcentre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".4" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/padding_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".025" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/padding_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".975" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
