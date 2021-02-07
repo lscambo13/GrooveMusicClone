@@ -31,10 +31,8 @@ class SongsFragment(context: Context) : Fragment(R.layout.fragment_songs) {
         rvSongs.adapter = adapter
         rvSongs.layoutManager = LinearLayoutManager(context)
 
+
         fragmentSongsPlaceholderText.setOnClickListener {
-
-            /////////////////////
-
             val collection =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     MediaStore.Audio.Media.getContentUri(
@@ -52,52 +50,60 @@ class SongsFragment(context: Context) : Fragment(R.layout.fragment_songs) {
             )
 
             // Show only videos that are at least 5 minutes in duration.
-            val selection = "${MediaStore.Audio.Media.DURATION} >= ?"
+            val selection = "${MediaStore.Video.Media.DURATION} >= ?"
             val selectionArgs = arrayOf(
-                TimeUnit.MILLISECONDS.convert(5, TimeUnit.MINUTES).toString()
+                TimeUnit.MILLISECONDS.convert(2, TimeUnit.MINUTES).toString()
             )
 
             // Display videos in alphabetical order based on their display name.
             val sortOrder = "${MediaStore.Audio.Media.DISPLAY_NAME} ASC"
 
-            var query = context?.contentResolver?.query(
+            var query = context!!.contentResolver.query(
                 collection,
                 projection,
                 selection,
                 selectionArgs,
                 sortOrder
             )
+
+            val artist = "xxx"
+            val duration = 0
+
             query?.use { cursor ->
                 // Cache column indices.
                 val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
                 val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
-                val durationColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
-                val artistColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ARTIST)
+                //val durationColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+                //val artistColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
+
+                //Toast.makeText(context, "queried", Toast.LENGTH_SHORT).show()
+                //songslist.add(Songs(null, "Song Name 2", "Artist Name 2", 0))
+                //adapter.notifyItemInserted(songslist.size - 1)
 
                 while (cursor.moveToNext()) {
+
+                    fragmentSongsPlaceholderText.visibility = View.GONE
+                    //Toast.makeText(context, "moveToNext", Toast.LENGTH_SHORT).show()
+
                     // Get values of columns for a given video.
                     val id = cursor.getLong(idColumn)
                     val song = cursor.getString(nameColumn)
-                    val duration = cursor.getInt(durationColumn)
-                    val artist = cursor.getString(artistColumn)
-
+                    //val duration = cursor.getInt(durationColumn)
+                    //var artist = cursor.getString(artistColumn)
                     val contentUri: Uri = ContentUris.withAppendedId(
-                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                         id
                     )
 
                     // Stores column values and the contentUri in a local object
                     // that represents the media file.
-                    songslist += Songs(contentUri, song, artist, duration)
+                    songslist.add(Songs(contentUri, song, artist, duration))
+
                 }
+                adapter.notifyDataSetChanged()
+                //adapter.notifyItemInserted(songslist.size - 1)
             }
-
-            ////////////////////
-
-            adapter.notifyItemInserted(songslist.size - 1)
-
         }
-
 
     }
 
