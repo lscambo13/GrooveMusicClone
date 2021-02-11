@@ -4,8 +4,7 @@
 
     <stroke
         android:width="2.5dp"
-        android:color="@color/dimtext" />
-
+        android:color="@color/progressEmpty" />
     <corners android:radius="10dp" />
 
 </shape>

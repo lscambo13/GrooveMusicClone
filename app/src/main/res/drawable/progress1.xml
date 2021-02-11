@@ -4,6 +4,6 @@
 
     <stroke
         android:width="2.5dp"
-        android:color="@color/coloAccent2" />
+        android:color="@color/progressFilled" />
     <corners android:radius="10dp" />
 </shape>

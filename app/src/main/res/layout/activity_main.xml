@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_color"
+    android:background="@color/bgColor"
     tools:context=".MainActivity">
 
     <FrameLayout
@@ -31,11 +31,10 @@
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_marginTop="5dp"
-            android:fontFamily="@font/segoeuisl"
             android:gravity="bottom"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
-            android:textColor="@color/text"
+            android:textColor="@color/textWhite"
             android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/verticalcentre"
             app:layout_constraintStart_toStartOf="@+id/padding_left"
@@ -45,11 +44,11 @@
             android:id="@+id/tvArtistName"
             android:layout_width="0dp"
             android:layout_height="20dp"
-            android:fontFamily="@font/segoeuib"
+            android:textColor="@color/textWhite"
             android:gravity="top"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
-            android:textColor="@color/text"
+            android:textStyle="bold"
             android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/verticalcentre"
             app:layout_constraintStart_toStartOf="@+id/padding_left"
@@ -76,6 +75,7 @@
             android:background="@drawable/playbtn"
             android:clickable="true"
             android:focusable="true"
+            android:contentDescription="Play"
             app:layout_constraintBottom_toTopOf="@+id/seekbar"
             app:layout_constraintEnd_toStartOf="@+id/btnNext"
             app:layout_constraintTop_toTopOf="parent" />
@@ -107,8 +107,8 @@
             android:layout_height="25dp"
             android:gravity="center"
             android:singleLine="true"
+            android:textColor="@color/textWhite"
             android:text="00:00"
-            android:textColor="@color/text"
             android:textSize="9sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/padding_left" />
@@ -129,8 +129,8 @@
             android:layout_height="25dp"
             android:gravity="center"
             android:singleLine="true"
+            android:textColor="@color/textWhite"
             android:text="00:00"
-            android:textColor="@color/text"
             android:textSize="9sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/padding_right" />

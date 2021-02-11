@@ -13,8 +13,8 @@
         <shape android:shape="oval">
             <stroke
                 android:width="4dp"
-                android:color="@android:color/transparent" />
-            <solid android:color="@color/text" />
+                android:color="@color/transparent" />
+            <solid android:color="@android:color/white" />
             <size
                 android:width="10dp"
                 android:height="10dp" />
@@ -24,7 +24,7 @@
         <shape android:shape="oval">
             <stroke
                 android:width="10dp"
-                android:color="@android:color/transparent" />
+                android:color="@color/transparent" />
             <solid android:color="@color/variableAccent" />
             <size
                 android:width="5dp"
