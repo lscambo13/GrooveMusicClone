@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto">
     <font
-        android:font="@font/segoeui"
-        android:fontStyle="normal"
-        android:fontWeight="400" />
+        app:font="@font/segoeui"
+        app:fontStyle="normal"
+        app:fontWeight="400" />
     <font
-        android:font="@font/seguisb"
-        android:fontStyle="normal"
-        android:fontWeight="600" />
+        app:font="@font/seguisb"
+        app:fontStyle="normal"
+        app:fontWeight="600" />
     <font
-        android:font="@font/segoeuib"
-        android:fontStyle="normal"
-        android:fontWeight="700" />
+        app:font="@font/segoeuib"
+        app:fontStyle="normal"
+        app:fontWeight="700" />
     <font
-        android:font="@font/segoeuiz"
-        android:fontStyle="italic"
-        android:fontWeight="700" />
+        app:font="@font/segoeuiz"
+        app:fontStyle="italic"
+        app:fontWeight="700" />
     <font
-        android:font="@font/segoeuisl"
-        android:fontStyle="normal"
-        android:fontWeight="300" />
+        app:font="@font/segoeuisl"
+        app:fontStyle="normal"
+        app:fontWeight="300" />
     <font
-        android:font="@font/segoeuii"
-        android:fontStyle="italic"
-        android:fontWeight="400" />
+        app:font="@font/segoeuii"
+        app:fontStyle="italic"
+        app:fontWeight="400" />
 </font-family>
