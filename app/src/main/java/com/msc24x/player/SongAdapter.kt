@@ -20,6 +20,7 @@ class SongAdapter(
         holder.itemView.apply {
             tvListSongName.text = songs[position].SongTitle
             tvListArtistName.text = songs[position].ArtistName
+            tvListDuration.text = songs[position].Duration.toString()
         }
     }
 

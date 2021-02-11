@@ -15,26 +15,35 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvListSongName"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="30dp"
-            android:textSize="16dp"
             android:gravity="bottom"
-            app:layout_constraintBottom_toTopOf="@+id/tvListArtistName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            android:singleLine="true"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/tvListDuration"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvListDuration"
+            android:layout_width="70dp"
+            android:layout_height="54dp"
+            android:gravity="center"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvListArtistName"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="24dp"
-            android:textSize="14dp"
             android:gravity="top"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:singleLine="true"
+            android:textFontWeight="300"
+            android:textSize="14dp"
+            app:layout_constraintEnd_toStartOf="@+id/tvListDuration"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvListSongName" />
 

@@ -6,7 +6,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_songs.*
@@ -23,7 +22,7 @@ class SongsFragment : Fragment(R.layout.fragment_songs) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragmentSongsPlaceholderText.text = "Hmm so empty here"
-        Toast.makeText(context, "haa", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context, "haa", Toast.LENGTH_SHORT).show()
 
         // show the song list in recycler view
         val adapter = SongAdapter(songsList)
@@ -44,6 +43,7 @@ class SongsFragment : Fragment(R.layout.fragment_songs) {
             MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.TITLE,
             MediaStore.Audio.Media.DISPLAY_NAME,
+            MediaStore.Audio.Media.ALBUM,
             MediaStore.Audio.Media.DURATION,
             MediaStore.Audio.Media.ALBUM_ARTIST
         )
@@ -69,6 +69,7 @@ class SongsFragment : Fragment(R.layout.fragment_songs) {
             // Cache column indices.
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
             val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
+            val albumColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)
             val fileNameColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
             val durationColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
             val artistColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ARTIST)
@@ -79,6 +80,10 @@ class SongsFragment : Fragment(R.layout.fragment_songs) {
                 var fileName = cursor.getString(fileNameColumn)
                 when (song) {
                     null -> song = fileName
+                }
+                var album = cursor.getString(albumColumn)
+                when (album) {
+                    null -> album = "Unknown"
                 }
                 val duration = cursor.getInt(durationColumn)
                 var artist = cursor.getString(artistColumn)
@@ -92,8 +97,11 @@ class SongsFragment : Fragment(R.layout.fragment_songs) {
 
                 // Stores column values and the contentUri in a local object
                 // that represents the media file.
-                songsList.add(Songs(contentUri, song, artist, duration))
+                var listArtist = artist + " • " + album
+                songsList.add(Songs(contentUri, song, listArtist, duration))
             }
+
+            songsList.removeAt(0)
             adapter.notifyDataSetChanged()
             //adapter.notifyItemInserted(songsList.size - 1)
         }
