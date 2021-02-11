@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val songsFragment = SongsFragment(this)
+        val songsFragment = SongsFragment()
         val artistsFragment = ArtistsFragment()
         val albumsFragment = AlbumsFragment()
 
