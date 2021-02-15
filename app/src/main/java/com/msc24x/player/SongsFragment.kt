@@ -16,19 +16,18 @@ class SongsFragment : Fragment(R.layout.fragment_songs) {
 
     // populate the songs list
     val songsList = mutableListOf(
-        Songs(null, "Song Name 1", "Artist Name 1", 0)
+        Songs(null, "Song Name 1", "Artist Name 1", "Album Name 1", 0)
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fragmentSongsPlaceholderText.text = "Hmm so empty here"
+        //fragmentSongsPlaceholderText.text = "Hmm so empty here"
         //Toast.makeText(context, "haa", Toast.LENGTH_SHORT).show()
 
         // show the song list in recycler view
         val adapter = SongAdapter(songsList)
         rvSongs.adapter = adapter
         rvSongs.layoutManager = LinearLayoutManager(context)
-
 
         val collection =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -97,8 +96,7 @@ class SongsFragment : Fragment(R.layout.fragment_songs) {
 
                 // Stores column values and the contentUri in a local object
                 // that represents the media file.
-                var listArtist = artist + " • " + album
-                songsList.add(Songs(contentUri, song, listArtist, duration))
+                songsList.add(Songs(contentUri, song, artist, album, duration))
             }
 
             songsList.removeAt(0)

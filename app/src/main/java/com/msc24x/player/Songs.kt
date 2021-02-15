@@ -10,6 +10,7 @@ data class Songs(
     val uri: Uri?,
     val SongTitle: String,
     val ArtistName: String,
+    val AlbumName: String,
     val Duration: Int
 )
 

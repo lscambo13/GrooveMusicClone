@@ -19,8 +19,9 @@ class SongAdapter(
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         holder.itemView.apply {
             tvListSongName.text = songs[position].SongTitle
-            tvListArtistName.text = songs[position].ArtistName
-            tvListDuration.text = songs[position].Duration.toString()
+            val listArtist = songs[position].ArtistName + " • " + songs[position].AlbumName
+            tvListArtistName.text = listArtist
+            tvListDuration.text = MainActivity().progressToString(songs[position].Duration)
         }
     }
 
