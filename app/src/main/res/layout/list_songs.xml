@@ -6,6 +6,8 @@
     android:paddingStart="0dp"
     android:paddingEnd="0dp">
 
+    <!-- TODO - Add swipe on list item for Play and Add options -->
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardSong"
         android:layout_width="match_parent"

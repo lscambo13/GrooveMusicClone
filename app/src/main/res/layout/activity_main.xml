@@ -7,6 +7,8 @@
     android:background="@color/bgColor"
     tools:context=".MainActivity">
 
+    <!-- TODO - Add app drawer -->
+
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolbar"
         android:layout_width="match_parent"
@@ -38,6 +40,10 @@
             android:layout_height="match_parent" />
 
     </FrameLayout>
+
+    <!-- TODO - Add ripple effects -->
+    <!-- TODO - Add acrylic effects  -->
+    <!-- TODO - Add ColorPalette api  -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ContainerMiniPlayer"

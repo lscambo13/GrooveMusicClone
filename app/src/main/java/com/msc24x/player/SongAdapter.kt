@@ -16,6 +16,8 @@ class SongAdapter(
         return SongViewHolder(view)
     }
 
+    // TODO -- IMPLEMENT ONCLICK EVENTS
+
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         holder.itemView.apply {
             tvListSongName.text = songs[position].SongTitle
