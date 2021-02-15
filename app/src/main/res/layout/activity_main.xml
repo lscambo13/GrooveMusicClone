@@ -7,6 +7,18 @@
     android:background="@color/bgColor"
     tools:context=".MainActivity">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu"
+        app:navigationContentDescription="@string/app_name"
+        app:navigationIcon="@drawable/ic_hamburger"
+        app:title="@string/app_name"
+        app:titleTextAppearance="@style/AppBar" />
+
     <FrameLayout
         android:id="@+id/fragmentContainerMain"
         android:layout_width="match_parent"
@@ -14,7 +26,16 @@
         app:layout_constraintBottom_toTopOf="@+id/ContainerMiniPlayer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/materialToolbar">
+
+        <com.google.android.material.tabs.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 
@@ -35,7 +56,6 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             android:textColor="@color/textWhite"
-            android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/verticalcentre"
             app:layout_constraintStart_toStartOf="@+id/padding_left"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,12 +64,11 @@
             android:id="@+id/tvArtistName"
             android:layout_width="0dp"
             android:layout_height="20dp"
-            android:textColor="@color/textWhite"
             android:gravity="top"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
+            android:textColor="@color/textWhite"
             android:textStyle="bold"
-            android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/verticalcentre"
             app:layout_constraintStart_toStartOf="@+id/padding_left"
             app:layout_constraintTop_toBottomOf="@+id/tvSongName" />
@@ -74,8 +93,8 @@
             android:layout_marginEnd="12dp"
             android:background="@drawable/playbtn"
             android:clickable="true"
-            android:focusable="true"
             android:contentDescription="Play"
+            android:focusable="true"
             app:layout_constraintBottom_toTopOf="@+id/seekbar"
             app:layout_constraintEnd_toStartOf="@+id/btnNext"
             app:layout_constraintTop_toTopOf="parent" />
@@ -106,10 +125,10 @@
             android:layout_width="35dp"
             android:layout_height="25dp"
             android:gravity="center"
+            android:paddingBottom="2sp"
             android:singleLine="true"
             android:textColor="@color/textWhite"
-            android:text="00:00"
-            android:textSize="9sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/padding_left" />
 
@@ -118,7 +137,7 @@
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:progressDrawable="@drawable/progress"
-            android:thumb="@drawable/thumb"
+            android:thumb="@drawable/thumb_progress"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tvTrackLength"
             app:layout_constraintStart_toEndOf="@id/tvTimeCode" />
@@ -128,10 +147,10 @@
             android:layout_width="35dp"
             android:layout_height="25dp"
             android:gravity="center"
+            android:paddingBottom="2sp"
             android:singleLine="true"
             android:textColor="@color/textWhite"
-            android:text="00:00"
-            android:textSize="9sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/padding_right" />
 

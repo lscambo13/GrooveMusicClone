@@ -2,52 +2,73 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="54dp">
+    android:layout_height="54dp"
+    android:paddingStart="0dp"
+    android:paddingEnd="0dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardSong"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?android:attr/selectableItemBackground"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:contextClickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/bgColor"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvListSongName"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:gravity="bottom"
-            android:singleLine="true"
-            android:textSize="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/tvListDuration"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvListDuration"
-            android:layout_width="70dp"
-            android:layout_height="54dp"
-            android:gravity="center"
-            android:singleLine="true"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvListArtistName"
-            android:layout_width="0dp"
-            android:layout_height="24dp"
-            android:gravity="top"
-            android:singleLine="true"
-            android:textFontWeight="300"
-            android:textSize="14dp"
-            app:layout_constraintEnd_toStartOf="@+id/tvListDuration"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvListSongName" />
+            app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvListSongName"
+                android:layout_width="0dp"
+                android:layout_height="27dp"
+                android:gravity="bottom"
+                android:paddingStart="16dp"
+                android:paddingEnd="0dp"
+                android:singleLine="true"
+                android:textStyle="normal"
+                app:fontFamily="@font/segoeui"
+                app:layout_constraintEnd_toStartOf="@+id/tvListDuration"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvListDuration"
+                android:layout_width="70dp"
+                android:layout_height="54dp"
+                android:fontFamily="@font/segoeuisl"
+                android:gravity="center"
+                android:singleLine="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvListArtistName"
+                android:layout_width="0dp"
+                android:layout_height="27dp"
+                android:gravity="top"
+                android:paddingStart="16dp"
+                android:paddingEnd="0dp"
+                android:singleLine="true"
+                app:fontFamily="@font/segoeuisl"
+                app:layout_constraintEnd_toStartOf="@+id/tvListDuration"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvListSongName" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

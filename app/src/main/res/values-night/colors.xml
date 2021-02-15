@@ -6,7 +6,7 @@
     <color name="textInverted">#000000</color>
     <color name="textWhite">#ffffff</color>
     <color name="textBlack">#000000</color>
-    <color name="progressEmpty">#474747</color>
+    <color name="progressEmpty">#80FFFFFF</color>
     <color name="progressFilled">#ffffff</color>
     <!-- color name="dimtext">#65FFFFFF</color -->
     <color name="transparent">#00000000</color>
