@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#171717</color>
+    <color name="colorPrimaryAlpha">#99171717</color>
     <color name="colorPrimaryDark">#171717</color>
     <color name="text">#FFFFFF</color>
     <color name="textInverted">#000000</color>
@@ -8,11 +9,10 @@
     <color name="textBlack">#000000</color>
     <color name="progressEmpty">#80FFFFFF</color>
     <color name="progressFilled">#ffffff</color>
-    <!-- color name="dimtext">#65FFFFFF</color -->
     <color name="transparent">#00000000</color>
     <color name="colorAccent">#59F3FF</color>
     <color name="bgColor">#000000</color>
-    <color name="variableAccent">#9E4B31</color>
+    <color name="variableAccent">#E69E4B31</color>
     <color name="highlightGrey">#333333</color>
     <color name="pressedGrey">#474747</color>
 </resources>
