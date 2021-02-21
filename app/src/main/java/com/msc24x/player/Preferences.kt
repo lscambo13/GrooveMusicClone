@@ -1,12 +1,12 @@
 package com.msc24x.player
 
 import android.content.Context
-import android.content.SharedPreferences
 
 class Preferences(context: Context) {
 
 //    Theme settings begin. --------------------------------
 
+/*
     // This is the save file for theme settings.
     val preferenceProgressFile = "ConfigProgress"
 
@@ -33,6 +33,8 @@ class Preferences(context: Context) {
         editor.putInt(preferenceIDProgress, progress)
         editor.apply()
     }
+
+*/
 
 //  Theme settings end. --------------------------------
 
