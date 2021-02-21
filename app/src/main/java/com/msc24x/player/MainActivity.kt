@@ -2,47 +2,32 @@ package com.msc24x.player
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.res.Configuration
-import android.graphics.Color
 import android.media.MediaPlayer
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.view.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.view.ViewGroup
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var player: MediaPlayer
     var safeThread = true
+    lateinit var viewModel: CommonViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // This makes the actionbar flat
-        // supportActionBar?.elevation = 0F
-
-        //makeStatusBarTransparent()
-        //ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.fragmentContainerMain)) { _, insets ->
-        //    findViewById<TextView>(R.id.materialToolbar).setMarginTop(insets.systemWindowInsetTop)
-        //    insets.consumeSystemWindowInsets()
-        //}
-
-
-        val songsFragment = SongsFragment()
-        val artistsFragment = ArtistsFragment()
-        val albumsFragment = AlbumsFragment()
-        //switchTab(songsFragment)
-
-        viewPager.adapter = ViewPagerAdapter(songsFragment)
 
         ActivityCompat.requestPermissions(
             this,
@@ -50,26 +35,45 @@ class MainActivity : AppCompatActivity() {
             111
         )
 
+        navigationView.elevation = 0f
+        materialToolbar.setOnClickListener {
+            when (navigationView.visibility) {
+                GONE -> {
+                    navigationView.visibility = VISIBLE
+                }
+                VISIBLE -> {
+                    navigationView.visibility = GONE
+                }
+            }
+        }
+
+        val songsFragment = SongsFragment()
+        val artistsFragment = ArtistsFragment()
+        val albumsFragment = AlbumsFragment()
+        switchTab(songsFragment)
+
+        viewModel = ViewModelProvider(this).get(CommonViewModel::class.java)
+
+        //updateFirst()
+        enableBlur()
         var songUri = R.raw.song
+
 
         player = MediaPlayer.create(this, songUri)
         player.isLooping = true
-
-        tvSongName.text = "Gotta Be A Reason"
-        tvArtistName.text = "Alec Benjamin"
-        tvTrackLength.text = progressToString(player.duration)
+        tvTrackLength.text = viewModel.progressToString(player.duration)
         player.setVolume(0.5f, 0.5f)
         btnPlay.setBackgroundResource(R.drawable.playbtn)
 
-        var isPlaying = true
-        var progressPos = Preferences(this).getCurrentProgress()
+        //var isPlaying = true
+        //var progressPos = Preferences(this).getCurrentProgress()
 
-        player.seekTo(progressPos)
-        seekbar.progress = progressPos
-        if (isPlaying) {
-            //player.start()
-            btnPlay.setBackgroundResource(R.drawable.pausebtn)
-        }
+        //player.seekTo(progressPos)
+        //seekbar.progress = progressPos
+        //if (isPlaying) {
+        //player.start()
+        //    btnPlay.setBackgroundResource(R.drawable.pausebtn)
+        //}
 
         btnPlay.setOnClickListener {
             if (player.isPlaying) {
@@ -92,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (fromUser) {
                         player.seekTo(progress)
-                        tvTimeCode.text = progressToString(progress)
+                        tvTimeCode.text = viewModel.progressToString(progress)
                     }
                 }
 
@@ -105,7 +109,7 @@ class MainActivity : AppCompatActivity() {
         var handler = object : Handler() {
             override fun handleMessage(msg: Message) {
                 seekbar.progress = msg.what
-                tvTimeCode.text = progressToString(msg.what)
+                tvTimeCode.text = viewModel.progressToString(msg.what)
                 savedInstanceState?.putInt("progressPos", msg.what)
             }
         }
@@ -114,7 +118,8 @@ class MainActivity : AppCompatActivity() {
             while (safeThread) {
                 var msg = Message()
                 msg.what = player.currentPosition
-                Preferences(this).setCurrentProgress(msg.what)
+                var curPos = msg.what
+                //Preferences(this).setCurrentProgress(msg.what)
                 handler.sendMessage(msg)
                 Thread.sleep(100)
             }
@@ -123,84 +128,37 @@ class MainActivity : AppCompatActivity() {
 
     // TODO -- FIX BROKEN MENU
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuSearch -> {
-                println("Searched.")
-                Toast.makeText(applicationContext, "Searched.", Toast.LENGTH_SHORT).show()
-            }
-        }
-        return true
-    }
-
-
     fun switchTab(fragment: Fragment) = supportFragmentManager.beginTransaction().apply {
         replace(R.id.fragmentContainerMain, fragment)
         commit()
     }
 
-    // Experiment for transparent status bar
-    private fun Activity.makeStatusBarTransparent() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.apply {
-                clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    val mode =
-                        context?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)
-                    when (mode) {
-                        Configuration.UI_MODE_NIGHT_YES -> {
-                            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        }
-                        Configuration.UI_MODE_NIGHT_NO -> {
-                            decorView.systemUiVisibility =
-                                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-                        }
-                        Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                            decorView.systemUiVisibility =
-                                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-                        }
-                    }
-                } else {
-                    decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                }
-                statusBarColor = Color.TRANSPARENT
-            }
-        }
-    }
 
-    private fun View.setMarginTop(marginTop: Int) {
-        val menuLayoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
-        menuLayoutParams.setMargins(0, marginTop, 0, 0)
-        this.layoutParams = menuLayoutParams
-    }
+    private fun enableBlur() {
+        val radius = 15f
+        val decorView = window.decorView
+        //ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
+        val rootView = decorView.findViewById(android.R.id.content) as ViewGroup
+        //Set drawable to draw in the beginning of each blurred frame (Optional).
+        //Can be used in case your layout has a lot of transparent space and your content
+        //gets kinda lost after after blur is applied.
+        //Set drawable to draw in the beginning of each blurred frame (Optional).
+        //Can be used in case your layout has a lot of transparent space and your content
+        //gets kinda lost after after blur is applied.
+        val windowBackground = decorView.background
+        blurMiniPlayer.setupWith(rootView)
+            .setFrameClearDrawable(windowBackground)
+            .setBlurAlgorithm(RenderScriptBlur(this))
+            .setBlurRadius(radius)
+            .setBlurAutoUpdate(true)
+            .setHasFixedTransformationMatrix(true)
+        blurAppBar.setupWith(rootView)
+            .setFrameClearDrawable(windowBackground)
+            .setBlurAlgorithm(RenderScriptBlur(this))
+            .setBlurRadius(radius)
+            .setBlurAutoUpdate(true)
+            .setHasFixedTransformationMatrix(true)
 
-    fun progressToString(p: Int): String {
-        var str = ""
-        val min = p / 1000 / 60
-        val sec = p / 1000 % 60
-        if (min == 0) {
-            str += "0:"
-        } else if (min < 10) {
-            str = min.toString() + ":"
-        } else {
-            str = min.toString() + ":"
-        }
-        if (sec < 10) {
-            str = str + "0" + sec.toString()
-        } else {
-            str += sec.toString()
-        }
-        return str
-    }
-
-    fun setTvSongName(song: String) {
-        this.tvSongName.text = song
     }
 
     override fun onDestroy() {

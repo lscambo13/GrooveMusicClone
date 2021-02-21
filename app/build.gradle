@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
 
 android {
     compileSdkVersion 30
@@ -12,7 +14,8 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
+        renderscriptTargetApi 30 //must match target sdk and build tools
+        renderscriptSupportModeEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -37,4 +40,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.eightbitlab:blurview:1.6.5'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.3.0"
+    implementation "androidx.activity:activity-ktx:1.2.0"
 }
