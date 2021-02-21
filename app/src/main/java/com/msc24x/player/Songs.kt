@@ -7,11 +7,11 @@ import android.net.Uri
 
 // Container for information about each video.
 data class Songs(
-    val uri: Uri?,
-    val SongTitle: String,
-    val ArtistName: String,
-    val AlbumName: String,
-    val Duration: Int
+    var uri: Uri?,
+    var SongTitle: String,
+    var ArtistName: String,
+    var AlbumName: String,
+    var Duration: Int
 )
 
 
