@@ -1,25 +1,34 @@
-package com.msc24x.player
+package com.msc24x.player.tabs
 
 import android.content.ContentUris
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
+import com.msc24x.player.CommonViewModel
+import com.msc24x.player.R
+import com.msc24x.player.SongAdapter
+import com.msc24x.player.Songs
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_songs.*
+import kotlinx.android.synthetic.main.fragment_songs.view.*
 import kotlinx.android.synthetic.main.list_songs.view.*
 import java.util.concurrent.TimeUnit
 
 
-class SongsFragment : Fragment(R.layout.fragment_songs), SongAdapter.OnItemClickListener {
+class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
     lateinit var viewModel: CommonViewModel
 
@@ -60,7 +69,7 @@ class SongsFragment : Fragment(R.layout.fragment_songs), SongAdapter.OnItemClick
 
     private fun loadMedia() {
 
-        val query = context!!.contentResolver.query(
+        val query = requireContext().contentResolver.query(
             collection,
             projection,
             selection,
@@ -77,7 +86,6 @@ class SongsFragment : Fragment(R.layout.fragment_songs), SongAdapter.OnItemClick
             val durationColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
             val artistColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ARTIST)
             while (cursor.moveToNext()) {
-                fragmentSongsPlaceholderText.visibility = View.GONE
                 val id = cursor.getLong(idColumn)
                 var song = cursor.getString(nameColumn)
                 val fileName = cursor.getString(fileNameColumn)
@@ -135,14 +143,14 @@ class SongsFragment : Fragment(R.layout.fragment_songs), SongAdapter.OnItemClick
 
     fun updateSong(id: Int) {
         val song = songsList[id].SongTitle
-        viewModel.setSong(song)
-        activity!!.tvSongName.text = viewModel.getSong().value
+        viewModel.currentSong.value = song
+        //requireActivity().tvSongName.text = viewModel.getSong().value
     }
 
     fun updateArtist(id: Int) {
         val artist = songsList[id].ArtistName
-        viewModel.setArtist(artist)
-        activity!!.tvArtistName.text = viewModel.getArtist().value
+        viewModel.currentArtist.value = artist
+        //requireActivity().tvArtistName.text = viewModel.getArtist().value
 
     }
 
@@ -151,38 +159,55 @@ class SongsFragment : Fragment(R.layout.fragment_songs), SongAdapter.OnItemClick
     }
 
     private fun updateFirst() {
-        activity!!.tvSongName.text = viewModel.getSong().value
-        activity!!.tvArtistName.text = viewModel.getArtist().value
+        //requireActivity().tvSongName.text = viewModel.getSong().value
+        //requireActivity().tvArtistName.text = viewModel.getArtist().value
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_songs, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CommonViewModel::class.java)
-        rvSongs.adapter = adapter
-        rvSongs.layoutManager = LinearLayoutManager(context)
-        when (savedInstanceState) {
-            null -> {
-                println("null")
-                loadMedia()
-
-            }
-            else -> {
-                println("not null")
-                updateFirst()
-            }
+        val viewPagerMain = activity?.findViewById<ViewPager2>(R.id.viewPagerMain)
+        view.fabNext.setOnClickListener {
+            viewPagerMain?.currentItem = 1
         }
 
 
-        // show the song list in recycler view
+        val tPad = requireActivity().blurAppBar.layoutParams.height
+        val bPad = requireActivity().blurMiniPlayer.layoutParams.height
+        view.rvSongs.setPadding(0, tPad, 0, bPad)
+        //TypedValue.complexToDimensionPixelSize(sHeight, resources.displayMetrics)
+        println("app bar is - $tPad, $bPad")
+        //val tv = TypedValue()
+        //if (requireActivity().theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+        //    val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
 
 
-        //rvSongs.imgPlayIndicator.visibility = GONE
-        /*var pad = resources.getIdentifier("status_bar_height", "dimen", "android")
-        if (pad == 0) {pad = 24}
-        pad = resources.getDimensionPixelSize(pad)+148
-        println(pad)
-        rvSongs.setPadding(0, pad, 0, 300)*/
+        view.fragmentSongsPlaceholderText.visibility = GONE
+
+        view.rvSongs.adapter = adapter
+        view.rvSongs.layoutManager = LinearLayoutManager(context)
+        loadMedia()
+        //updateFirst()
+
+        return view
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(CommonViewModel::class.java)
+        requireActivity().tvSongName.text = viewModel.currentSong.value
+        requireActivity().tvArtistName.text = viewModel.currentArtist.value
+        viewModel.currentSong.observe(viewLifecycleOwner, Observer {
+            println("change detected song")
+            requireActivity().tvSongName.text = viewModel.currentSong.value
+        })
+        viewModel.currentArtist.observe(viewLifecycleOwner, Observer {
+            println("change detected artist")
+            requireActivity().tvArtistName.text = viewModel.currentArtist.value
+        })
+    }
 }
