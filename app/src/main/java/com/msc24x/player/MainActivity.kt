@@ -6,13 +6,12 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,7 +22,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var player: MediaPlayer
     var safeThread = true
     lateinit var viewModel: CommonViewModel
-
+/*    lateinit var navController: NavController
+    lateinit var appBarConfiguration: AppBarConfiguration
+    lateinit var drawerLayout: DrawerLayout*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,23 +37,18 @@ class MainActivity : AppCompatActivity() {
         )
 
         navigationView.elevation = 0f
-        materialToolbar.setOnClickListener {
-            when (navigationView.visibility) {
-                GONE -> {
-                    navigationView.visibility = VISIBLE
-                }
-                VISIBLE -> {
-                    navigationView.visibility = GONE
-                }
-            }
-        }
 
-        val songsFragment = SongsFragment()
-        val artistsFragment = ArtistsFragment()
-        val albumsFragment = AlbumsFragment()
-        switchTab(songsFragment)
 
         viewModel = ViewModelProvider(this).get(CommonViewModel::class.java)
+
+        viewModel.currentSong.observe(this, Observer {
+            println("change detected song- main")
+            tvSongName.text = viewModel.currentSong.value
+        })
+        viewModel.currentArtist.observe(this, Observer {
+            println("change detected artist- main")
+            tvArtistName.text = viewModel.currentArtist.value
+        })
 
         //updateFirst()
         enableBlur()
@@ -129,8 +125,8 @@ class MainActivity : AppCompatActivity() {
     // TODO -- FIX BROKEN MENU
 
     fun switchTab(fragment: Fragment) = supportFragmentManager.beginTransaction().apply {
-        replace(R.id.fragmentContainerMain, fragment)
-        commit()
+        //replace(R.id.fragmentContainerMain, fragment)
+        //commit()
     }
 
 

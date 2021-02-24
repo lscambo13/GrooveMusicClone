@@ -1,7 +1,6 @@
 package com.msc24x.player
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -9,10 +8,11 @@ class CommonViewModel : ViewModel() {
 
     private var str = "0"
     val currentSong = MutableLiveData<String>()
-    private var currentArtist = MutableLiveData<String>()
+    val currentArtist = MutableLiveData<String>()
     private var currentUri = MutableLiveData<Uri>()
 
 
+/*
     fun getSong(): LiveData<String> {
         return currentSong
     }
@@ -28,6 +28,7 @@ class CommonViewModel : ViewModel() {
     fun setArtist(string: String) {
         currentArtist.value = string
     }
+*/
 
 
     fun progressToString(p: Int): String {
