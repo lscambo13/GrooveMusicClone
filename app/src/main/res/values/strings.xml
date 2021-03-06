@@ -1,7 +1,10 @@
 <resources>
-    <string name="app_name">MY MUSIC</string>
+    <string name="app_name">Bop</string>
+    <string name="title_activity_main">MY MUSIC</string>
     <string name="search">Search</string>
     <string name="title_activity_songs">Songs</string>
     <string name="title_activity_artists">Artists</string>
     <string name="title_activity_albums">Albums</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

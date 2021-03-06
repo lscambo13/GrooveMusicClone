@@ -1,6 +1,3 @@
 <resources>
-    <string name="app_name"><b>MY MUSIC</b></string>
-    <string name="title_activity_songs">Songs</string>
-    <string name="title_activity_artists">Artists</string>
-    <string name="title_activity_albums">Albums</string>
+
 </resources>
