@@ -10,13 +10,12 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.snackbar.Snackbar
 import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
 import com.msc24x.player.SongAdapter
@@ -120,7 +119,10 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
         updateArtist(position)
         updateUri(position)
         //updatePlayIndicator(position)
-        Toast.makeText(activity, "item $position, ${clickedItem.uri}", Toast.LENGTH_SHORT).show()
+        Snackbar.make(requireView(), "item $position, ${clickedItem.uri}", Snackbar.LENGTH_LONG)
+            .setAnchorView(requireActivity().blurMiniPlayer)
+            .show()
+        //Toast.makeText(activity, "item $position, ${clickedItem.uri}", Toast.LENGTH_SHORT).show()
         //rvSongs[position].tvListSongName.setTextColor(context!!.getColor(R.color.variableAccent))
         //rvSongs[position].tvListArtistName.setTextColor(context!!.getColor(R.color.variableAccent))
         adapter.notifyItemChanged(position)
@@ -170,17 +172,17 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_songs, container, false)
 
-        val viewPagerMain = activity?.findViewById<ViewPager2>(R.id.viewPagerMain)
+/*        val viewPagerMain = activity?.findViewById<ViewPager2>(R.id.viewPagerMain)
         view.fabNext.setOnClickListener {
             viewPagerMain?.currentItem = 1
-        }
+        }*/
 
 
         val tPad = requireActivity().blurAppBar.layoutParams.height
         val bPad = requireActivity().blurMiniPlayer.layoutParams.height
-        view.rvSongs.setPadding(0, tPad, 0, bPad)
+        view.rvSongs.setPadding(0, 0, 0, bPad)
         //TypedValue.complexToDimensionPixelSize(sHeight, resources.displayMetrics)
-        println("app bar is - $tPad, $bPad")
+        //println("app bar is - $tPad, $bPad")
         //val tv = TypedValue()
         //if (requireActivity().theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
         //    val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
