@@ -42,7 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="27dp"
             android:gravity="bottom"
-            android:paddingLeft="16dp"
+            android:paddingStart="16dp"
             android:paddingEnd="0dp"
             android:singleLine="true"
             android:textStyle="normal"

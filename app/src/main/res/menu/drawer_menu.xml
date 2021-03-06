@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menuSearch"
+            android:icon="@drawable/ic_search"
+            android:title="@string/search"
+            app:showAsAction="always" />
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menuSongs"
+            android:title="@string/title_activity_songs" />
+        <item
+            android:id="@+id/menuArtists"
+            android:title="@string/title_activity_artists" />
+        <item
+            android:id="@+id/menuAlbums"
+            android:title="@string/title_activity_albums" />
+    </group>
+</menu>

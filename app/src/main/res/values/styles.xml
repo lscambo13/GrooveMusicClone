@@ -19,4 +19,13 @@
         <item name="fontFamily">@font/segoe_ui</item>
     </style>
 
+    <style name="TabLayout">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="tabSelectedTextColor">@color/text</item>
+        <item name="fontFamily">@font/segoe_ui</item>
+        <item name="tabIndicatorColor">@color/variableAccent</item>
+        <item name="tabUnboundedRipple">false</item>
+    </style>
+
+
 </resources>

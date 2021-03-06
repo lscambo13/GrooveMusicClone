@@ -24,9 +24,9 @@ class ViewPagerFragment : Fragment() {
         )
 
         val tabTitles = arrayListOf<String>(
-            "1",
-            "2",
-            "3"
+            "Songs",
+            "Artists",
+            "Albums"
         )
 
         val adapter = ViewPagerAdapter(

@@ -36,8 +36,14 @@ class MainActivity : AppCompatActivity() {
             111
         )
 
-        navigationView.elevation = 0f
-
+        materialToolbar.setNavigationOnClickListener {
+            drawerLayout.open()
+        }
+        navigationView.setNavigationItemSelectedListener {
+            it.isChecked = true
+            drawerLayout.close()
+            true
+        }
 
         viewModel = ViewModelProvider(this).get(CommonViewModel::class.java)
 
@@ -51,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         //updateFirst()
-        enableBlur()
+        //enableBlur()
         var songUri = R.raw.song
 
 

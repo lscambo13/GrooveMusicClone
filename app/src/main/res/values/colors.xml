@@ -12,7 +12,8 @@
     <color name="transparent">#00000000</color>
     <color name="colorAccent">#59F3FF</color>
     <color name="bgColor">#FFFFFF</color>
-    <color name="variableAccent">#999E4B31</color>
+    <color name="variableAccentAlpha">#999E4B31</color>
+    <color name="variableAccent">#9E4B31</color>
     <color name="highlightGrey">#D9D9D9</color>
     <color name="pressedGrey">#C4C4C4</color>
 </resources>
