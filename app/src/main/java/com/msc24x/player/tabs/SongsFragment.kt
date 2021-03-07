@@ -12,8 +12,8 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.msc24x.player.CommonViewModel
@@ -29,7 +29,8 @@ import java.util.concurrent.TimeUnit
 
 class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
-    lateinit var viewModel: CommonViewModel
+    //lateinit var viewModel: CommonViewModel
+    private val viewModel: CommonViewModel by activityViewModels()
 
     // populate the songs list
     val songsList = mutableListOf(
@@ -158,6 +159,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
     fun updateUri(id: Int) {
         val uri = songsList[id].uri
+        viewModel.currentUri.value = uri
     }
 
     private fun updateFirst() {
@@ -200,7 +202,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CommonViewModel::class.java)
+        //viewModel = ViewModelProvider(this).get(CommonViewModel::class.java)
         requireActivity().tvSongName.text = viewModel.currentSong.value
         requireActivity().tvArtistName.text = viewModel.currentArtist.value
         viewModel.currentSong.observe(viewLifecycleOwner, Observer {

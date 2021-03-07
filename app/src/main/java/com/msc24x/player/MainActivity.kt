@@ -3,16 +3,17 @@ package com.msc24x.player
 import android.Manifest
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -20,8 +21,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     lateinit var player: MediaPlayer
+    lateinit var songUri: Uri
+    lateinit var busy: String
     var safeThread = true
-    lateinit var viewModel: CommonViewModel
+
+    //lateinit var viewModel: CommonViewModel
+    private val viewModel: CommonViewModel by viewModels()
+
 /*    lateinit var navController: NavController
     lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var drawerLayout: DrawerLayout*/
@@ -45,7 +51,22 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        viewModel = ViewModelProvider(this).get(CommonViewModel::class.java)
+
+        //viewModel = ViewModelProvider(this).get(CommonViewModel::class.java)
+
+        when (this::player.isInitialized) {
+            true -> {
+
+            }
+            false -> {
+                player = MediaPlayer.create(this, R.raw.song)
+                btnPlay.setBackgroundResource(R.drawable.ic_music_play_button)
+                tvTrackLength.text = viewModel.progressToString(player.duration)
+                busy = "false"
+            }
+        }
+        player.isLooping = true
+
 
         viewModel.currentSong.observe(this, Observer {
             println("change detected song- main")
@@ -55,17 +76,37 @@ class MainActivity : AppCompatActivity() {
             println("change detected artist- main")
             tvArtistName.text = viewModel.currentArtist.value
         })
+        viewModel.currentUri.observe(this, Observer {
+            println("change detected uri- main")
+            songUri = viewModel.currentUri.value!!
+            when (busy) {
+                "true" -> {
+                    println("player is playing")
+                    player.pause()
+                    player.reset()
+                    player = MediaPlayer.create(this, songUri)
+                    tvTrackLength.text = viewModel.progressToString(player.duration)
+                    player.start()
+                    btnPlay.setBackgroundResource(R.drawable.ic_music_pause_button)
+                    busy = "true"
+                }
+                "false" -> {
+                    player = MediaPlayer.create(this, songUri)
+                    println("player wasn't playing")
+                    tvTrackLength.text = viewModel.progressToString(player.duration)
+                    player.start()
+                    btnPlay.setBackgroundResource(R.drawable.ic_music_pause_button)
+                    busy = "true"
+                }
+                else -> println("what happened? busy = $busy")
+            }
+        })
 
         //updateFirst()
         //enableBlur()
-        var songUri = R.raw.song
 
 
-        player = MediaPlayer.create(this, songUri)
-        player.isLooping = true
-        tvTrackLength.text = viewModel.progressToString(player.duration)
-        player.setVolume(0.5f, 0.5f)
-        btnPlay.setBackgroundResource(R.drawable.playbtn)
+        //player.setVolume(0.5f, 0.5f)
 
         //var isPlaying = true
         //var progressPos = Preferences(this).getCurrentProgress()
@@ -80,12 +121,14 @@ class MainActivity : AppCompatActivity() {
         btnPlay.setOnClickListener {
             if (player.isPlaying) {
                 player.pause()
-                btnPlay.setBackgroundResource(R.drawable.playbtn)
-                savedInstanceState?.putBoolean("isPlaying", false)
+                println("click is playing")
+                btnPlay.setBackgroundResource(R.drawable.ic_music_play_button)
+                busy = "false"
             } else {
-                btnPlay.setBackgroundResource(R.drawable.pausebtn)
+                btnPlay.setBackgroundResource(R.drawable.ic_music_pause_button)
                 player.start()
-                savedInstanceState?.putBoolean("isPlaying", true)
+                println("click wasn't playing")
+                busy = "true"
             }
         }
         seekbar.max = player.duration
