@@ -28,7 +28,6 @@
             android:layout_height="match_parent">
 
             <com.google.android.material.appbar.AppBarLayout
-                style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:elevation="0dp"
@@ -36,11 +35,10 @@
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/materialToolbar"
-                    style="@style/AppBar"
                     android:layout_width="match_parent"
                     android:layout_height="?android:attr/actionBarSize"
-                    android:background="@color/transparent"
                     android:paddingTop="0dp"
+                    android:background="@color/colorPrimary"
                     app:layout_constraintTop_toTopOf="parent"
                     app:menu="@menu/menu"
                     app:navigationIcon="@drawable/ic_hamburger"
@@ -100,14 +98,15 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="24dp"
             android:background="?android:selectableItemBackground"
             android:clickable="true"
             android:contextClickable="true"
             android:focusable="true"
-            app:layout_constraintEnd_toStartOf="@+id/verticalcentre"
-            app:layout_constraintStart_toStartOf="@+id/padding_left"
+            app:layout_constraintEnd_toStartOf="@id/btnPrev"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -183,22 +182,24 @@
             android:id="@+id/imgBtnThreeDot"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/threedot"
             app:layout_constraintBottom_toTopOf="@+id/seekbar"
-            app:layout_constraintEnd_toStartOf="@+id/padding_right"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvTimeCode"
             android:layout_width="35dp"
             android:layout_height="25dp"
+            android:layout_marginStart="8dp"
             android:gravity="center"
             android:paddingBottom="2sp"
             android:singleLine="true"
             android:textColor="@color/textWhite"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/padding_left" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/seekbar"
@@ -214,34 +215,14 @@
             android:id="@+id/tvTrackLength"
             android:layout_width="35dp"
             android:layout_height="25dp"
+            android:layout_marginEnd="8dp"
             android:gravity="center"
             android:paddingBottom="2sp"
             android:singleLine="true"
             android:textColor="@color/textWhite"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/padding_right" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalcentre"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent=".4" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/padding_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent=".025" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/padding_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent=".975" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

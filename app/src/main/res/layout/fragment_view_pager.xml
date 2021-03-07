@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:elevation="0dp"
+        android:background="@color/bgColor"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.tabs.TabLayout
@@ -18,14 +19,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             style="@style/TabLayout"
+            android:background="@color/bgColor"
+            android:elevation="0dp"
             app:tabGravity="start"
+            android:paddingStart="10dp"
             app:tabIndicatorFullWidth="false"
             app:tabMode="scrollable"
+            android:paddingEnd="10dp"
             app:tabTextAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
 

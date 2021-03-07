@@ -7,7 +7,6 @@
         <item name="android:textColor">@color/text</item>
         <item name="fontFamily">@font/segoe_ui</item>
         <item name="android:windowLightStatusBar">false</item>
-
         <item name="android:windowBackground">@drawable/splash</item>
 
     </style>
@@ -15,6 +14,7 @@
     <style name="AppBar">
         <item name="textAllCaps">true</item>
         <item name="android:textColor">@color/text</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
         <item name="fontFamily">@font/segoe_ui</item>
     </style>
@@ -23,6 +23,7 @@
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="tabSelectedTextColor">@color/text</item>
         <item name="fontFamily">@font/segoe_ui</item>
+        <item name="backgroundColor">@color/bgColor</item>
         <item name="tabIndicatorColor">@color/variableAccent</item>
         <item name="tabUnboundedRipple">false</item>
     </style>
