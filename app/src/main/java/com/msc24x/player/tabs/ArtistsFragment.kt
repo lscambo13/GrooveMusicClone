@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.msc24x.player.R
-import kotlinx.android.synthetic.main.fragment_songs.view.*
+import kotlinx.android.synthetic.main.fragment_artists.view.*
 
 class ArtistsFragment : Fragment() {
     override fun onCreateView(
@@ -17,7 +17,7 @@ class ArtistsFragment : Fragment() {
     ): View? {
         val view = layoutInflater.inflate(R.layout.fragment_artists, container, false)
         val viewPagerMain = activity?.findViewById<ViewPager2>(R.id.viewPagerMain)
-        view.fabNext.setOnClickListener {
+        view.placeholder.setOnClickListener {
             viewPagerMain?.currentItem = 2
         }
         return view
