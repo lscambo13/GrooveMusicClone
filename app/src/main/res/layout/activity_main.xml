@@ -41,6 +41,7 @@
                     android:background="@color/colorPrimary"
                     app:layout_constraintTop_toTopOf="parent"
                     app:menu="@menu/menu"
+                    app:layout_scrollFlags="noScroll"
                     app:navigationIconTint="?attr/colorControlNormal"
                     app:navigationIcon="@drawable/ic_hamburger"
                     app:title="@string/title_activity_main"
