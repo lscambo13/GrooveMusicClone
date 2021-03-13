@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.activity.viewModels
@@ -60,7 +61,8 @@ class MainActivity : AppCompatActivity() {
             }
             false -> {
                 player = MediaPlayer.create(this, R.raw.song)
-                btnPlay.setBackgroundResource(R.drawable.ic_music_play_button)
+                iconPlay.visibility = View.VISIBLE
+                iconPause.visibility = View.INVISIBLE
                 tvTrackLength.text = viewModel.progressToString(player.duration)
                 busy = "false"
             }
@@ -87,7 +89,8 @@ class MainActivity : AppCompatActivity() {
                     player = MediaPlayer.create(this, songUri)
                     tvTrackLength.text = viewModel.progressToString(player.duration)
                     player.start()
-                    btnPlay.setBackgroundResource(R.drawable.ic_music_pause_button)
+                    iconPlay.visibility = View.INVISIBLE
+                    iconPause.visibility = View.VISIBLE
                     busy = "true"
                 }
                 "false" -> {
@@ -95,7 +98,8 @@ class MainActivity : AppCompatActivity() {
                     println("player wasn't playing")
                     tvTrackLength.text = viewModel.progressToString(player.duration)
                     player.start()
-                    btnPlay.setBackgroundResource(R.drawable.ic_music_pause_button)
+                    iconPlay.visibility = View.INVISIBLE
+                    iconPause.visibility = View.VISIBLE
                     busy = "true"
                 }
                 else -> println("what happened? busy = $busy")
@@ -118,14 +122,16 @@ class MainActivity : AppCompatActivity() {
         //    btnPlay.setBackgroundResource(R.drawable.pausebtn)
         //}
 
-        btnPlay.setOnClickListener {
+        btnOutline.setOnClickListener {
             if (player.isPlaying) {
                 player.pause()
                 println("click is playing")
-                btnPlay.setBackgroundResource(R.drawable.ic_music_play_button)
+                iconPlay.visibility = View.VISIBLE
+                iconPause.visibility = View.INVISIBLE
                 busy = "false"
             } else {
-                btnPlay.setBackgroundResource(R.drawable.ic_music_pause_button)
+                iconPlay.visibility = View.INVISIBLE
+                iconPause.visibility = View.VISIBLE
                 player.start()
                 println("click wasn't playing")
                 busy = "true"
