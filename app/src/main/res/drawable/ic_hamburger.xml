@@ -1,12 +1,6 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="20dp"
-    android:height="20dp"
-    android:tint="?attr/colorControlNormal"
-    android:viewportWidth="50"
-    android:viewportHeight="50">
-    <path
-        android:fillColor="#000000"
-        android:pathData="M0,9L0,11L50,11L50,9ZM0,24L0,26L50,26L50,24ZM0,39L0,41L50,41L50,39Z"
-        android:strokeWidth="1"
-        android:strokeColor="#000000" />
-</vector>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="22dp"
+        android:height="22dp"
+        android:drawable="@drawable/hamburger"></item>
+</layer-list>
