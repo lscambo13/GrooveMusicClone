@@ -1,15 +1,31 @@
 package com.msc24x.player.tabs
 
+import android.annotation.SuppressLint
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import com.google.android.material.tabs.TabLayoutMediator
+import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
+import com.msc24x.player.SongAdapter
 import kotlinx.android.synthetic.main.fragment_view_pager.view.*
 
-class ViewPagerFragment : Fragment() {
+class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
+
+    lateinit var player: MediaPlayer
+    lateinit var songUri: Uri
+    private val viewModel: CommonViewModel by activityViewModels()
+    var safeThread = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,8 +63,136 @@ class ViewPagerFragment : Fragment() {
             }).attach()
 
 
+
+        view.mainSongInfo.setOnClickListener {
+            Navigation.findNavController(requireActivity(), R.id.fragment)
+                .navigate(R.id.action_viewPagerFragment_to_nowPlayingFragment)
+        }
+
+        when (this::player.isInitialized) {
+            true -> {
+
+            }
+            false -> {
+                player = MediaPlayer.create(requireActivity(), R.raw.song)
+                view.iconPlay.visibility = View.VISIBLE
+                view.iconPause.visibility = View.INVISIBLE
+                view.tvTrackLength.text = viewModel.progressToString(player.duration)
+                viewModel.busy.value = "false"
+            }
+        }
+        player.isLooping = true
+
+
+        viewModel.currentSong.observe(viewLifecycleOwner, Observer {
+            println("change detected song- main")
+            view.tvSongName.text = viewModel.currentSong.value
+        })
+        viewModel.currentArtist.observe(viewLifecycleOwner, Observer {
+            println("change detected artist- main")
+            view.tvArtistName.text = viewModel.currentArtist.value
+        })
+        viewModel.currentUri.observe(viewLifecycleOwner, Observer {
+            println("change detected uri- main")
+            songUri = viewModel.currentUri.value!!
+            when (viewModel.busy.value) {
+                "true" -> {
+                    println("player is playing")
+
+                    view.tvTrackLength.text = viewModel.progressToString(player.duration)
+                    view.iconPlay.visibility = View.INVISIBLE
+                    view.iconPause.visibility = View.VISIBLE
+                    //busy = "true"
+                }
+                "false" -> {
+                    player = MediaPlayer.create(requireActivity(), songUri)
+                    println("player wasn't playing")
+                    view.tvTrackLength.text = viewModel.progressToString(player.duration)
+                    player.start()
+                    view.iconPlay.visibility = View.INVISIBLE
+                    view.iconPause.visibility = View.VISIBLE
+                    viewModel.busy.value = "true"
+                }
+            }
+        })
+
+
+
+        view.btnOutline.setOnClickListener {
+            if (player.isPlaying) {
+                player.pause()
+                println("click is playing")
+                view.iconPlay.visibility = View.VISIBLE
+                view.iconPause.visibility = View.INVISIBLE
+                viewModel.busy.value = "false"
+            } else {
+                view.iconPlay.visibility = View.INVISIBLE
+                view.iconPause.visibility = View.VISIBLE
+                player.start()
+                println("click wasn't playing")
+                viewModel.busy.value = "true"
+            }
+        }
+
+
+        view.seekbar.max = player.duration
+        view.seekbar.setOnSeekBarChangeListener(
+            object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    if (fromUser) {
+                        player.seekTo(progress)
+                        view.tvTimeCode.text = viewModel.progressToString(progress)
+                    }
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            }
+        )
+
+        @SuppressLint("HandlerLeak")
+        var handler = object : Handler() {
+            override fun handleMessage(msg: Message) {
+                view.seekbar.progress = msg.what
+                view.tvTimeCode.text = viewModel.progressToString(msg.what)
+                savedInstanceState?.putInt("progressPos", msg.what)
+            }
+        }
+
+        Thread {
+            while (safeThread) {
+                var msg = Message()
+                msg.what = player.currentPosition
+                var curPos = msg.what
+                //Preferences(this).setCurrentProgress(msg.what)
+                handler.sendMessage(msg)
+                Thread.sleep(100)
+            }
+        }.start()
         return view
     }
 
+    fun play() {
+        songUri = viewModel.currentUri.value!!
+        player.pause()
+        player.reset()
+        player = MediaPlayer.create(requireActivity(), songUri)
+        player.start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        safeThread = false
+        //player.release()
+    }
+
+    override fun onItemClick(position: Int) {
+
+        play()
+    }
 
 }

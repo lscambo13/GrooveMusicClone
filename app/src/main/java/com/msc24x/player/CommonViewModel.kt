@@ -10,6 +10,7 @@ class CommonViewModel : ViewModel() {
     val currentSong = MutableLiveData<String>()
     val currentArtist = MutableLiveData<String>()
     val currentUri = MutableLiveData<Uri>()
+    val busy = MutableLiveData<String>()
 
 
 /*
@@ -47,6 +48,7 @@ class CommonViewModel : ViewModel() {
         } else {
             str += sec.toString()
         }
+
         return str
     }
 
