@@ -10,6 +10,19 @@
         android:id="@+id/viewPagerFragment"
         android:name="com.msc24x.player.tabs.ViewPagerFragment"
         android:label="fragment_view_pager"
-        tools:layout="@layout/fragment_view_pager" />
+        tools:layout="@layout/fragment_view_pager">
+        <action
+            android:id="@+id/action_viewPagerFragment_to_nowPlayingFragment"
+            app:destination="@id/nowPlayingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nowPlayingFragment"
+        android:name="com.msc24x.player.tabs.NowPlayingFragment"
+        android:label="now_playing_fragment"
+        tools:layout="@layout/now_playing_fragment">
+        <action
+            android:id="@+id/action_nowPlayingFragment_to_viewPagerFragment"
+            app:destination="@id/viewPagerFragment" />
+    </fragment>
 
 </navigation>
