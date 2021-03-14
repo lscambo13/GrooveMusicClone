@@ -2,5 +2,5 @@
     <item
         android:width="22dp"
         android:height="22dp"
-        android:drawable="@drawable/hamburger" />
+        android:drawable="@drawable/playlist" />
 </layer-list>
