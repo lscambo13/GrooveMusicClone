@@ -31,4 +31,13 @@
     <string name="icon_prev">&#xE892;</string>
     <string name="icon_more">&#xE712;</string>
     <string name="icon_hamburger">&#xE700;</string>
+    <string name="icon_shuffle">&#xE8B1;</string>
+    <string name="icon_repeat">&#xE895;</string>
+    <string name="icon_up_arrow">&#xE971;</string>
+    <string name="icon_recent">&#xE823;</string>
+    <string name="icon_my_music">&#xE8D6;</string>
+    <string name="menuHome">My Music</string>
+    <string name="menuRecent">Recent Plays</string>
+    <string name="menuPlaylist">Playlists</string>
+    <string name="menuSettings">Settings</string>
 </resources>
