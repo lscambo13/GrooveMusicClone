@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -33,6 +34,7 @@ class NowPlayingFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+
         viewModel.currentUri.observe(viewLifecycleOwner, Observer {
             val mmr = MediaMetadataRetriever()
             val rawArt: ByteArray?
@@ -40,13 +42,22 @@ class NowPlayingFragment : Fragment() {
             val bfo = BitmapFactory.Options()
             mmr.setDataSource(requireContext(), it)
             rawArt = mmr.embeddedPicture
-
             if (rawArt != null) {
                 art = BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size, bfo)
                 imgCoverArt.setImageBitmap(art)
             }
 
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
 
 }
