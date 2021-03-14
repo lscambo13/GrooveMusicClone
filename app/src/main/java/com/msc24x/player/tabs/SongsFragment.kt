@@ -10,10 +10,10 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.msc24x.player.CommonViewModel
@@ -33,9 +33,11 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     private val viewModel: CommonViewModel by activityViewModels()
 
     // populate the songs list
-    val songsList = mutableListOf(
-        Songs(null, "Song Name 1", "Artist Name 1", "Album Name 1", 0)
-    )
+    var songsList = mutableListOf<Songs>()
+/*    val songsList = mutableListOf(
+        Songs(null, "Song Name 1", "Artist Name 1", "Album Name 1", 0, BitmapFactory.decodeResource(
+            context?.resources, R.id.ic_default_art))
+    )*/
 
 
     private val adapter = SongAdapter(songsList, this)
@@ -67,6 +69,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     // Display videos in alphabetical order based on their display name.
     private val sortOrder = "${MediaStore.Audio.Media.DISPLAY_NAME} ASC"
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun loadMedia() {
 
         val query = requireContext().contentResolver.query(
@@ -81,10 +84,10 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
             val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
             val albumColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)
-            val fileNameColumn =
-                cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
+            val fileNameColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
             val durationColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
             val artistColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ARTIST)
+
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
                 var song = cursor.getString(nameColumn)
@@ -101,6 +104,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
                 when (artist) {
                     null -> artist = "Unknown"
                 }
+
                 val contentUri: Uri = ContentUris.withAppendedId(
                     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                     id
@@ -109,10 +113,11 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
                 // that represents the media file.
                 songsList.add(Songs(contentUri, song, artist, album, duration))
             }
-            songsList.removeAt(0)
-            adapter.notifyDataSetChanged()
         }
+        //songsList.removeAt(0)
+        adapter.notifyDataSetChanged()
     }
+
 
     override fun onItemClick(position: Int) {
         val clickedItem = songsList[position]
@@ -159,14 +164,11 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
     fun updateUri(id: Int) {
         val uri = songsList[id].uri
-        viewModel.currentUri.value = uri
+        viewModel.currentUri.value = uri!!
     }
 
-    private fun updateFirst() {
-        //requireActivity().tvSongName.text = viewModel.getSong().value
-        //requireActivity().tvArtistName.text = viewModel.getArtist().value
-    }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -174,44 +176,17 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_songs, container, false)
 
-/*        val viewPagerMain = activity?.findViewById<ViewPager2>(R.id.viewPagerMain)
-        view.fabNext.setOnClickListener {
-            viewPagerMain?.currentItem = 1
-        }*/
-
-
         val tPad = requireActivity().blurAppBar.layoutParams.height
         val bPad = requireActivity().blurMiniPlayer.layoutParams.height
         view.rvSongs.setPadding(0, 0, 0, bPad)
-        //TypedValue.complexToDimensionPixelSize(sHeight, resources.displayMetrics)
-        //println("app bar is - $tPad, $bPad")
-        //val tv = TypedValue()
-        //if (requireActivity().theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-        //    val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
-
 
         view.fragmentSongsPlaceholderText.visibility = GONE
 
         view.rvSongs.adapter = adapter
         view.rvSongs.layoutManager = LinearLayoutManager(context)
         loadMedia()
-        //updateFirst()
 
         return view
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        //viewModel = ViewModelProvider(this).get(CommonViewModel::class.java)
-        requireActivity().tvSongName.text = viewModel.currentSong.value
-        requireActivity().tvArtistName.text = viewModel.currentArtist.value
-        viewModel.currentSong.observe(viewLifecycleOwner, Observer {
-            println("change detected song")
-            requireActivity().tvSongName.text = viewModel.currentSong.value
-        })
-        viewModel.currentArtist.observe(viewLifecycleOwner, Observer {
-            println("change detected artist")
-            requireActivity().tvArtistName.text = viewModel.currentArtist.value
-        })
-    }
 }

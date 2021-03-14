@@ -98,7 +98,7 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
             when (viewModel.busy.value) {
                 "true" -> {
                     println("player is playing")
-
+                    play()
                     view.tvTrackLength.text = viewModel.progressToString(player.duration)
                     view.iconPlay.visibility = View.INVISIBLE
                     view.iconPause.visibility = View.VISIBLE

@@ -42,7 +42,6 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:menu="@menu/menu"
                     app:layout_scrollFlags="noScroll"
-                    app:navigationIconTint="?attr/colorControlNormal"
                     app:navigationIcon="@drawable/ic_hamburger"
                     app:title="@string/title_activity_main"
                     app:titleTextAppearance="@style/AppBar" />
@@ -71,7 +70,7 @@
             android:background="@color/colorPrimary"
             android:clickable="true"
             android:focusable="true"
-            android:paddingTop="?attr/actionBarSize"
+            style="?attr/navigationViewStyle"
             app:headerLayout="@layout/navigation_header"
             app:menu="@menu/drawer_menu" />
 
