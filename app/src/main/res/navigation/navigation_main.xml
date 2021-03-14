@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_viewPagerFragment_to_nowPlayingFragment"
             app:destination="@id/nowPlayingFragment" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/nowPlayingFragment"
@@ -24,5 +27,9 @@
             android:id="@+id/action_nowPlayingFragment_to_viewPagerFragment"
             app:destination="@id/viewPagerFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.msc24x.player.SettingsFragment"
+        android:label="SettingsFragment" />
 
 </navigation>

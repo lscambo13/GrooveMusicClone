@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -38,8 +39,25 @@ class MainActivity : AppCompatActivity() {
         materialToolbar.setNavigationOnClickListener {
             drawerLayout.open()
         }
+
         navigationView.setNavigationItemSelectedListener {
-            it.isChecked = true
+            when (it.itemId) {
+                R.id.menuHome -> {
+                    Toast.makeText(applicationContext, "Home", Toast.LENGTH_SHORT).show()
+                }
+                R.id.menuRecent -> {
+                    Toast.makeText(applicationContext, "Recent", Toast.LENGTH_SHORT).show()
+                }
+                R.id.menuPlaylist -> {
+                    Toast.makeText(applicationContext, "Playlist", Toast.LENGTH_SHORT).show()
+                }
+                R.id.menuSettings -> {
+                    Toast.makeText(applicationContext, "Settings", Toast.LENGTH_SHORT).show()
+                    Navigation.findNavController(this, R.id.fragment)
+                        .navigate(R.id.action_viewPagerFragment_to_settingsFragment)
+                    //it.isChecked = true
+                }
+            }
             drawerLayout.close()
             true
         }

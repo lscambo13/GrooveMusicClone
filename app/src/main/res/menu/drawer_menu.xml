@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/menuSearch"
-            android:icon="@drawable/ic_search"
-            android:title="@string/search"
-            app:showAsAction="always" />
-    </group>
+    <group>
 
-    <group android:checkableBehavior="single">
         <item
-            android:id="@+id/menuSongs"
-            android:title="@string/title_activity_songs" />
+            android:id="@+id/menuHome"
+            android:icon="@drawable/ic_music"
+            android:title="@string/menuHome" />
         <item
-            android:id="@+id/menuArtists"
-            android:title="@string/title_activity_artists" />
+            android:id="@+id/menuRecent"
+            android:icon="@drawable/ic_recent"
+            android:title="@string/menuRecent" />
+
+
         <item
-            android:id="@+id/menuAlbums"
-            android:title="@string/title_activity_albums" />
+            android:id="@+id/menuPlaylist"
+            android:icon="@drawable/ic_playlist"
+            android:title="@string/menuPlaylist" />
+
+        <item
+            android:id="@+id/menuSettings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/menuSettings" />
+
     </group>
 </menu>
