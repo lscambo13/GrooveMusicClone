@@ -35,7 +35,7 @@ class CommonViewModel : ViewModel() {
 
 
     fun progressToString(p: Int): String {
-
+        str = ""
         val min = p / 1000 / 60
         val sec = p / 1000 % 60
         if (min == 0) {
