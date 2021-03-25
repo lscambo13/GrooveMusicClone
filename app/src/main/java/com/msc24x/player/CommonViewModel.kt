@@ -9,8 +9,10 @@ class CommonViewModel : ViewModel() {
     private var str = "0"
     val currentSong = MutableLiveData<String>()
     val currentArtist = MutableLiveData<String>()
+    val currentPosition = MutableLiveData<Int>()
     val currentUri = MutableLiveData<Uri>()
     val busy = MutableLiveData<String>()
+    val songLength = MutableLiveData<Int>()
 
 
 /*

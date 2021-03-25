@@ -46,7 +46,16 @@ class NowPlayingFragment : Fragment() {
                 art = BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size, bfo)
                 imgCoverArt.setImageBitmap(art)
             }
+            tvArtistName.text = viewModel.currentArtist.value
+            tvSongName.text = viewModel.currentSong.value
+            tvTrackLength.text = viewModel.progressToString(viewModel.songLength.value!!)
+        })
 
+        seekbar.max = viewModel.songLength.value!!
+
+        viewModel.currentPosition.observe(viewLifecycleOwner, Observer {
+            seekbar.progress = viewModel.currentPosition.value!!
+            tvTimeCode.text = viewModel.progressToString(viewModel.currentPosition.value!!)
         })
     }
 

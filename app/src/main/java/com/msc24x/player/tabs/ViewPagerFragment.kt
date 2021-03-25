@@ -99,7 +99,9 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                 "true" -> {
                     println("player is playing")
                     play()
-                    view.tvTrackLength.text = viewModel.progressToString(player.duration)
+                    viewModel.songLength.value = player.duration
+                    view.tvTrackLength.text =
+                        viewModel.progressToString(viewModel.songLength.value!!)
                     view.iconPlay.visibility = View.INVISIBLE
                     view.iconPause.visibility = View.VISIBLE
                     //busy = "true"
@@ -107,7 +109,9 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                 "false" -> {
                     player = MediaPlayer.create(requireActivity(), songUri)
                     println("player wasn't playing")
-                    view.tvTrackLength.text = viewModel.progressToString(player.duration)
+                    viewModel.songLength.value = player.duration
+                    view.tvTrackLength.text =
+                        viewModel.progressToString(viewModel.songLength.value!!)
                     player.start()
                     view.iconPlay.visibility = View.INVISIBLE
                     view.iconPause.visibility = View.VISIBLE
@@ -157,22 +161,30 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
         @SuppressLint("HandlerLeak")
         var handler = object : Handler() {
             override fun handleMessage(msg: Message) {
-                view.seekbar.progress = msg.what
-                view.tvTimeCode.text = viewModel.progressToString(msg.what)
+                viewModel.currentPosition.value = msg.what
                 savedInstanceState?.putInt("progressPos", msg.what)
+
             }
         }
+
+        viewModel.currentPosition.observe(viewLifecycleOwner, Observer {
+            view.seekbar.progress = viewModel.currentPosition.value!!
+            view.tvTimeCode.text = viewModel.progressToString(viewModel.currentPosition.value!!)
+        })
+
+
 
         Thread {
             while (safeThread) {
                 var msg = Message()
                 msg.what = player.currentPosition
-                var curPos = msg.what
                 //Preferences(this).setCurrentProgress(msg.what)
                 handler.sendMessage(msg)
                 Thread.sleep(100)
             }
         }.start()
+
+
         return view
     }
 
