@@ -269,10 +269,11 @@
 
         <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/seekbar"
+            android:background="@null"
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:progressDrawable="@drawable/progress"
-            android:thumb="@drawable/thumb_progress"
+            android:thumb="@drawable/thumb_drawable"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tvTrackLength"
             app:layout_constraintStart_toEndOf="@id/tvTimeCode" />
