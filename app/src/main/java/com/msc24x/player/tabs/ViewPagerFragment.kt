@@ -65,8 +65,10 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
 
 
         view.mainSongInfo.setOnClickListener {
-            Navigation.findNavController(requireActivity(), R.id.fragment)
-                .navigate(R.id.action_viewPagerFragment_to_nowPlayingFragment)
+
+            if (viewModel.currentUri.value != null)
+                Navigation.findNavController(requireActivity(), R.id.fragment)
+                    .navigate(R.id.action_viewPagerFragment_to_nowPlayingFragment)
         }
 
         when (this::player.isInitialized) {
@@ -84,17 +86,19 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
         player.isLooping = true
 
 
-        viewModel.currentSong.observe(viewLifecycleOwner, Observer {
-            println("change detected song- main")
-            view.tvSongName.text = viewModel.currentSong.value
-        })
-        viewModel.currentArtist.observe(viewLifecycleOwner, Observer {
-            println("change detected artist- main")
-            view.tvArtistName.text = viewModel.currentArtist.value
-        })
+//        viewModel.currentSong.observe(viewLifecycleOwner, Observer {
+//            println("change detected song- main")
+//            view.tvSongName.text = viewModel.currentSong.value
+//        })
+//        viewModel.currentArtist.observe(viewLifecycleOwner, Observer {
+//            println("change detected artist- main")
+//            view.tvArtistName.text = viewModel.currentArtist.value
+//        })
         viewModel.currentUri.observe(viewLifecycleOwner, Observer {
             println("change detected uri- main")
+
             songUri = viewModel.currentUri.value!!
+
             when (viewModel.busy.value) {
                 "true" -> {
                     println("player is playing")
@@ -118,6 +122,9 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                     viewModel.busy.value = "true"
                 }
             }
+
+            view.tvSongName.text = viewModel.currentSong.value
+            view.tvArtistName.text = viewModel.currentArtist.value
         })
 
 
