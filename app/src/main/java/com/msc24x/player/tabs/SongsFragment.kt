@@ -89,18 +89,21 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
             val artistColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ARTIST)
 
             while (cursor.moveToNext()) {
+
                 val id = cursor.getLong(idColumn)
                 var song = cursor.getString(nameColumn)
                 val fileName = cursor.getString(fileNameColumn)
+                var album = cursor.getString(albumColumn)
+                val duration = cursor.getInt(durationColumn)
+                var artist = cursor.getString(artistColumn)
+
                 when (song) {
                     null -> song = fileName
                 }
-                var album = cursor.getString(albumColumn)
                 when (album) {
                     null -> album = "Unknown"
                 }
-                val duration = cursor.getInt(durationColumn)
-                var artist = cursor.getString(artistColumn)
+
                 when (artist) {
                     null -> artist = "Unknown"
                 }
