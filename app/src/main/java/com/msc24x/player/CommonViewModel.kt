@@ -1,8 +1,10 @@
 package com.msc24x.player
 
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+
 
 class CommonViewModel : ViewModel() {
 
@@ -35,7 +37,7 @@ class CommonViewModel : ViewModel() {
 
 
     fun progressToString(p: Int): String {
-        str = ""
+        var str = ""
         val min = p / 1000 / 60
         val sec = p / 1000 % 60
         if (min == 0) {
