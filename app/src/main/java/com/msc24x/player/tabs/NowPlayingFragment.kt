@@ -32,6 +32,10 @@ class NowPlayingFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
 
+        viewModel.decodedArt.observe(viewLifecycleOwner, Observer {
+            imgCoverArt.setImageBitmap(it)
+        })
+
         viewModel.currentUri.observe(viewLifecycleOwner, Observer {
 //            val mmr = MediaMetadataRetriever()
 //            val rawArt: ByteArray?
