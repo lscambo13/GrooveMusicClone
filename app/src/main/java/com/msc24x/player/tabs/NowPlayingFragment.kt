@@ -1,8 +1,5 @@
 package com.msc24x.player.tabs
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.media.MediaMetadataRetriever
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -36,22 +33,26 @@ class NowPlayingFragment : Fragment() {
 
 
         viewModel.currentUri.observe(viewLifecycleOwner, Observer {
-            val mmr = MediaMetadataRetriever()
-            val rawArt: ByteArray?
-            var art: Bitmap
-            val bfo = BitmapFactory.Options()
-            mmr.setDataSource(requireContext(), it)
-            rawArt = mmr.embeddedPicture
-            if (rawArt != null) {
-                art = BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size, bfo)
-                imgCoverArt.setImageBitmap(art)
-            }
+//            val mmr = MediaMetadataRetriever()
+//            val rawArt: ByteArray?
+//            var art: Bitmap
+//            val bfo = BitmapFactory.Options()
+//            mmr.setDataSource(requireContext(), it)
+//            rawArt = mmr.embeddedPicture
+//
+//            if (rawArt != null) {
+//                art = BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size, bfo)
+//                val myPalette = createPaletteSync(art)
+//                val muted = myPalette.mutedSwatch
+//                viewModel.mutedColor.value = muted?.rgb
+//            }
             tvArtistName.text = viewModel.currentArtist.value
             tvSongName.text = viewModel.currentSong.value
             tvTrackLength.text = viewModel.progressToString(viewModel.songLength.value!!)
+            seekbar.max = viewModel.songLength.value!!
+
         })
 
-        seekbar.max = viewModel.songLength.value!!
 
         viewModel.currentPosition.observe(viewLifecycleOwner, Observer {
             seekbar.progress = viewModel.currentPosition.value!!
@@ -68,5 +69,6 @@ class NowPlayingFragment : Fragment() {
         super.onStop()
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
+
 
 }

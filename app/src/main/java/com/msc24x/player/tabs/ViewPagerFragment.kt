@@ -1,6 +1,10 @@
 package com.msc24x.player.tabs
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -10,12 +14,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.palette.graphics.Palette
 import com.google.android.material.tabs.TabLayoutMediator
 import com.msc24x.player.CommonViewModel
+import com.msc24x.player.PlayerService
 import com.msc24x.player.R
 import com.msc24x.player.SongAdapter
 import kotlinx.android.synthetic.main.fragment_view_pager.view.*
@@ -94,6 +101,7 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
 //            println("change detected artist- main")
 //            view.tvArtistName.text = viewModel.currentArtist.value
 //        })
+
         viewModel.currentUri.observe(viewLifecycleOwner, Observer {
             println("change detected uri- main")
 
@@ -121,8 +129,22 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                     view.iconPause.visibility = View.VISIBLE
                     viewModel.busy.value = "true"
                 }
+
             }
 
+            val mmr = MediaMetadataRetriever()
+            var art: Bitmap
+            val bfo = BitmapFactory.Options()
+            mmr.setDataSource(requireContext(), it)
+            val rawArt: ByteArray? = mmr.embeddedPicture
+
+            if (rawArt != null) {
+                art = BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size, bfo)
+                viewModel.decodedArt.value = art
+                val myPalette = createPaletteSync(art)
+                val muted = myPalette.mutedSwatch
+                viewModel.mutedColor.value = muted?.rgb
+            }
             view.tvSongName.text = viewModel.currentSong.value
             view.tvArtistName.text = viewModel.currentArtist.value
         })
@@ -210,8 +232,9 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(position: Int) {
-
         play()
     }
+
+    fun createPaletteSync(bitmap: Bitmap): Palette = Palette.from(bitmap).generate()
 
 }
