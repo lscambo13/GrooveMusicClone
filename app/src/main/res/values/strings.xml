@@ -40,4 +40,12 @@
     <string name="menuRecent">Recent Plays</string>
     <string name="menuPlaylist">Playlists</string>
     <string name="menuSettings">Settings</string>
+    <string name="find_music">Music on this device</string>
+    <string name="find_music_description">Choose where we look for music</string>
+    <string name="audio_fx">Playback</string>
+    <string name="equalizer">Equalizer</string>
+    <string name="media_info">Media Info</string>
+    <string name="media_retriever_description">Automatically retrieve and update missing album art and metadata</string>
+    <string name="display_artist_art">Display artist art</string>
+    <string name="art_as_lockscreen_description">Get the Now Playing artist art my lock screen</string>
 </resources>
