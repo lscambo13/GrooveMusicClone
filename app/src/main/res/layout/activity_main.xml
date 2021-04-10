@@ -7,8 +7,6 @@
     android:background="@color/bgColor"
     tools:context=".MainActivity">
 
-    <!-- TODO - Add app drawer -->
-
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurAppBar"
         android:layout_width="match_parent"
@@ -75,10 +73,6 @@
             app:menu="@menu/drawer_menu" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
-
-    <!-- TODO - Add ripple effects -->
-    <!-- TODO - Add acrylic effects  -->
-    <!-- TODO - Add ColorPalette api  -->
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurMiniPlayer"
