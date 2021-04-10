@@ -149,7 +149,11 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
             view.tvArtistName.text = viewModel.currentArtist.value
         })
 
+        viewModel.mutedColor.observe(viewLifecycleOwner, Observer {
+            println("woah! new color")
+            view.ContainerMiniPlayer.setBackgroundColor(it!!)
 
+        })
 
         view.btnOutline.setOnClickListener {
             if (player.isPlaying) {
