@@ -171,7 +171,6 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -187,9 +186,14 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
         view.rvSongs.adapter = adapter
         view.rvSongs.layoutManager = LinearLayoutManager(context)
-        loadMedia()
-
         return view
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadMedia()
+        println("loaded songs")
     }
 
 }
