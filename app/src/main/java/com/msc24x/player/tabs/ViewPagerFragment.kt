@@ -14,7 +14,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -102,6 +101,10 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
 //            view.tvArtistName.text = viewModel.currentArtist.value
 //        })
 
+        val serviceIntent = Intent(requireContext(), PlayerService::class.java)
+        //startForegroundService(requireContext(), serviceIntent)
+        requireContext().startService(serviceIntent)
+
         viewModel.currentUri.observe(viewLifecycleOwner, Observer {
             println("change detected uri- main")
 
@@ -116,6 +119,7 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                         viewModel.progressToString(viewModel.songLength.value!!)
                     view.iconPlay.visibility = View.INVISIBLE
                     view.iconPause.visibility = View.VISIBLE
+
                     //busy = "true"
                 }
                 "false" -> {
@@ -169,6 +173,10 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                 println("click wasn't playing")
                 viewModel.busy.value = "true"
             }
+        }
+
+        view.iconMore.setOnClickListener {
+            requireContext().stopService(serviceIntent)
         }
 
 
