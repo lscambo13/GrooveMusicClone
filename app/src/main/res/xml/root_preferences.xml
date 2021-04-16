@@ -1,75 +1,64 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="@string/find_music">
-
-        <!--        <EditTextPreference
-                    app:key="signature"
-                    app:title="@string/signature_title"
-                    app:useSimpleSummaryProvider="true" />-->
-
-        <DropDownPreference
-            app:singleLineTitle="false"
-            app:title="@string/find_music_description" />
-
-        <!--        <ListPreference
-                    app:defaultValue="reply"
-                    app:entries="@array/reply_entries"
-                    app:entryValues="@array/reply_values"
-                    app:key="reply"
-                    app:title="@string/reply_title"
-                    app:useSimpleSummaryProvider="true" />-->
-
+    <PreferenceCategory
+        android:layout="@layout/custom_preference_category"
+        android:title="@string/find_music">
+        <Preference
+            android:key="pref_key_push"
+            android:layout="@layout/custom_preference"
+            android:title="@string/find_music_description" />
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/audio_fx">
-
-        <!--        <EditTextPreference
-                    app:key="signature"
-                    app:title="@string/signature_title"
-                    app:useSimpleSummaryProvider="true" />-->
-
-        <DropDownPreference app:title="@string/equalizer" />
-
-        <!--        <ListPreference
-                    app:defaultValue="reply"
-                    app:entries="@array/reply_entries"
-                    app:entryValues="@array/reply_values"
-                    app:key="reply"
-                    app:title="@string/reply_title"
-                    app:useSimpleSummaryProvider="true" />-->
-
+    <PreferenceCategory
+        android:layout="@layout/custom_preference_category"
+        android:title="@string/audio_fx">
+        <Preference
+            android:key="pref_key_push"
+            android:layout="@layout/custom_preference"
+            android:title="@string/equalizer" />
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/media_info">
-
+    <PreferenceCategory
+        android:layout="@layout/custom_preference_category"
+        android:title="@string/media_info">
         <SwitchPreferenceCompat
-            app:key="sync"
-            app:singleLineTitle="false"
-            app:title="@string/media_retriever_description" />
-
-        <!--        <SwitchPreferenceCompat
-                    app:dependency="sync"
-                    app:key="attachment"
-                    app:summaryOff="@string/attachment_summary_off"
-                    app:summaryOn="@string/attachment_summary_on"
-                    app:title="@string/attachment_title" />-->
-
+            android:key="pref_key_push"
+            android:layout="@layout/custom_switch_preference"
+            android:title="@string/media_retriever_description" />
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/display_artist_art">
-
+    <PreferenceCategory
+        android:layout="@layout/custom_preference_category"
+        android:title="@string/display_artist_art">
         <SwitchPreferenceCompat
-            app:key="sync"
-            app:singleLineTitle="false"
-            app:title="@string/art_as_lockscreen_description" />
+            android:key="pref_key_push"
+            android:layout="@layout/custom_switch_preference"
+            android:title="@string/art_as_lockscreen_description" />
+        <SwitchPreferenceCompat
+            android:key="pref_key_push"
+            android:layout="@layout/custom_switch_preference"
+            android:title="@string/art_as_wallpaper_description" />
+    </PreferenceCategory>
 
-        <!--        <SwitchPreferenceCompat
-                    app:dependency="sync"
-                    app:key="attachment"
-                    app:summaryOff="@string/attachment_summary_off"
-                    app:summaryOn="@string/attachment_summary_on"
-                    app:title="@string/attachment_title" />-->
-
+    <PreferenceCategory
+        android:layout="@layout/custom_preference_category"
+        android:title="@string/app">
+        <Preference
+            android:key="pref_key_push"
+            android:layout="@layout/custom_preference"
+            android:title="@string/help" />
+        <Preference
+            android:key="pref_key_push"
+            android:layout="@layout/custom_preference"
+            android:title="@string/feedback" />
+        <Preference
+            android:key="pref_key_push"
+            android:layout="@layout/custom_preference"
+            android:title="@string/about" />
+        <Preference
+            android:key="pref_key_push"
+            android:layout="@layout/custom_preference"
+            android:title="@string/sign_in_help" />
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -47,5 +47,11 @@
     <string name="media_info">Media Info</string>
     <string name="media_retriever_description">Automatically retrieve and update missing album art and metadata</string>
     <string name="display_artist_art">Display artist art</string>
-    <string name="art_as_lockscreen_description">Get the Now Playing artist art my lock screen</string>
+    <string name="art_as_lockscreen_description">Set the Now Playing artist art as my lock screen</string>
+    <string name="app">App</string>
+    <string name="help">Help</string>
+    <string name="feedback">Feedback</string>
+    <string name="about">About</string>
+    <string name="sign_in_help">Need to sign in?</string>
+    <string name="art_as_wallpaper_description">Set the Now Playing artist art as my wallpaper</string>
 </resources>

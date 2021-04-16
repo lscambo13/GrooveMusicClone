@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -27,6 +27,10 @@
         <item name="backgroundColor">@color/bgColor</item>
         <item name="tabIndicatorColor">@color/variableAccent</item>
         <item name="tabUnboundedRipple">false</item>
+    </style>
+
+    <style name="PreferenceFragment.Material" tools:ignore="PrivateResource">
+        <item name="android:divider">@null</item>
     </style>
 
 </resources>
