@@ -67,7 +67,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     )
 
     // Display videos in alphabetical order based on their display name.
-    private val sortOrder = "${MediaStore.Audio.Media.DISPLAY_NAME} ASC"
+    private val sortOrder = "${MediaStore.Audio.Media.TITLE} ASC"
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun loadMedia() {
