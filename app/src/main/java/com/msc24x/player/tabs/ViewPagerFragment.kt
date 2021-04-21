@@ -148,7 +148,17 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                 val myPalette = createPaletteSync(art)
                 val muted = myPalette.mutedSwatch
                 viewModel.mutedColor.value = muted?.rgb
+            } else {
+                art = BitmapFactory.decodeResource(
+                    requireActivity().resources,
+                    R.drawable.missing_album_art
+                )
+                viewModel.decodedArt.value = art
+                val myPalette = createPaletteSync(art)
+                val muted = myPalette.mutedSwatch
+                viewModel.mutedColor.value = muted?.rgb
             }
+
             view.tvSongName.text = viewModel.currentSong.value
             view.tvArtistName.text = viewModel.currentArtist.value
         })
