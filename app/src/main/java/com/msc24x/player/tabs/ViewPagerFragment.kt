@@ -167,11 +167,13 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
 
         viewModel.mutedColor.observe(viewLifecycleOwner, Observer {
             println("woah! new color")
-            view.ContainerMiniPlayer.setBackgroundColor(it!!)
 
-            requireActivity().window.navigationBarColor = it
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                requireActivity().window.navigationBarDividerColor = it
+            if (it != null) {
+                view.ContainerMiniPlayer.setBackgroundColor(it)
+                requireActivity().window.navigationBarColor = it
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    requireActivity().window.navigationBarDividerColor = it
+                }
             }
         })
 
