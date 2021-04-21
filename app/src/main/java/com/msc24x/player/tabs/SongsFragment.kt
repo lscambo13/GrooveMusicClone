@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
-import com.msc24x.player.SongAdapter
-import com.msc24x.player.Songs
+import com.msc24x.player.adapters.SongAdapter
+import com.msc24x.player.data.Songs
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_songs.*
 import kotlinx.android.synthetic.main.fragment_songs.view.*

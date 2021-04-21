@@ -23,7 +23,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.msc24x.player.CommonViewModel
 import com.msc24x.player.PlayerService
 import com.msc24x.player.R
-import com.msc24x.player.SongAdapter
+import com.msc24x.player.adapters.SongAdapter
+import com.msc24x.player.mediaplayer.PlayerService
 import kotlinx.android.synthetic.main.fragment_view_pager.view.*
 
 class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
