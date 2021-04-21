@@ -45,7 +45,9 @@ class MainActivity : AppCompatActivity() {
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menuHome -> {
-                    Toast.makeText(applicationContext, "Home", Toast.LENGTH_SHORT).show()
+                    Navigation.findNavController(this, R.id.fragment)
+                        .navigate(R.id.action_settingsFragment_to_viewPagerFragment)
+                    materialToolbar.title = getString(R.string.title_activity_main)
                 }
                 R.id.menuRecent -> {
                     Toast.makeText(applicationContext, "Recent", Toast.LENGTH_SHORT).show()
@@ -57,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Settings", Toast.LENGTH_SHORT).show()
                     Navigation.findNavController(this, R.id.fragment)
                         .navigate(R.id.action_viewPagerFragment_to_settingsFragment)
+                    materialToolbar.title = getString(R.string.title_fragment_settings)
                     //it.isChecked = true
                 }
             }
