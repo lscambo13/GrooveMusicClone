@@ -18,7 +18,8 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.305" />
+        app:layout_constraintVertical_bias="0.3"
+        app:shapeAppearance="?attr/shapeAppearanceSmallComponent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ContainerMiniPlayer"
