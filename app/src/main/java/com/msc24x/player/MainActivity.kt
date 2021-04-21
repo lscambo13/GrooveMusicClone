@@ -35,6 +35,8 @@ class MainActivity : AppCompatActivity() {
             111
         )
 
+        window.navigationBarColor = resources.getColor(R.color.variableAccent)
+
         setSupportActionBar(materialToolbar)
         materialToolbar.setNavigationOnClickListener {
             drawerLayout.open()

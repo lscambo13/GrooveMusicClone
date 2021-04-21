@@ -31,6 +31,11 @@ class NowPlayingFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        requireActivity().window.navigationBarColor = resources.getColor(R.color.colorPrimary)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            requireActivity().window.navigationBarDividerColor =
+                resources.getColor(R.color.colorPrimary)
+        }
 
         viewModel.decodedArt.observe(viewLifecycleOwner, Observer {
             imgCoverArt.setImageBitmap(it)
