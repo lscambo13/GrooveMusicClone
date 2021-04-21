@@ -1,4 +1,4 @@
-package com.msc24x.player
+package com.msc24x.player.data
 
 import android.net.Uri
 
