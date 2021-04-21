@@ -36,4 +36,8 @@
         <item name="android:divider">@null</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="AppTheme">
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>
