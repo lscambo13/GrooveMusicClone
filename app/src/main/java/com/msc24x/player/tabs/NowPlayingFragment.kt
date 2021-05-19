@@ -23,6 +23,7 @@ class NowPlayingFragment : Fragment() {
 
     private val viewModel: CommonViewModel by activityViewModels()
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -73,6 +74,7 @@ class NowPlayingFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
     }
 

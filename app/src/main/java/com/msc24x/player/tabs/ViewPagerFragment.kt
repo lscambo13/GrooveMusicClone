@@ -8,11 +8,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
-import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,15 +22,12 @@ import androidx.navigation.Navigation
 import androidx.palette.graphics.Palette
 import com.google.android.material.tabs.TabLayoutMediator
 import com.msc24x.player.CommonViewModel
-import com.msc24x.player.PlayerService
 import com.msc24x.player.R
-import com.msc24x.player.adapters.SongAdapter
 import com.msc24x.player.mediaplayer.PlayerService
 import kotlinx.android.synthetic.main.fragment_view_pager.view.*
 
-class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
+class ViewPagerFragment : Fragment() {
 
-    lateinit var player: MediaPlayer
     lateinit var songUri: Uri
     private val viewModel: CommonViewModel by activityViewModels()
     var safeThread = true
@@ -66,11 +61,11 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
 
         TabLayoutMediator(
             tabLayout,
-            viewPager,
-            TabLayoutMediator.TabConfigurationStrategy { tab, position ->
-                tab.text = tabTitles[position]
-                viewPager.setCurrentItem(tab.position, true)
-            }).attach()
+            viewPager
+        ) { tab, position ->
+            tab.text = tabTitles[position]
+            viewPager.setCurrentItem(tab.position, true)
+        }.attach()
 
 
 
@@ -81,37 +76,8 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                     .navigate(R.id.action_viewPagerFragment_to_nowPlayingFragment)
         }
 
-        when (this::player.isInitialized) {
-            true -> {
-
-            }
-            false -> {
-                player = MediaPlayer.create(requireActivity(), R.raw.song)
-                view.iconPlay.visibility = View.VISIBLE
-                view.iconPause.visibility = View.INVISIBLE
-                view.tvTrackLength.text = viewModel.progressToString(player.duration)
-                viewModel.busy.value = "false"
-            }
-        }
-        player.isLooping = true
-
-
-//        viewModel.currentSong.observe(viewLifecycleOwner, Observer {
-//            println("change detected song- main")
-//            view.tvSongName.text = viewModel.currentSong.value
-//        })
-//        viewModel.currentArtist.observe(viewLifecycleOwner, Observer {
-//            println("change detected artist- main")
-//            view.tvArtistName.text = viewModel.currentArtist.value
-//        })
-
-        val serviceIntent = Intent(requireContext(), PlayerService::class.java)
-        //startForegroundService(requireContext(), serviceIntent)
-        requireContext().startService(serviceIntent)
-
         viewModel.currentUri.observe(viewLifecycleOwner, Observer {
             println("change detected uri- main")
-
             songUri = viewModel.currentUri.value!!
             if (viewModel.songLength.value != null) {
                 view.seekbar.max = viewModel.songLength.value!!
@@ -122,18 +88,13 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                 true -> {
                     println("player is playing")
                     play()
-                    viewModel.songLength.value = player.duration
                     view.tvTrackLength.text =
                         Utils.progressToString(viewModel.songLength.value!!)
                     view.iconPlay.visibility = View.INVISIBLE
                     view.iconPause.visibility = View.VISIBLE
-
-                    //busy = "true"
                 }
                 false -> {
-                    //player = MediaPlayer.create(requireActivity(), songUri)
                     println("player wasn't playing")
-                    viewModel.songLength.value = player.duration
                     view.tvTrackLength.text =
                         Utils.progressToString(viewModel.songLength.value!!)
                     play()
@@ -143,6 +104,7 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                 }
 
             }
+
 
             val mmr = MediaMetadataRetriever()
             var art: Bitmap
@@ -203,12 +165,6 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
             }
         }
 
-        view.iconMore.setOnClickListener {
-            requireContext().stopService(serviceIntent)
-        }
-
-
-        view.seekbar.max = player.duration
         view.seekbar.setOnSeekBarChangeListener(
             object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(
@@ -239,26 +195,20 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
             override fun handleMessage(msg: Message) {
                 viewModel.currentPosition.value = msg.what
                 savedInstanceState?.putInt("progressPos", msg.what)
-
             }
         }
 
-        viewModel.currentPosition.observe(viewLifecycleOwner, Observer {
-            view.seekbar.progress = viewModel.currentPosition.value!!
-            view.tvTimeCode.text = viewModel.progressToString(viewModel.currentPosition.value!!)
-        })
-
-
-
-        Thread {
-            while (safeThread) {
-                var msg = Message()
-                msg.what = player.currentPosition
+        var msg = Message()
+        var trackPlayerPos = Thread {
+            while (viewModel.busy.value == true) {
+                msg.what = viewModel.currentPosition.value!!//player.currentPosition
                 //Preferences(this).setCurrentProgress(msg.what)
                 handler.sendMessage(msg)
                 Thread.sleep(100)
             }
-        }.start()
+        }
+        trackPlayerPos.start()*/
+
 
 
         return view
@@ -287,13 +237,8 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
     override fun onDestroy() {
         super.onDestroy()
         safeThread = false
-        //player.release()
     }
 
-    override fun onItemClick(position: Int) {
-        play()
-    }
-
-    fun createPaletteSync(bitmap: Bitmap): Palette = Palette.from(bitmap).generate()
+    private fun createPaletteSync(bitmap: Bitmap): Palette = Palette.from(bitmap).generate()
 
 }

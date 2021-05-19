@@ -56,7 +56,6 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Playlist", Toast.LENGTH_SHORT).show()
                 }
                 R.id.menuSettings -> {
-                    Toast.makeText(applicationContext, "Settings", Toast.LENGTH_SHORT).show()
                     Navigation.findNavController(this, R.id.fragment)
                         .navigate(R.id.action_viewPagerFragment_to_settingsFragment)
                     materialToolbar.title = getString(R.string.title_fragment_settings)
@@ -122,6 +121,7 @@ class MainActivity : AppCompatActivity() {
             .setHasFixedTransformationMatrix(true)
 
     }
+
 
 }
 

@@ -53,6 +53,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         }
 
+    @RequiresApi(Build.VERSION_CODES.R)
     private val projection = arrayOf(
         MediaStore.Audio.Media._ID,
         MediaStore.Audio.Media.TITLE,
@@ -63,6 +64,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     )
 
     // Show only videos that are at least 5 minutes in duration.
+    @RequiresApi(Build.VERSION_CODES.Q)
     private val selection = "${MediaStore.Video.Media.DURATION} >= ?"
     private val selectionArgs = arrayOf(
         TimeUnit.MILLISECONDS.convert(2, TimeUnit.MINUTES).toString()
@@ -71,7 +73,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     // Display videos in alphabetical order based on their display name.
     private val sortOrder = "${MediaStore.Audio.Media.TITLE} ASC"
 
-    @RequiresApi(Build.VERSION_CODES.Q)
+    @RequiresApi(Build.VERSION_CODES.R)
     private fun loadMedia() {
 
         val query = requireContext().contentResolver.query(
@@ -205,7 +207,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
         return view
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadMedia()
