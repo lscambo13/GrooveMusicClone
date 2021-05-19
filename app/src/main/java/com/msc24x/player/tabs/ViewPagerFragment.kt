@@ -1,6 +1,9 @@
 package com.msc24x.player.tabs
 
-import android.annotation.SuppressLint
+import Helpers.PAUSE
+import Helpers.PLAY
+import Helpers.SEEK_TO
+import Helpers.Utils
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -117,7 +120,7 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                     play()
                     viewModel.songLength.value = player.duration
                     view.tvTrackLength.text =
-                        viewModel.progressToString(viewModel.songLength.value!!)
+                        Utils.progressToString(viewModel.songLength.value!!)
                     view.iconPlay.visibility = View.INVISIBLE
                     view.iconPause.visibility = View.VISIBLE
 
@@ -128,8 +131,8 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                     println("player wasn't playing")
                     viewModel.songLength.value = player.duration
                     view.tvTrackLength.text =
-                        viewModel.progressToString(viewModel.songLength.value!!)
-                    player.start()
+                        Utils.progressToString(viewModel.songLength.value!!)
+                    play()
                     view.iconPlay.visibility = View.INVISIBLE
                     view.iconPause.visibility = View.VISIBLE
                     viewModel.busy.value = true

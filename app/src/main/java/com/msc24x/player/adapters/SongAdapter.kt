@@ -1,10 +1,10 @@
 package com.msc24x.player.adapters
 
+import Helpers.Utils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
 import com.msc24x.player.data.Songs
 import kotlinx.android.synthetic.main.list_songs.view.*
@@ -25,7 +25,7 @@ class SongAdapter(
             tvListSongName.text = songs[position].SongTitle
             val listArtist = songs[position].ArtistName + " • " + songs[position].AlbumName
             tvListArtistName.text = listArtist
-            tvListDuration.text = CommonViewModel().progressToString(songs[position].Duration)
+            tvListDuration.text = Utils.progressToString(songs[position].Duration)
         }
     }
 

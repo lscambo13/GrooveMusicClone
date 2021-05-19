@@ -1,5 +1,7 @@
 package com.msc24x.player.tabs
 
+import Helpers.Utils
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -57,7 +59,7 @@ class NowPlayingFragment : Fragment() {
 //            }
             tvArtistName.text = viewModel.currentArtist.value
             tvSongName.text = viewModel.currentSong.value
-            tvTrackLength.text = viewModel.progressToString(viewModel.songLength.value!!)
+            tvTrackLength.text = Utils.progressToString(viewModel.songLength.value!!)
             seekbar.max = viewModel.songLength.value!!
 
         })
@@ -65,7 +67,7 @@ class NowPlayingFragment : Fragment() {
 
         viewModel.currentPosition.observe(viewLifecycleOwner, Observer {
             seekbar.progress = viewModel.currentPosition.value!!
-            tvTimeCode.text = viewModel.progressToString(viewModel.currentPosition.value!!)
+            tvTimeCode.text = Utils.progressToString(viewModel.currentPosition.value!!)
         })
     }
 
