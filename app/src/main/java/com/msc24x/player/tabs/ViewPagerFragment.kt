@@ -113,6 +113,10 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
             println("change detected uri- main")
 
             songUri = viewModel.currentUri.value!!
+            if (viewModel.songLength.value != null) {
+                view.seekbar.max = viewModel.songLength.value!!
+                view.tvTrackLength.text = Utils.progressToString(view.seekbar.max)
+            }
 
             when (viewModel.busy.value) {
                 true -> {
@@ -184,8 +188,8 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
         })
 
         view.btnOutline.setOnClickListener {
-            if (player.isPlaying) {
-                player.pause()
+            if (viewModel.busy.value == true) {
+                pause()
                 println("click is playing")
                 view.iconPlay.visibility = View.VISIBLE
                 view.iconPause.visibility = View.INVISIBLE
@@ -193,7 +197,7 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
             } else {
                 view.iconPlay.visibility = View.INVISIBLE
                 view.iconPause.visibility = View.VISIBLE
-                player.start()
+                play()
                 println("click wasn't playing")
                 viewModel.busy.value = true
             }
@@ -213,8 +217,9 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                     fromUser: Boolean
                 ) {
                     if (fromUser) {
-                        player.seekTo(progress)
-                        view.tvTimeCode.text = viewModel.progressToString(progress)
+                        seekTo(progress)
+                        //player.seekTo(progress)
+                        view.tvTimeCode.text = Utils.progressToString(progress)
                     }
                 }
 
@@ -223,7 +228,13 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
             }
         )
 
-        @SuppressLint("HandlerLeak")
+        viewModel.currentPosition.observe(viewLifecycleOwner, Observer {
+            view.seekbar.progress = viewModel.currentPosition.value!!
+            view.tvTimeCode.text = Utils.progressToString(viewModel.currentPosition.value!!)
+        })
+
+
+/*        @SuppressLint("HandlerLeak")
         var handler = object : Handler() {
             override fun handleMessage(msg: Message) {
                 viewModel.currentPosition.value = msg.what
@@ -253,12 +264,24 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
         return view
     }
 
-    fun play() {
-        songUri = viewModel.currentUri.value!!
-        player.pause()
-        player.reset()
-        player = MediaPlayer.create(requireActivity(), songUri)
-        player.start()
+    private fun play() {
+        val intent = Intent(context, PlayerService::class.java)
+        intent.action = PLAY
+        requireActivity().startService(intent)
+    }
+
+    private fun pause() {
+        val intent = Intent(context, PlayerService::class.java)
+        intent.action = PAUSE
+        requireActivity().startService(intent)
+    }
+
+
+    private fun seekTo(pos: Int) {
+        val intent = Intent(context, PlayerService::class.java)
+        intent.action = SEEK_TO
+        intent.putExtra(SEEK_TO, pos)
+        requireActivity().startService(intent)
     }
 
     override fun onDestroy() {
