@@ -112,7 +112,7 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
             songUri = viewModel.currentUri.value!!
 
             when (viewModel.busy.value) {
-                "true" -> {
+                true -> {
                     println("player is playing")
                     play()
                     viewModel.songLength.value = player.duration
@@ -123,8 +123,8 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
 
                     //busy = "true"
                 }
-                "false" -> {
-                    player = MediaPlayer.create(requireActivity(), songUri)
+                false -> {
+                    //player = MediaPlayer.create(requireActivity(), songUri)
                     println("player wasn't playing")
                     viewModel.songLength.value = player.duration
                     view.tvTrackLength.text =
@@ -132,7 +132,7 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                     player.start()
                     view.iconPlay.visibility = View.INVISIBLE
                     view.iconPause.visibility = View.VISIBLE
-                    viewModel.busy.value = "true"
+                    viewModel.busy.value = true
                 }
 
             }
@@ -186,13 +186,13 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                 println("click is playing")
                 view.iconPlay.visibility = View.VISIBLE
                 view.iconPause.visibility = View.INVISIBLE
-                viewModel.busy.value = "false"
+                viewModel.busy.value = false
             } else {
                 view.iconPlay.visibility = View.INVISIBLE
                 view.iconPause.visibility = View.VISIBLE
                 player.start()
                 println("click wasn't playing")
-                viewModel.busy.value = "true"
+                viewModel.busy.value = true
             }
         }
 
