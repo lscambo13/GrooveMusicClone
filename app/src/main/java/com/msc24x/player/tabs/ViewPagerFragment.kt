@@ -147,7 +147,10 @@ class ViewPagerFragment : Fragment(), SongAdapter.OnItemClickListener {
                 art = BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size, bfo)
                 viewModel.decodedArt.value = art
                 val myPalette = createPaletteSync(art)
-                val muted = myPalette.mutedSwatch
+                var muted = myPalette.mutedSwatch
+                if (muted == null) {
+                    muted = myPalette.darkVibrantSwatch
+                }
                 viewModel.mutedColor.value = muted?.rgb
             } else {
                 art = BitmapFactory.decodeResource(
