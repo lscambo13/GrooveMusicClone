@@ -129,10 +129,11 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
         updateSong(position)
         updateArtist(position)
         updateUri(position)
-        //updatePlayIndicator(position)
-        Snackbar.make(requireView(), "item $position, ${clickedItem.uri}", Snackbar.LENGTH_LONG)
-            .setAnchorView(requireActivity().blurMiniPlayer)
-            .show()
+        updateDuration(position)
+//        updatePlayIndicator(position)
+//        Snackbar.make(requireView(), "item $position, ${clickedItem.uri}", Snackbar.LENGTH_LONG)
+//            .setAnchorView(requireActivity().blurMiniPlayer)
+//            .show()
         //Toast.makeText(activity, "item $position, ${clickedItem.uri}", Toast.LENGTH_SHORT).show()
         //rvSongs[position].tvListSongName.setTextColor(context!!.getColor(R.color.variableAccent))
         //rvSongs[position].tvListArtistName.setTextColor(context!!.getColor(R.color.variableAccent))
@@ -156,20 +157,24 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
     }
 
-    fun updateSong(id: Int) {
+    private fun updateDuration(id: Int) {
+        viewModel.songLength.value = songsList[id].Duration
+    }
+
+    private fun updateSong(id: Int) {
         val song = songsList[id].SongTitle
         viewModel.currentSong.value = song
         //requireActivity().tvSongName.text = viewModel.getSong().value
     }
 
-    fun updateArtist(id: Int) {
+    private fun updateArtist(id: Int) {
         val artist = songsList[id].ArtistName
         viewModel.currentArtist.value = artist
         //requireActivity().tvArtistName.text = viewModel.getArtist().value
 
     }
 
-    fun updateUri(id: Int) {
+    private fun updateUri(id: Int) {
         val uri = songsList[id].uri
         viewModel.currentUri.value = uri!!
     }
