@@ -1,6 +1,9 @@
 package com.msc24x.player.tabs
 
+import Helpers.PLAY_SONG
+import Helpers.TRACK_URI
 import android.content.ContentUris
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -8,18 +11,17 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
 import com.msc24x.player.adapters.SongAdapter
 import com.msc24x.player.data.Songs
+import com.msc24x.player.mediaplayer.PlayerService
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_songs.*
 import kotlinx.android.synthetic.main.fragment_songs.view.*
@@ -135,6 +137,8 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
         //rvSongs[position].tvListSongName.setTextColor(context!!.getColor(R.color.variableAccent))
         //rvSongs[position].tvListArtistName.setTextColor(context!!.getColor(R.color.variableAccent))
         adapter.notifyItemChanged(position)
+        playSelectedSong()
+        viewModel.busy.value = true
     }
 
     fun updatePlayIndicator(id: Int) {
@@ -168,6 +172,13 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     fun updateUri(id: Int) {
         val uri = songsList[id].uri
         viewModel.currentUri.value = uri!!
+    }
+
+    private fun playSelectedSong() {
+        val intent = Intent(context, PlayerService::class.java)
+        intent.action = PLAY_SONG
+        intent.putExtra(TRACK_URI, viewModel.currentUri.value.toString())
+        requireActivity().startService(intent)
     }
 
 
