@@ -24,11 +24,12 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
 import com.msc24x.player.mediaplayer.PlayerService
+import kotlinx.android.synthetic.main.fragment_view_pager.*
 import kotlinx.android.synthetic.main.fragment_view_pager.view.*
 
 class ViewPagerFragment : Fragment() {
 
-    lateinit var songUri: Uri
+    ///lateinit var songUri: Uri
     private val viewModel: CommonViewModel by activityViewModels()
     var safeThread = true
 
@@ -67,10 +68,7 @@ class ViewPagerFragment : Fragment() {
             viewPager.setCurrentItem(tab.position, true)
         }.attach()
 
-
-
         view.mainSongInfo.setOnClickListener {
-
             if (viewModel.currentUri.value != null)
                 Navigation.findNavController(requireActivity(), R.id.fragment)
                     .navigate(R.id.action_viewPagerFragment_to_nowPlayingFragment)
@@ -80,12 +78,16 @@ class ViewPagerFragment : Fragment() {
             ContainerMiniPlayer.visibility = View.VISIBLE
 
             println("change detected uri- main")
-            songUri = viewModel.currentUri.value!!
+
+            // Display main song info
+            view.tvSongName.text = viewModel.currentSong.value
+            view.tvArtistName.text = viewModel.currentArtist.value
             if (viewModel.songLength.value != null) {
                 view.seekbar.max = viewModel.songLength.value!!
                 view.tvTrackLength.text = Utils.progressToString(view.seekbar.max)
             }
 
+            // Handle Uri change
             when (viewModel.busy.value) {
                 true -> {
                     println("player is playing")
@@ -104,49 +106,18 @@ class ViewPagerFragment : Fragment() {
                     view.iconPause.visibility = View.VISIBLE
                     viewModel.busy.value = true
                 }
-
             }
 
+            // Update Song Art (Image and color)
+            saveSongArt(it)
 
-            val mmr = MediaMetadataRetriever()
-            var art: Bitmap
-            val bfo = BitmapFactory.Options()
-            mmr.setDataSource(requireContext(), it)
-            val rawArt: ByteArray? = mmr.embeddedPicture
-
-            if (rawArt != null) {
-                art = BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size, bfo)
-                viewModel.decodedArt.value = art
-                val myPalette = createPaletteSync(art)
-                var muted = myPalette.mutedSwatch
-                if (muted == null) {
-                    muted = myPalette.darkVibrantSwatch
-                }
-                viewModel.mutedColor.value = muted?.rgb
-            } else {
-                art = BitmapFactory.decodeResource(
-                    requireActivity().resources,
-                    R.drawable.missing_album_art
-                )
-                viewModel.decodedArt.value = art
-                val myPalette = createPaletteSync(art)
-                val muted = myPalette.mutedSwatch
-                viewModel.mutedColor.value = muted?.rgb
-            }
-
-            view.tvSongName.text = viewModel.currentSong.value
-            view.tvArtistName.text = viewModel.currentArtist.value
-        })
-
-
-        viewModel.mutedColor.observe(viewLifecycleOwner, Observer {
-            println("woah! new color")
-
-            if (it != null) {
-                view.ContainerMiniPlayer.setBackgroundColor(it)
-                requireActivity().window.navigationBarColor = it
+            // Handle muted color change
+            if (viewModel.mutedColor.value != null) {
+                view.ContainerMiniPlayer.setBackgroundColor(viewModel.mutedColor.value!!)
+                requireActivity().window.navigationBarColor = viewModel.mutedColor.value!!
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    requireActivity().window.navigationBarDividerColor = it
+                    requireActivity().window.navigationBarDividerColor =
+                        viewModel.mutedColor.value!!
                 }
             }
         })
@@ -192,7 +163,8 @@ class ViewPagerFragment : Fragment() {
         })
 
 
-/*        @SuppressLint("HandlerLeak")
+/*
+        @SuppressLint("HandlerLeak")
         var handler = object : Handler() {
             override fun handleMessage(msg: Message) {
                 viewModel.currentPosition.value = msg.what
@@ -211,9 +183,37 @@ class ViewPagerFragment : Fragment() {
         }
         trackPlayerPos.start()*/
 
-
-
         return view
+    }
+
+    private fun saveSongArt(uri: Uri) {
+        val mmr = MediaMetadataRetriever()
+        val art: Bitmap
+        val bfo = BitmapFactory.Options()
+        mmr.setDataSource(requireContext(), uri)
+        val rawArt: ByteArray? = mmr.embeddedPicture
+
+        if (rawArt != null) {
+            art = BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size, bfo)
+            viewModel.decodedArt.value = art
+            saveMutedColor(art)
+        } else {
+            art = BitmapFactory.decodeResource(
+                requireActivity().resources,
+                R.drawable.missing_album_art
+            )
+            viewModel.decodedArt.value = art
+            saveMutedColor(art)
+        }
+    }
+
+    private fun saveMutedColor(art: Bitmap) {
+        val myPalette = createPaletteSync(art)
+        var muted = myPalette.mutedSwatch
+        if (muted == null) {
+            muted = myPalette.darkVibrantSwatch
+        }
+        viewModel.mutedColor.value = muted?.rgb
     }
 
     private fun play() {
