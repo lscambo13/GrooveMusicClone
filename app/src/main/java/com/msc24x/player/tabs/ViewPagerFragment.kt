@@ -77,6 +77,8 @@ class ViewPagerFragment : Fragment() {
         }
 
         viewModel.currentUri.observe(viewLifecycleOwner, Observer {
+            ContainerMiniPlayer.visibility = View.VISIBLE
+
             println("change detected uri- main")
             songUri = viewModel.currentUri.value!!
             if (viewModel.songLength.value != null) {
