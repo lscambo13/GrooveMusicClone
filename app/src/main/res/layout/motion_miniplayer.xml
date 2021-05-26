@@ -13,6 +13,10 @@
         android:clickable="true"
         android:focusable="true"
         android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,66 +25,87 @@
             android:layout_height="76dp"
             android:alpha="0.4"
             android:background="@color/textBlack"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgCoverArt"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="6dp"
-            android:background="@color/transparent"
-            android:elevation="0dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_no_art"
-            app:layout_constraintEnd_toStartOf="@id/mainSongInfo"
-            app:layout_constraintTop_toTopOf="@id/mainSongInfo"
-            app:shapeAppearance="?attr/shapeAppearanceSmallComponent" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/mainSongInfo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="56dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="12dp"
-            android:background="?android:selectableItemBackground"
-            android:clickable="true"
-            android:contextClickable="true"
-            android:focusable="true"
-            app:layout_constraintEnd_toStartOf="@id/iconPrev"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tvSongName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:scrollHorizontally="true"
-                android:text="@string/title_activity_songs"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/textWhite"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/tvArtistName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:singleLine="true"
-                android:text="@string/title_activity_artists"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/textWhite"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvSongName" />
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imgCoverArt"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@color/transparent"
+        android:elevation="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_no_art"
+        app:layout_constraintBottom_toTopOf="@id/seekbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".03"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".99"
+        app:shapeAppearance="?attr/shapeAppearanceSmallComponent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainSongInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        android:contextClickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toTopOf="@id/seekbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".99">
+
+        <TextView
+            android:id="@+id/tvSongName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
+            android:text="@string/title_activity_songs"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/textWhite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvArtistName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@string/title_activity_artists"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/textWhite"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSongName" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mediaControls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/seekbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".995">
 
         <com.msc24x.player.IconTextView
             android:id="@+id/iconPlay"
@@ -118,9 +143,10 @@
             android:text="@string/icon_next"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/textWhite"
-            app:layout_constraintBottom_toTopOf="@+id/seekbar"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iconMore"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias=".5" />
 
         <com.msc24x.player.IconTextView
             android:id="@+id/iconPrev"
@@ -133,9 +159,10 @@
             android:text="@string/icon_prev"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/textWhite"
-            app:layout_constraintBottom_toTopOf="@+id/seekbar"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnOutline"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias=".5" />
 
         <com.msc24x.player.IconTextView
             android:id="@+id/iconMore"
@@ -150,64 +177,74 @@
             android:text="@string/icon_more"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/textWhite"
-            app:layout_constraintBottom_toTopOf="@+id/seekbar"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias=".5" />
 
         <ImageButton
             android:id="@+id/btnOutline"
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:layout_marginEnd="10dp"
-            android:background="@color/transparent"
+            android:background="?android:actionBarItemBackground"
             android:clickable="true"
             android:focusable="true"
             android:scaleType="centerInside"
             android:src="@drawable/ic_outline"
-            app:layout_constraintBottom_toTopOf="@+id/seekbar"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iconNext"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias=".5"
             tools:ignore="ContentDescription" />
 
-        <TextView
-            android:id="@+id/tvTimeCode"
-            android:layout_width="35dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8sp"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/textWhite"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatSeekBar
-            android:id="@+id/seekbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:background="@null"
-            android:progressDrawable="@drawable/progress"
-            android:thumb="@drawable/thumb_drawable"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tvTrackLength"
-            app:layout_constraintStart_toEndOf="@id/tvTimeCode" />
-
-        <TextView
-            android:id="@+id/tvTrackLength"
-            android:layout_width="35dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8sp"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/textWhite"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tvTimeCode"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="2:43"
+        android:textColor="@color/textWhite"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".005"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".990" />
+
+    <androidx.appcompat.widget.AppCompatSeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:background="@null"
+        android:progressDrawable="@drawable/progress"
+        android:thumb="@drawable/thumb_drawable"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvTrackLength"
+        app:layout_constraintStart_toEndOf="@id/tvTimeCode"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".995" />
+
+    <TextView
+        android:id="@+id/tvTrackLength"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="6:26"
+        android:textColor="@color/textWhite"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".990"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".990" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
