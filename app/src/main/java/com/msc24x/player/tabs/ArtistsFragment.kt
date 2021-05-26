@@ -80,8 +80,8 @@ class ArtistsFragment : Fragment(), ArtistAdapter.OnItemClickListener {
             viewPagerMain?.currentItem = 2
         }
 
-        val bPad = requireActivity().blurMiniPlayer.layoutParams.height
-        view.rvArtists.setPadding(0, 0, 0, bPad)
+        //val bPad = requireActivity().blurMiniPlayer.layoutParams.height
+        //view.rvArtists.setPadding(0, 0, 0, bPad)
 
         view.fragmentArtistsPlaceholderText.visibility = View.GONE
         view.rvArtists.adapter = adapter

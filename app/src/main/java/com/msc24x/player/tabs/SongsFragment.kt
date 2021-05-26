@@ -195,9 +195,9 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_songs, container, false)
 
-        val tPad = requireActivity().blurAppBar.layoutParams.height
-        val bPad = requireActivity().blurMiniPlayer.layoutParams.height
-        view.rvSongs.setPadding(0, 0, 0, bPad)
+        //val tPad = requireActivity().blurAppBar.layoutParams.height
+        //val bPad = requireActivity().blurMiniPlayer.layoutParams.height
+        //view.rvSongs.setPadding(0, 0, 0, bPad)
 
         view.fragmentSongsPlaceholderText.visibility = GONE
 
