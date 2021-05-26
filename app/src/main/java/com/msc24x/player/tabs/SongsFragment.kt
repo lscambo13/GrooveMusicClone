@@ -22,10 +22,9 @@ import com.msc24x.player.R
 import com.msc24x.player.adapters.SongAdapter
 import com.msc24x.player.data.Songs
 import com.msc24x.player.mediaplayer.PlayerService
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_songs.*
 import kotlinx.android.synthetic.main.fragment_songs.view.*
-import kotlinx.android.synthetic.main.list_songs.view.*
+import kotlinx.android.synthetic.main.list_item_songs.view.*
 import java.util.concurrent.TimeUnit
 
 

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.msc24x.player.R
 import com.msc24x.player.data.Arists
-import kotlinx.android.synthetic.main.list_artists.view.*
+import kotlinx.android.synthetic.main.list_item_artists.view.*
 
 
 class ArtistAdapter(

@@ -1,18 +1,18 @@
 package com.msc24x.player.tabs
 
 import Helpers.Utils
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
-import kotlinx.android.synthetic.main.now_playing_fragment.*
+import kotlinx.android.synthetic.main.fragment_now_playing.*
 
 
 class NowPlayingFragment : Fragment() {

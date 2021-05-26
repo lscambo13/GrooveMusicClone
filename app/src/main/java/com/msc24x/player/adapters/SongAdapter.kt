@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.msc24x.player.R
 import com.msc24x.player.data.Songs
-import kotlinx.android.synthetic.main.list_songs.view.*
+import kotlinx.android.synthetic.main.list_item_songs.view.*
 
 
 class SongAdapter(

@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><!-- TODO - Add swipe on list item for Play and Add options -->
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- TODO - Add swipe on list item for Play and Add options -->
 
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -46,6 +48,7 @@
             android:paddingEnd="0dp"
             android:singleLine="true"
             android:textStyle="normal"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:fontFamily="@font/segoeui"
             app:layout_constraintEnd_toStartOf="@+id/tvListDuration"
             app:layout_constraintHorizontal_bias="0.0"
@@ -72,6 +75,7 @@
             android:paddingEnd="0dp"
             android:singleLine="true"
             app:fontFamily="@font/segoeuisl"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintEnd_toStartOf="@+id/tvListDuration"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvListSongName" />

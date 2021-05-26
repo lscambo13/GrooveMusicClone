@@ -5,17 +5,16 @@
     android:id="@+id/fragmentNowPlaying"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
     tools:context=".tabs.NowPlayingFragment">
+
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/blurImgCoverArt"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:alpha="0.5"
+        android:background="@color/colorAccent"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_no_art"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -74,7 +73,7 @@
                 android:singleLine="true"
                 android:text="@string/title_activity_songs"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/text"
+                android:textColor="@color/textWhite"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -89,7 +88,7 @@
                 android:singleLine="true"
                 android:text="@string/title_activity_artists"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/text"
+                android:textColor="@color/textWhite"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -103,7 +102,7 @@
             android:layout_height="wrap_content"
             android:text="@string/icon_play"
             android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-            android:textColor="@color/text"
+            android:textColor="@color/textWhite"
             app:layout_constraintBottom_toBottomOf="@+id/btnOutline"
             app:layout_constraintEnd_toEndOf="@+id/btnOutline"
             app:layout_constraintStart_toStartOf="@+id/btnOutline"
@@ -115,7 +114,7 @@
             android:layout_height="wrap_content"
             android:text="@string/icon_pause"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/text"
+            android:textColor="@color/textWhite"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/btnOutline"
             app:layout_constraintEnd_toEndOf="@+id/btnOutline"
@@ -133,7 +132,7 @@
             android:gravity="center"
             android:text="@string/icon_next"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/text"
+            android:textColor="@color/textWhite"
             app:layout_constraintStart_toEndOf="@id/btnOutline"
             app:layout_constraintTop_toBottomOf="@id/seekbar" />
 
@@ -148,7 +147,7 @@
             android:gravity="center"
             android:text="@string/icon_prev"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/text"
+            android:textColor="@color/textWhite"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/seekbar" />
 
@@ -164,7 +163,7 @@
             android:rotation="90"
             android:text="@string/icon_more"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/text"
+            android:textColor="@color/textWhite"
             app:layout_constraintStart_toEndOf="@+id/iconNext"
             app:layout_constraintTop_toBottomOf="@id/seekbar" />
 
@@ -178,7 +177,7 @@
             android:clickable="true"
             android:focusable="true"
             android:src="@drawable/ic_outline"
-            android:tint="@color/text"
+            android:tint="@color/textWhite"
             android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@+id/iconPrev"
             app:layout_constraintTop_toBottomOf="@id/seekbar"
@@ -192,7 +191,7 @@
             android:gravity="center"
             android:paddingBottom="2sp"
             android:singleLine="true"
-            android:textColor="@color/text"
+            android:textColor="@color/textWhite"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/mainSongInfo" />
@@ -202,7 +201,7 @@
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:progressDrawable="@drawable/progress"
-            android:progressTint="@color/text"
+            android:progressTint="@color/textWhite"
             android:thumb="@drawable/thumb_progress"
             app:layout_constraintEnd_toStartOf="@id/tvTrackLength"
             app:layout_constraintStart_toEndOf="@id/tvTimeCode"
@@ -216,7 +215,7 @@
             android:gravity="center"
             android:paddingBottom="2sp"
             android:singleLine="true"
-            android:textColor="@color/text"
+            android:textColor="@color/textWhite"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/mainSongInfo" />
@@ -228,6 +227,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingBottom="4dp"
+        android:textColor="@color/textWhite"
         android:text="@string/icon_up_arrow"
         app:layout_constraintBottom_toBottomOf="@id/ContainerMiniPlayer" />
 
