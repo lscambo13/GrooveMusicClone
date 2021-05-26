@@ -1,34 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom"
+    app:layoutDescription="@xml/motion_miniplayer_scene">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ContainerMiniPlayer"
         android:layout_width="match_parent"
         android:layout_height="76dp"
-        android:background="@color/variableAccent"
+        android:background="@drawable/miniplayer_bg"
         android:clickable="true"
         android:focusable="true"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintVertical_bias="1">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ContainerFade"
-            android:layout_width="match_parent"
-            android:layout_height="76dp"
-            android:alpha="0.4"
-            android:background="@color/textBlack"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+        <!--            android:id="@+id/ContainerFade"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:alpha=".5"-->
+        <!--            android:background="@color/textBlack"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:layout_constraintVertical_bias="1" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -42,59 +45,51 @@
         android:src="@drawable/ic_no_art"
         app:layout_constraintBottom_toTopOf="@id/seekbar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias=".03"
+        app:layout_constraintHorizontal_bias=".035"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias=".99"
         app:shapeAppearance="?attr/shapeAppearanceSmallComponent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/mainSongInfo"
+    <TextView
+        android:id="@+id/tvSongName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:background="?android:selectableItemBackground"
-        android:clickable="true"
-        android:contextClickable="true"
-        android:focusable="true"
+        android:ellipsize="end"
+        android:maxEms="9"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        android:text="@string/art_as_wallpaper_description"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/textWhite"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/seekbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias=".15"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/space_songinfo_end"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/space_songinfo_start"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".99">
+        app:layout_constraintVertical_bias=".96" />
 
-        <TextView
-            android:id="@+id/tvSongName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:scrollHorizontally="true"
-            android:text="@string/title_activity_songs"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/textWhite"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tvArtistName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:ellipsize="end"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:maxEms="9"
+        android:maxLines="1"
+        android:text="@string/art_as_wallpaper_description"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/textWhite"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toTopOf="@id/seekbar"
+        app:layout_constraintEnd_toEndOf="@id/space_songinfo_end"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/space_songinfo_start"
+        app:layout_constraintTop_toBottomOf="@id/tvSongName"
+        app:layout_constraintVertical_bias="0" />
 
-        <TextView
-            android:id="@+id/tvArtistName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:singleLine="true"
-            android:text="@string/title_activity_artists"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/textWhite"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvSongName" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mediaControls"
@@ -209,18 +204,21 @@
         android:text="2:43"
         android:textColor="@color/textWhite"
         android:textSize="12sp"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias=".005"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".990" />
+        app:layout_constraintVertical_bias=".987" />
 
     <androidx.appcompat.widget.AppCompatSeekBar
         android:id="@+id/seekbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@null"
         android:progressDrawable="@drawable/progress"
         android:thumb="@drawable/thumb_drawable"
@@ -239,12 +237,35 @@
         android:text="6:26"
         android:textColor="@color/textWhite"
         android:textSize="12sp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias=".990"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".990" />
+        app:layout_constraintVertical_bias=".987" />
+
+    <Space
+        android:id="@+id/space_songinfo_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/seekbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".95" />
+
+    <Space
+        android:id="@+id/space_songinfo_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/seekbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".95" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
