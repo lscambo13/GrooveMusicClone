@@ -4,6 +4,7 @@ import Helpers.PAUSE
 import Helpers.PLAY
 import Helpers.SEEK_TO
 import Helpers.Utils
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -11,21 +12,24 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import androidx.palette.graphics.Palette
 import com.google.android.material.tabs.TabLayoutMediator
 import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
 import com.msc24x.player.mediaplayer.PlayerService
-import kotlinx.android.synthetic.main.fragment_view_pager.*
 import kotlinx.android.synthetic.main.fragment_view_pager.view.*
+import kotlinx.android.synthetic.main.motion_miniplayer.view.*
 
 class ViewPagerFragment : Fragment() {
 
@@ -71,9 +75,6 @@ class ViewPagerFragment : Fragment() {
         firstLoad(view)
 
         viewModel.currentUri.observe(viewLifecycleOwner, Observer {
-            ContainerMiniPlayer.visibility = View.VISIBLE
-
-            println("change detected uri- main")
 
             // Display main song info
             view.tvSongName.text = viewModel.currentSong.value
@@ -84,15 +85,14 @@ class ViewPagerFragment : Fragment() {
             // Handle Uri change
             when (viewModel.busy.value) {
                 true -> {
-                    println("player is playing")
                     play()
                     view.tvTrackLength.text =
                         Utils.progressToString(viewModel.songLength.value!!)
                     view.iconPlay.visibility = View.INVISIBLE
                     view.iconPause.visibility = View.VISIBLE
+                    viewModel.busy.value = true
                 }
                 false -> {
-                    println("player wasn't playing")
                     view.tvTrackLength.text =
                         Utils.progressToString(viewModel.songLength.value!!)
                     play()
@@ -104,16 +104,25 @@ class ViewPagerFragment : Fragment() {
 
             // Update Song Art (Image and color)
             saveSongArt(it)
+            view.imgCoverArt.setImageBitmap(viewModel.decodedArt.value)
 
             // Handle muted color change
             if (viewModel.mutedColor.value != null) {
                 view.ContainerMiniPlayer.setBackgroundColor(viewModel.mutedColor.value!!)
                 requireActivity().window.navigationBarColor = viewModel.mutedColor.value!!
+                requireActivity().window.statusBarColor = viewModel.mutedColor.value!!
+                (activity as AppCompatActivity?)!!.supportActionBar!!.setBackgroundDrawable(
+                    viewModel.mutedColor.value?.toDrawable()
+                )
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     requireActivity().window.navigationBarDividerColor =
                         viewModel.mutedColor.value!!
                 }
             }
+
+            if (!trackPlayerPos.isAlive)
+                trackPlayerPos.start()
         })
 
         view.btnOutline.setOnClickListener {
@@ -141,7 +150,6 @@ class ViewPagerFragment : Fragment() {
                 ) {
                     if (fromUser) {
                         seekTo(progress)
-                        //player.seekTo(progress)
                         view.tvTimeCode.text = Utils.progressToString(progress)
                     }
                 }
@@ -155,28 +163,6 @@ class ViewPagerFragment : Fragment() {
             view.seekbar.progress = viewModel.currentPosition.value!!
             view.tvTimeCode.text = Utils.progressToString(viewModel.currentPosition.value!!)
         })
-
-
-/*
-        @SuppressLint("HandlerLeak")
-        var handler = object : Handler() {
-            override fun handleMessage(msg: Message) {
-                viewModel.currentPosition.value = msg.what
-                savedInstanceState?.putInt("progressPos", msg.what)
-            }
-        }
-
-        var msg = Message()
-        var trackPlayerPos = Thread {
-            while (viewModel.busy.value == true) {
-                msg.what = viewModel.currentPosition.value!!//player.currentPosition
-                //Preferences(this).setCurrentProgress(msg.what)
-                handler.sendMessage(msg)
-                Thread.sleep(100)
-            }
-        }
-        trackPlayerPos.start()*/
-
         return view
     }
 
@@ -205,7 +191,6 @@ class ViewPagerFragment : Fragment() {
         view.tvSongName.isSelected = true
         view.tvTrackLength.text = ""
         view.tvTimeCode.text = ""
-        //view.imgCoverArt.visibility = View.INVISIBLE
     }
 
     private fun saveSongArt(uri: Uri) {
@@ -265,3 +250,4 @@ class ViewPagerFragment : Fragment() {
     private fun createPaletteSync(bitmap: Bitmap): Palette = Palette.from(bitmap).generate()
 
 }
+
