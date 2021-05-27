@@ -33,7 +33,6 @@ import kotlinx.android.synthetic.main.motion_miniplayer.view.*
 
 class ViewPagerFragment : Fragment() {
 
-    ///lateinit var songUri: Uri
     private val viewModel: CommonViewModel by activityViewModels()
     var safeThread = true
 

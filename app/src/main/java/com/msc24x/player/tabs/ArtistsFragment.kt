@@ -17,7 +17,6 @@ import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
 import com.msc24x.player.adapters.ArtistAdapter
 import com.msc24x.player.data.Arists
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_artists.view.*
 
 

@@ -29,16 +29,10 @@ import java.util.concurrent.TimeUnit
 
 class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
-    //lateinit var viewModel: CommonViewModel
     private val viewModel: CommonViewModel by activityViewModels()
 
     // populate the songs list
     var songsList = mutableListOf<Songs>()
-/*    val songsList = mutableListOf(
-        Songs(null, "Song Name 1", "Artist Name 1", "Album Name 1", 0, BitmapFactory.decodeResource(
-            context?.resources, R.id.ic_default_art))
-    )*/
-
 
     private val adapter = SongAdapter(songsList, this)
 
@@ -119,7 +113,6 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
                 songsList.add(Songs(contentUri, song, artist, album, duration))
             }
         }
-        //songsList.removeAt(0)
         adapter.notifyDataSetChanged()
     }
 
@@ -148,14 +141,11 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     private fun updateSong(id: Int) {
         val song = songsList[id].SongTitle
         viewModel.currentSong.value = song
-        //requireActivity().tvSongName.text = viewModel.getSong().value
     }
 
     private fun updateArtist(id: Int) {
         val artist = songsList[id].ArtistName
         viewModel.currentArtist.value = artist
-        //requireActivity().tvArtistName.text = viewModel.getArtist().value
-
     }
 
     private fun updateUri(id: Int) {
@@ -177,13 +167,10 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_songs, container, false)
-
         //val tPad = requireActivity().blurAppBar.layoutParams.height
         //val bPad = requireActivity().blurMiniPlayer.layoutParams.height
         //view.rvSongs.setPadding(0, 0, 0, bPad)
-
         view.fragmentSongsPlaceholderText.visibility = GONE
-
         view.rvSongs.adapter = adapter
         view.rvSongs.layoutManager = LinearLayoutManager(context)
         return view
@@ -193,7 +180,6 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadMedia()
-        println("loaded songs")
+        //println("loaded songs")
     }
-
 }
