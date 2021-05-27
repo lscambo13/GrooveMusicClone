@@ -4,26 +4,14 @@ import android.Manifest
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
-
-
-
-    //lateinit var viewModel: CommonViewModel
-
-
-/*    lateinit var navController: NavController
-    lateinit var appBarConfiguration: AppBarConfiguration
-    lateinit var drawerLayout: DrawerLayout*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,20 +47,11 @@ class MainActivity : AppCompatActivity() {
                     Navigation.findNavController(this, R.id.fragment)
                         .navigate(R.id.action_viewPagerFragment_to_settingsFragment)
                     materialToolbar.title = getString(R.string.title_fragment_settings)
-                    //it.isChecked = true
                 }
             }
             drawerLayout.close()
             true
         }
-
-
-        //viewModel = ViewModelProvider(this).get(CommonViewModel::class.java)
-
-
-        //updateFirst()
-        //enableBlur()
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

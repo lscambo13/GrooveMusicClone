@@ -16,5 +16,4 @@ class CommonViewModel : ViewModel() {
     val songLength = MutableLiveData<Int>()
     val mutedColor = MutableLiveData<Int>()
     val decodedArt = MutableLiveData<Bitmap>()
-
 }
