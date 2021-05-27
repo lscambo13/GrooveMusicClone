@@ -5,8 +5,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <!--    <include layout="@layout/custom_preference_divider" />-->
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,6 +36,7 @@
             android:orientation="vertical"
             android:paddingStart="16dp"
             android:paddingEnd="16dp" />
+        <!-- TODO - - Custom switch -->
     </RelativeLayout>
 
 </LinearLayout>
