@@ -15,7 +15,8 @@ class ArtistAdapter(
 ) : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_artists, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.list_item_artists, parent, false)
         return ArtistViewHolder(view)
     }
 
