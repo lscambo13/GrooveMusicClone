@@ -37,9 +37,8 @@ class PlayerService : Service() {
         return START_STICKY
     }
 
-
-    override fun onBind(intent: Intent): IBinder {
-        TODO("Return the communication channel to the service.")
+    override fun onBind(intent: Intent?): IBinder? {
+        TODO("Not yet implemented")
     }
 
     private fun playSong(intent: Intent) {
@@ -52,13 +51,11 @@ class PlayerService : Service() {
         if (!player.isPlaying) {
             player.start()
         }
-        broadcastBusy(true)
     }
 
     private fun pause() {
         if (player.isPlaying)
             player.pause()
-        broadcastBusy(false)
     }
 
     private fun seekTo(intent: Intent) {
@@ -72,7 +69,6 @@ class PlayerService : Service() {
             return
         player = MediaPlayer()
         player.isLooping = true
-        broadcastBusy(false)
         playerInit = true
     }
 
@@ -81,16 +77,6 @@ class PlayerService : Service() {
         val uri = Uri.parse(intent.getStringExtra(TRACK_URI))
         player = MediaPlayer.create(applicationContext, uri!!)
         player.isLooping = true
-        //player.prepare()
-    }
-
-
-    private fun broadcastBusy(busy: Boolean) {
-        //CommonViewModel().busy.value = busy
-    }
-
-    private fun broadcastPos() {
-
     }
 
 }
