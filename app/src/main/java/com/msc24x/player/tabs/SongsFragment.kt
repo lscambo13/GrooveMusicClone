@@ -129,8 +129,9 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
         val clickedItem = songsList[position]
         updateSong(position)
         updateArtist(position)
-        updateUri(position)
         updateDuration(position)
+        updateUri(position)
+
 //        updatePlayIndicator(position)
 //        Snackbar.make(requireView(), "item $position, ${clickedItem.uri}", Snackbar.LENGTH_LONG)
 //            .setAnchorView(requireActivity().blurMiniPlayer)
