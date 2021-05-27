@@ -15,26 +15,11 @@
         android:background="@drawable/miniplayer_bg"
         android:clickable="true"
         android:focusable="true"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1">
-
-        <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-        <!--            android:id="@+id/ContainerFade"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:alpha=".5"-->
-        <!--            android:background="@color/textBlack"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent"-->
-        <!--            app:layout_constraintVertical_bias="1" />-->
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintVertical_bias="1" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imgCoverArt"
@@ -49,12 +34,12 @@
         app:layout_constraintHorizontal_bias=".035"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".99"
+        app:layout_constraintVertical_bias=".98"
         app:shapeAppearance="?attr/shapeAppearanceSmallComponent" />
 
     <TextView
         android:id="@+id/tvSongName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
@@ -71,11 +56,11 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/space_songinfo_start"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".96" />
+        app:layout_constraintVertical_bias=".950" />
 
     <TextView
         android:id="@+id/tvArtistName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
         android:ellipsize="marquee"
@@ -105,7 +90,7 @@
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".995">
+        app:layout_constraintVertical_bias=".985">
 
         <com.msc24x.player.IconTextView
             android:id="@+id/iconPlay"
@@ -204,6 +189,7 @@
         android:id="@+id/tvTimeCode"
         android:layout_width="35dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:gravity="center"
         android:singleLine="true"
         android:text="@string/_2_43"
@@ -220,9 +206,9 @@
         android:id="@+id/seekbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="6dp"
         android:background="@null"
         android:progressDrawable="@drawable/progress"
         android:thumb="@drawable/thumb_drawable"
@@ -236,6 +222,7 @@
         android:id="@+id/tvTrackLength"
         android:layout_width="35dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:gravity="center"
         android:singleLine="true"
         android:text="@string/_6_26"
