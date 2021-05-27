@@ -186,6 +186,34 @@ class ViewPagerFragment : Fragment() {
         return view
     }
 
+    @SuppressLint("HandlerLeak")
+    var handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            viewModel.currentPosition.value = msg.what
+            //savedInstanceState?.putInt("progressPos", msg.what)
+        }
+    }
+
+    var trackPlayerPos = Thread {
+        while (true) {
+            var msg = Message()
+            msg.what = PlayerService.getCurrentPlayerPos()
+            handler.sendMessage(msg)
+            Thread.sleep(100)
+        }
+    }
+
+
+    private fun firstLoad(view: View) {
+        view.tvArtistName.text = "Tap to play"
+        view.tvArtistName.isSelected = true
+        view.tvSongName.text = "So empty here"
+        view.tvSongName.isSelected = true
+        view.tvTrackLength.text = ""
+        view.tvTimeCode.text = ""
+        //view.imgCoverArt.visibility = View.INVISIBLE
+    }
+
     private fun saveSongArt(uri: Uri) {
         val mmr = MediaMetadataRetriever()
         val art: Bitmap
