@@ -12,93 +12,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bgColor"
-        app:elevation="0dp"
-        app:layout_constraintTop_toTopOf="parent">
+        app:liftOnScroll="true">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            style="@style/TabLayout"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/bgColor"
-            android:elevation="0dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:tabGravity="start"
-            app:tabIndicatorFullWidth="false"
-            app:tabMode="scrollable"
-            app:tabTextAppearance="@style/TextAppearance.AppCompat.Medium" />
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:background="?android:attr/listDivider"
-            app:layout_scrollFlags="scroll|enterAlways" />
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                style="@style/TabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/bgColor"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                app:tabGravity="start"
+                app:tabIndicatorFullWidth="false"
+                app:tabMode="scrollable"
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways">
+                app:tabTextColor="@color/text"
+                app:tabUnboundedRipple="false" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvSortOptions"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:layout_marginTop="10dp"
-                android:gravity="fill_horizontal"
-                android:paddingStart="20dp"
-                android:paddingEnd="0dp"
-                android:singleLine="true"
-                android:text="Refine: "
-                android:textStyle="normal"
-                app:fontFamily="@font/segoeui"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.msc24x.player.IconTextView
-                android:id="@+id/iconShuffle"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:gravity="fill_horizontal"
-                android:paddingStart="20dp"
-                android:paddingTop="4dp"
-                android:paddingEnd="0dp"
-                android:text="@string/icon_shuffle"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvSortOptions" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvShuffle"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:gravity="fill_horizontal"
-                android:paddingStart="6dp"
-                android:paddingEnd="0dp"
-                android:singleLine="true"
-                android:text="Shuffle all"
-                android:textStyle="normal"
-                app:fontFamily="@font/segoeui"
-                app:layout_constraintStart_toEndOf="@id/iconShuffle"
-                app:layout_constraintTop_toBottomOf="@id/tvSortOptions" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPagerMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:layout_marginBottom="76dp"
+        android:orientation="horizontal"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </androidx.viewpager2.widget.ViewPager2>
 
-    <include layout="@layout/motion_miniplayer"></include>
+    <include
+        layout="@layout/motion_miniplayer"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
