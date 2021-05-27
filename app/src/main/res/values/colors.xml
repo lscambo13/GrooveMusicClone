@@ -17,4 +17,6 @@
     <color name="highlightGrey">#D9D9D9</color>
     <color name="pressedGrey">#C4C4C4</color>
     <color name="btOutline">#32FFFFFF</color>
+    <color name="halfBlack">#80000000</color>
+    <color name="halfWhite">#80FFFFFF</color>
 </resources>
