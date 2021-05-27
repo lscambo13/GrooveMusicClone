@@ -26,7 +26,7 @@
             android:fontFamily="@font/segoeui"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             android:textColor="@color/text"
             tools:text="Sending usage data" />
 

@@ -62,6 +62,7 @@
             android:focusable="true"
             style="?attr/navigationViewStyle"
             app:headerLayout="@layout/navigation_header"
+            app:itemTextAppearance="@style/TextAppearance.AppCompat.Subhead"
             app:menu="@menu/drawer_menu" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
