@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- TODO - - Fast scroll -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSongs"
@@ -14,12 +15,11 @@
         android:paddingTop="0dp"
         android:paddingBottom="0dp"
         app:fastScrollEnabled="true"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"
+        app:fastScrollHorizontalThumbDrawable="@drawable/thick_line"
         app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"
-        app:fastScrollVerticalThumbDrawable="@drawable/thumb_drawable"
-        app:fastScrollVerticalTrackDrawable="@drawable/line_drawable" />
+        app:fastScrollVerticalThumbDrawable="@drawable/thick_line"
+        app:fastScrollVerticalTrackDrawable="@drawable/line_drawable"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/fragmentSongsPlaceholderText"
