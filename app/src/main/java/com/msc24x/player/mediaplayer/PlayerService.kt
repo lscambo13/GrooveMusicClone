@@ -10,8 +10,19 @@ import android.util.Log
 
 
 class PlayerService : Service() {
+    companion object {
+        private lateinit var player: MediaPlayer
+        private var playerInit = false
 
-    lateinit var player: MediaPlayer
+        fun getCurrentPlayerPos(): Int {
+            if (playerInit) {
+                return player.currentPosition
+            } else {
+                return 0
+            }
+        }
+    }
+
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         safeInit()
@@ -57,11 +68,12 @@ class PlayerService : Service() {
     }
 
     private fun safeInit() {
-        if (this::player.isInitialized)
+        if (playerInit)
             return
         player = MediaPlayer()
         player.isLooping = true
         broadcastBusy(false)
+        playerInit = true
     }
 
     private fun setUri(intent: Intent) {
