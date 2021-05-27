@@ -130,32 +130,15 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
         updateArtist(position)
         updateDuration(position)
         updateUri(position)
-
-//        updatePlayIndicator(position)
-//        Snackbar.make(requireView(), "item $position, ${clickedItem.uri}", Snackbar.LENGTH_LONG)
-//            .setAnchorView(requireActivity().blurMiniPlayer)
-//            .show()
-        //Toast.makeText(activity, "item $position, ${clickedItem.uri}", Toast.LENGTH_SHORT).show()
-        //rvSongs[position].tvListSongName.setTextColor(context!!.getColor(R.color.variableAccent))
-        //rvSongs[position].tvListArtistName.setTextColor(context!!.getColor(R.color.variableAccent))
         adapter.notifyItemChanged(position)
         playSelectedSong()
         viewModel.busy.value = true
     }
 
     fun updatePlayIndicator(id: Int) {
-        val songInd = rvSongs[id].imgPlayIndicator
-        when (songInd.visibility) {
-            VISIBLE -> {
-                songInd.visibility = GONE
-                rvSongs[id].tvListSongName.setPadding(16, 0, 0, 0)
-            }
-            GONE -> {
-                songInd.visibility = VISIBLE
-                rvSongs[id].tvListSongName.setPadding(0, 0, 0, 0)
-            }
-        }
-
+        rvSongs[id].isActivated = true
+        rvSongs[id].isSelected = true
+        //TODO - - Play indicator
     }
 
     private fun updateDuration(id: Int) {
