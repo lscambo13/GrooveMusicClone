@@ -78,10 +78,8 @@ class ViewPagerFragment : Fragment() {
             // Display main song info
             view.tvSongName.text = viewModel.currentSong.value
             view.tvArtistName.text = viewModel.currentArtist.value
-            if (viewModel.songLength.value != null) {
-                view.seekbar.max = viewModel.songLength.value!!
-                view.tvTrackLength.text = Utils.progressToString(view.seekbar.max)
-            }
+            view.seekbar.max = viewModel.songLength.value!!
+            view.tvTrackLength.text = Utils.progressToString(view.seekbar.max)
 
             // Handle Uri change
             when (viewModel.busy.value) {
@@ -234,9 +232,8 @@ class ViewPagerFragment : Fragment() {
     private fun saveMutedColor(art: Bitmap) {
         val myPalette = createPaletteSync(art)
         var muted = myPalette.mutedSwatch
-        if (muted == null) {
-            muted = myPalette.darkVibrantSwatch
-        }
+        if (muted == null) muted = myPalette.darkVibrantSwatch
+
         viewModel.mutedColor.value = muted?.rgb
     }
 
