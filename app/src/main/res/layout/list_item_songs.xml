@@ -5,7 +5,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="54dp"
+    android:layout_height="64dp"
     android:layout_marginStart="4dp"
     android:layout_marginTop="4dp"
     android:layout_marginEnd="4dp"
@@ -30,19 +30,23 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgPlayIndicator"
-            android:layout_width="wrap_content"
-            android:layout_height="22dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:layout_margin="16dp"
+            android:elevation="2dp"
             android:src="@drawable/ic_play_indicator"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/tvListArtistName"
-            app:layout_constraintEnd_toStartOf="@id/tvListSongName"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvListSongName"
             android:layout_width="0dp"
             android:layout_height="27dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="0dp"
+            android:ellipsize="end"
             android:gravity="bottom"
             android:maxLines="1"
             android:text="@string/example_song_name"
@@ -61,6 +65,7 @@
             android:fontFamily="@font/segoeuisl"
             android:gravity="center"
             android:singleLine="true"
+            android:text="@string/_6_26"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -69,13 +74,16 @@
             android:id="@+id/tvListArtistName"
             android:layout_width="0dp"
             android:layout_height="27dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:ellipsize="end"
             android:gravity="top"
             android:maxLines="1"
             android:text="@string/example_artist_name"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             app:fontFamily="@font/segoeuisl"
             app:layout_constraintEnd_toStartOf="@+id/tvListDuration"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvListSongName"
             app:layout_constraintTop_toBottomOf="@+id/tvListSongName" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
