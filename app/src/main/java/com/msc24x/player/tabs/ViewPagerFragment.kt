@@ -68,11 +68,7 @@ class ViewPagerFragment : Fragment() {
             viewPager.setCurrentItem(tab.position, true)
         }.attach()
 
-        view.mainSongInfo.setOnClickListener {
-            if (viewModel.currentUri.value != null)
-                Navigation.findNavController(requireActivity(), R.id.fragment)
-                    .navigate(R.id.action_viewPagerFragment_to_nowPlayingFragment)
-        }
+        firstLoad(view)
 
         viewModel.currentUri.observe(viewLifecycleOwner, Observer {
             ContainerMiniPlayer.visibility = View.VISIBLE
