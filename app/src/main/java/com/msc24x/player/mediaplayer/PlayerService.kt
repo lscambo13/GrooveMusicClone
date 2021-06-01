@@ -1,18 +1,30 @@
 package com.msc24x.player.mediaplayer
 
 import Helpers.*
-import android.app.Service
+import android.app.*
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import androidx.annotation.RequiresApi
+import com.msc24x.player.R
 
 
 class PlayerService : Service() {
+    private val mmr = MediaMetadataRetriever()
+
     companion object {
         private lateinit var player: MediaPlayer
         private var playerInit = false
+        private lateinit var trackUri: Uri
+        private lateinit var trackTitle: String
+        private lateinit var trackArtist: String
+        private var trackLen: Int = -1
 
         fun getCurrentPlayerPos(): Int {
             if (playerInit) {
@@ -21,8 +33,14 @@ class PlayerService : Service() {
                 return 0
             }
         }
-    }
 
+        fun getTrackTitle(): String = trackTitle
+        fun getTrackArtist(): String = trackArtist
+        fun isInitialized(): Boolean = playerInit
+        fun getCurrentUri(): Uri = trackUri
+        fun getSongLength(): Int = trackLen
+        fun isPlaying() = player.isPlaying
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         safeInit()
@@ -111,8 +129,12 @@ class PlayerService : Service() {
 
     private fun setUri(intent: Intent) {
         player.reset()
-        val uri = Uri.parse(intent.getStringExtra(TRACK_URI))
-        player = MediaPlayer.create(applicationContext, uri!!)
+        trackUri = Uri.parse(intent.getStringExtra(TRACK_URI))
+        player = MediaPlayer.create(applicationContext, trackUri)
+        trackLen = player.duration
+        mmr.setDataSource(this, trackUri)
+        trackTitle = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE).toString()
+        trackArtist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST).toString()
         player.isLooping = true
     }
 
