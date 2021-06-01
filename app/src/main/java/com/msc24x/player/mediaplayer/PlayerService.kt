@@ -34,11 +34,48 @@ class PlayerService : Service() {
             INIT -> safeInit()
         }
 
+        setupNotification()
         return START_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder? {
         TODO("Not yet implemented")
+    }
+
+    private fun setupNotification() {
+        val pendingIntent: PendingIntent =
+            Intent(this, PlayerService::class.java).let { notificationIntent ->
+                PendingIntent.getActivity(this, 0, notificationIntent, 0)
+            }
+
+        val channelId = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            createNotificationChannel("channelId", "channelName")
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+
+        val notification: Notification = Notification.Builder(this, channelId)
+            .setContentTitle("BOP")
+            .setContentText("Songs")
+            .setSmallIcon(R.drawable.ic_play_indicator)
+            .setContentIntent(pendingIntent)
+            .setTicker("this is ticker")
+            .build()
+
+        startForeground(54165, notification)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(channelId: String, channelName: String): String {
+        val chan = NotificationChannel(
+            channelId,
+            channelName, NotificationManager.IMPORTANCE_NONE
+        )
+        chan.lightColor = Color.BLUE
+        chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+        val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        service.createNotificationChannel(chan)
+        return channelId
     }
 
     private fun playSong(intent: Intent) {
