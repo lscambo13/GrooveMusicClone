@@ -83,11 +83,12 @@ class ViewPagerFragment : Fragment() {
             viewPager.setCurrentItem(tab.position, true)
         }.attach()
 
-        firstLoad(view)
+        //firstLoad(view)
 
         viewModel.currentUri.observe(viewLifecycleOwner, Observer {
 
             // Display main song info
+            motion_miniplayer.visibility = View.VISIBLE
             view.tvSongName.text = viewModel.currentSong.value
             view.tvArtistName.text = viewModel.currentArtist.value
             view.seekbar.max = viewModel.songLength.value!!
