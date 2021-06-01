@@ -54,6 +54,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        val miniPlayer = findViewById<MotionLayout>(R.id.motion_miniplayer)
+        if (miniPlayer.currentState == miniPlayer.endState)
+            miniPlayer.transitionToStart()
+        else
+            super.onBackPressed()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         return true
