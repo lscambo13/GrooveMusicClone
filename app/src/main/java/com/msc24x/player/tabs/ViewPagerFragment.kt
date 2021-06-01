@@ -36,6 +36,18 @@ class ViewPagerFragment : Fragment() {
     private val viewModel: CommonViewModel by activityViewModels()
     var safeThread = true
 
+    override fun onStart() {
+        super.onStart()
+        if (PlayerService.isInitialized()) {
+            viewModel.songLength.value = PlayerService.getSongLength()
+            viewModel.busy.value = PlayerService.isPlaying()
+            viewModel.currentArtist.value = PlayerService.getTrackArtist()
+            viewModel.currentSong.value = PlayerService.getTrackTitle()
+            viewModel.currentPosition.value = PlayerService.getCurrentPlayerPos()
+            viewModel.currentUri.value = PlayerService.getCurrentUri()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
