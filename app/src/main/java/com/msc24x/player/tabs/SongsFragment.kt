@@ -158,6 +158,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
         intent.action = PLAY_SONG
         intent.putExtra(TRACK_URI, viewModel.currentUri.value.toString())
         requireActivity().startService(intent)
+        viewModel.busy.value = true
     }
 
 
