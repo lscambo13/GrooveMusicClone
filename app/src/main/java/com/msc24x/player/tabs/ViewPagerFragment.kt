@@ -161,19 +161,26 @@ class ViewPagerFragment : Fragment() {
                     fromUser: Boolean
                 ) {
                     if (fromUser) {
-                        seekTo(progress)
                         view.tvTimeCode.text = Utils.progressToString(progress)
                     }
                 }
 
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                    seekBar!!.isSelected = true
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                    seekBar!!.isSelected = false
+                    seekTo(seekbar.progress)
+                }
             }
         )
 
         viewModel.currentPosition.observe(viewLifecycleOwner, Observer {
-            view.seekbar.progress = viewModel.currentPosition.value!!
-            view.tvTimeCode.text = Utils.progressToString(viewModel.currentPosition.value!!)
+            if (!seekbar.isSelected) {
+                view.seekbar.progress = viewModel.currentPosition.value!!
+                view.tvTimeCode.text = Utils.progressToString(viewModel.currentPosition.value!!)
+            }
         })
         return view
     }
