@@ -17,6 +17,8 @@ import com.msc24x.player.R
 
 class PlayerService : Service() {
     private val mmr = MediaMetadataRetriever()
+    private var isInterrupted = false
+    private lateinit var audioRequest: AudioFocusRequest
 
     companion object {
         private lateinit var player: MediaPlayer
@@ -97,20 +99,23 @@ class PlayerService : Service() {
     }
 
     private fun playSong(intent: Intent) {
+        pause()
         setUri(intent)
         play()
     }
 
     private fun play() {
-        Log.v("play", player.isPlaying.toString())
         if (!player.isPlaying) {
+            requestAudioFocus(true)
             player.start()
         }
     }
 
     private fun pause() {
-        if (player.isPlaying)
+        if (player.isPlaying) {
             player.pause()
+            requestAudioFocus(false)
+        }
     }
 
     private fun seekTo(intent: Intent) {
@@ -126,6 +131,43 @@ class PlayerService : Service() {
         player.isLooping = true
         playerInit = true
     }
+
+    private fun requestAudioFocus(reqFocus: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val mAudioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+
+            // Abandon the focus if not requesting focus with the exact same audioRequest
+            if (!reqFocus)
+                mAudioManager.abandonAudioFocusRequest(audioRequest)
+            else {
+                audioRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                    .setAudioAttributes(
+                        AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .build()
+                    )
+                    .setAcceptsDelayedFocusGain(true)
+                    .setOnAudioFocusChangeListener {
+                        when (it) {
+                            AudioManager.AUDIOFOCUS_GAIN -> {
+                                if (isInterrupted) {
+                                    isInterrupted = false
+                                    play()
+                                }
+                            }
+                            else -> {
+                                if (isPlaying()) {
+                                    isInterrupted = true
+                                    pause()
+                                }
+                            }
+                        }
+                    }.build()
+                mAudioManager.requestAudioFocus(audioRequest)
+            }
+        }
+    }
+
 
     private fun setUri(intent: Intent) {
         player.reset()
