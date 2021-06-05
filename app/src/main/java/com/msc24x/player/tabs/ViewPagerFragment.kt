@@ -181,15 +181,14 @@ class ViewPagerFragment : Fragment() {
         return view
     }
 
-    @SuppressLint("HandlerLeak")
-    var handler = object : Handler() {
+
+    private var handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             viewModel.currentPosition.value = msg.what
-            //savedInstanceState?.putInt("progressPos", msg.what)
         }
     }
 
-    var trackPlayerPos = Thread {
+    private var trackPlayerPos = Thread {
         while (true) {
             var msg = Message()
             msg.what = PlayerService.getCurrentPlayerPos()
