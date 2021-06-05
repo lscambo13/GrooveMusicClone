@@ -57,7 +57,9 @@ class ArtistsFragment : Fragment(), ArtistAdapter.OnItemClickListener {
                 when (artist) {
                     null -> artist = "Unknown"
                 }
-                artistsList.add(Arists(artist))
+
+                if (!artistsList.contains(Artists(artist)))
+                    artistsList.add(Artists(artist))
             }
         }
         //songsList.removeAt(0)
