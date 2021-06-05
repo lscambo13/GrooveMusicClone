@@ -4,16 +4,12 @@ import Helpers.PAUSE
 import Helpers.PLAY
 import Helpers.SEEK_TO
 import Helpers.Utils
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Message
+import android.os.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +25,7 @@ import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
 import com.msc24x.player.mediaplayer.PlayerService
 import kotlinx.android.synthetic.main.fragment_view_pager.view.*
+import kotlinx.android.synthetic.main.motion_miniplayer.*
 import kotlinx.android.synthetic.main.motion_miniplayer.view.*
 
 class ViewPagerFragment : Fragment() {
@@ -44,6 +41,8 @@ class ViewPagerFragment : Fragment() {
             viewModel.currentArtist.value = PlayerService.getTrackArtist()
             viewModel.currentSong.value = PlayerService.getTrackTitle()
             viewModel.currentPosition.value = PlayerService.getCurrentPlayerPos()
+            /* THIS WILL PLAY THE SONG WHEN WE GET BACK INSIDE THE APP EVEN IF THE SERVICE WAS NOT
+            * PLAYING IT EARLIER TODO("onStart bug") */
             viewModel.currentUri.value = PlayerService.getCurrentUri()
         }
     }
@@ -83,8 +82,6 @@ class ViewPagerFragment : Fragment() {
             viewPager.setCurrentItem(tab.position, true)
         }.attach()
 
-        //firstLoad(view)
-
         viewModel.currentUri.observe(viewLifecycleOwner, Observer {
 
             // Display main song info
@@ -111,24 +108,16 @@ class ViewPagerFragment : Fragment() {
             }
 
             // Update Song Art (Image and color)
-            saveSongArt(it)
+            viewModel.decodedArt.value = extractTrackBitmap(it)
+            viewModel.mutedColor.value = extractMutedColor(viewModel.decodedArt.value!!).rgb
             view.imgCoverArt.setImageBitmap(viewModel.decodedArt.value)
 
             // Handle muted color change
             if (viewModel.mutedColor.value != null) {
-                view.ContainerMiniPlayer.setBackgroundColor(viewModel.mutedColor.value!!)
-                requireActivity().window.navigationBarColor = viewModel.mutedColor.value!!
-                requireActivity().window.statusBarColor = viewModel.mutedColor.value!!
-                (activity as AppCompatActivity?)!!.supportActionBar!!.setBackgroundDrawable(
-                    viewModel.mutedColor.value?.toDrawable()
-                )
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    requireActivity().window.navigationBarDividerColor =
-                        viewModel.mutedColor.value!!
-                }
+                updateUI_color(viewModel.mutedColor.value!!)
             }
 
+            // Keep track position thread alive
             if (!trackPlayerPos.isAlive)
                 trackPlayerPos.start()
         })
@@ -136,7 +125,6 @@ class ViewPagerFragment : Fragment() {
         view.btnOutline.setOnClickListener {
             if (viewModel.busy.value == true) {
                 pause()
-                println("click is playing")
                 view.iconPlay.visibility = View.VISIBLE
                 view.iconPause.visibility = View.INVISIBLE
                 viewModel.busy.value = false
@@ -144,7 +132,6 @@ class ViewPagerFragment : Fragment() {
                 view.iconPlay.visibility = View.INVISIBLE
                 view.iconPause.visibility = View.VISIBLE
                 play()
-                println("click wasn't playing")
                 viewModel.busy.value = true
             }
         }
@@ -197,43 +184,42 @@ class ViewPagerFragment : Fragment() {
         }
     }
 
+    private fun updateUI_color(color: Int) {
+        ContainerMiniPlayer.setBackgroundColor(color)
+        requireActivity().window.navigationBarColor = color
+        requireActivity().window.statusBarColor = color
+        (activity as AppCompatActivity?)!!.supportActionBar!!.setBackgroundDrawable(
+            color.toDrawable()
+        )
 
-    private fun firstLoad(view: View) {
-        view.tvArtistName.text = "Tap to play"
-        view.tvArtistName.isSelected = true
-        view.tvSongName.text = "So empty here"
-        view.tvSongName.isSelected = true
-        view.tvTrackLength.text = ""
-        view.tvTimeCode.text = ""
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            requireActivity().window.navigationBarDividerColor = color
+        }
     }
 
-    private fun saveSongArt(uri: Uri) {
+    private fun extractTrackBitmap(uri: Uri): Bitmap {
         val mmr = MediaMetadataRetriever()
         val art: Bitmap
         val bfo = BitmapFactory.Options()
         mmr.setDataSource(requireContext(), uri)
         val rawArt: ByteArray? = mmr.embeddedPicture
 
-        if (rawArt != null) {
-            art = BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size, bfo)
-            viewModel.decodedArt.value = art
-            saveMutedColor(art)
+        art = if (rawArt != null) {
+            BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size, bfo)
         } else {
-            art = BitmapFactory.decodeResource(
+            BitmapFactory.decodeResource(
                 requireActivity().resources,
                 R.drawable.missing_album_art
             )
-            viewModel.decodedArt.value = art
-            saveMutedColor(art)
         }
+        return art
     }
 
-    private fun saveMutedColor(art: Bitmap) {
-        val myPalette = createPaletteSync(art)
+    private fun extractMutedColor(art: Bitmap): Palette.Swatch {
+        val myPalette = Palette.from(art).generate()
         var muted = myPalette.mutedSwatch
         if (muted == null) muted = myPalette.darkVibrantSwatch
-
-        viewModel.mutedColor.value = muted?.rgb
+        return muted!!
     }
 
     private fun play() {
@@ -248,20 +234,12 @@ class ViewPagerFragment : Fragment() {
         requireActivity().startService(intent)
     }
 
-
     private fun seekTo(pos: Int) {
         val intent = Intent(context, PlayerService::class.java)
         intent.action = SEEK_TO
         intent.putExtra(SEEK_TO, pos)
         requireActivity().startService(intent)
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        safeThread = false
-    }
-
-    private fun createPaletteSync(bitmap: Bitmap): Palette = Palette.from(bitmap).generate()
 
 }
 
