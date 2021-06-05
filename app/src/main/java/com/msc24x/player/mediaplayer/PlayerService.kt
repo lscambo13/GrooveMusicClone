@@ -170,8 +170,15 @@ class PlayerService : Service() {
 
 
     private fun setUri(intent: Intent) {
+        val newTrackUri = Uri.parse(intent.getStringExtra(TRACK_URI))
+        try {
+            if (newTrackUri == trackUri)
+                return
+        } catch (e: UninitializedPropertyAccessException) {
+        }
+
         player.reset()
-        trackUri = Uri.parse(intent.getStringExtra(TRACK_URI))
+        trackUri = newTrackUri
         player = MediaPlayer.create(applicationContext, trackUri)
         trackLen = player.duration
         mmr.setDataSource(this, trackUri)
