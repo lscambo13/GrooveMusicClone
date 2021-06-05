@@ -97,17 +97,13 @@ class ViewPagerFragment : Fragment() {
             // Handle Uri change
             when (viewModel.busy.value) {
                 true -> {
-                    play()
-                    view.tvTrackLength.text =
-                        Utils.progressToString(viewModel.songLength.value!!)
+                    view.tvTrackLength.text = Utils.progressToString(viewModel.songLength.value!!)
                     view.iconPlay.visibility = View.INVISIBLE
                     view.iconPause.visibility = View.VISIBLE
                     viewModel.busy.value = true
                 }
                 false -> {
-                    view.tvTrackLength.text =
-                        Utils.progressToString(viewModel.songLength.value!!)
-                    play()
+                    view.tvTrackLength.text = Utils.progressToString(viewModel.songLength.value!!)
                     view.iconPlay.visibility = View.INVISIBLE
                     view.iconPause.visibility = View.VISIBLE
                     viewModel.busy.value = true
