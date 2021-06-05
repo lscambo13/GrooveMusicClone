@@ -9,21 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
-import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
 import com.msc24x.player.adapters.ArtistAdapter
-import com.msc24x.player.data.Arists
+import com.msc24x.player.data.Artists
 import kotlinx.android.synthetic.main.fragment_artists.view.*
 
 
 class ArtistsFragment : Fragment(), ArtistAdapter.OnItemClickListener {
 
-    private val viewModel: CommonViewModel by activityViewModels()
-    var artistsList = mutableListOf<Arists>()
+    var artistsList = mutableListOf<Artists>()
     private val adapter = ArtistAdapter(artistsList, this)
 
 
