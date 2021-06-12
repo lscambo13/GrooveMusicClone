@@ -2,16 +2,22 @@ package com.msc24x.player.mediaplayer
 
 import Helpers.*
 import android.app.*
+import android.app.Notification.MediaStyle
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.media.MediaMetadataRetriever
-import android.media.MediaPlayer
+import android.graphics.drawable.Icon
+import android.media.*
+import android.media.session.MediaSession
+import android.media.session.PlaybackState
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.palette.graphics.Palette
+import com.msc24x.player.MainActivity
 import com.msc24x.player.R
 
 
@@ -61,6 +67,7 @@ class PlayerService : Service() {
             PLAY -> play()
             PAUSE -> pause()
             SEEK_TO -> seekTo(intent)
+            END_SESSION -> stopSelf()
             INIT -> safeInit()
         }
 
