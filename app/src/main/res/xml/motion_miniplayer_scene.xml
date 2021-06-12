@@ -7,6 +7,16 @@
         motion:constraintSetStart="@+id/start"
         motion:duration="250">
         <KeyFrameSet />
+        <OnClick
+            motion:clickAction="transitionToEnd"
+            motion:targetId="@+id/ContainerMiniPlayer" />
+    </Transition>
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@+id/start"
+        motion:duration="250">
+        <KeyFrameSet />
         <OnClick motion:targetId="@+id/imgCoverArt" />
     </Transition>
 
