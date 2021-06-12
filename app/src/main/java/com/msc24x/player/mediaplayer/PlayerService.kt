@@ -16,9 +16,10 @@ import com.msc24x.player.R
 
 
 class PlayerService : Service() {
-    private val mmr = MediaMetadataRetriever()
-    private var isInterrupted = false
-    private lateinit var audioRequest: AudioFocusRequest
+
+    private lateinit var endSessionIntent: PendingIntent
+    private lateinit var playIntent: PendingIntent
+    private lateinit var pauseIntent: PendingIntent
 
     companion object {
         private lateinit var player: MediaPlayer
@@ -27,6 +28,15 @@ class PlayerService : Service() {
         private lateinit var trackTitle: String
         private lateinit var trackArtist: String
         private var trackLen: Int = -1
+        private lateinit var trackBitmap: Bitmap
+        private var trackColor: Int = 909088
+        private lateinit var playbackState: PlaybackState
+
+        private val mmr = MediaMetadataRetriever()
+        private var isInterrupted = false
+        private lateinit var audioRequest: AudioFocusRequest
+        private lateinit var mediaSession: MediaSession
+        private lateinit var mediaStyle: MediaStyle
 
         fun getCurrentPlayerPos(): Int {
             if (playerInit) {
@@ -229,11 +239,48 @@ class PlayerService : Service() {
         player.reset()
         trackUri = newTrackUri
         player = MediaPlayer.create(applicationContext, trackUri)
-        trackLen = player.duration
+        player.isLooping = true
+
+        // MetaData
         mmr.setDataSource(this, trackUri)
+        trackLen = player.duration
         trackTitle = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE).toString()
         trackArtist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST).toString()
-        player.isLooping = true
+        if (trackArtist == "null") trackArtist = "Unknown"
+        trackBitmap = extractTrackBitmap(trackUri)
+        trackColor = extractMutedColor(trackBitmap)
+
     }
 
+    private fun extractTrackBitmap(uri: Uri): Bitmap {
+        val mmr = MediaMetadataRetriever()
+        val art: Bitmap
+        val bfo = BitmapFactory.Options()
+        mmr.setDataSource(applicationContext, uri)
+        val rawArt: ByteArray? = mmr.embeddedPicture
+
+        art = if (rawArt != null) {
+            BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size, bfo)
+        } else {
+            BitmapFactory.decodeResource(
+                applicationContext.resources,
+                R.drawable.missing_album_art
+            )
+        }
+        return art
+    }
+
+    private fun extractMutedColor(art: Bitmap): Int {
+        val myPalette = Palette.from(art).generate()
+        var muted = myPalette.mutedSwatch
+        if (muted == null) muted = myPalette.darkVibrantSwatch
+        return muted!!.rgb
+    }
+
+
+    /*private fun extractStrings(uri: Uri) : List<String>{
+        val mmr = MediaMetadataRetriever()
+        mmr.setDataSource(applicationContext, uri)
+        //mmr.extractMetadata(MediaMetadata.)
+    }*/
 }
