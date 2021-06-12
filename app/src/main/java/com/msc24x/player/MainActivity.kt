@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.app.ActivityCompat
 import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.activity_main.*
@@ -22,8 +23,6 @@ class MainActivity : AppCompatActivity() {
             arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
             111
         )
-
-        window.navigationBarColor = resources.getColor(R.color.variableAccent)
 
         setSupportActionBar(materialToolbar)
         materialToolbar.setNavigationOnClickListener {

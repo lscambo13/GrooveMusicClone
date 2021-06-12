@@ -9,9 +9,9 @@ class Utils {
             if (min == 0) {
                 str += "0:"
             } else if (min < 10) {
-                str = min.toString() + ":"
+                str = "$min:"
             } else {
-                str = min.toString() + ":"
+                str = "$min:"
             }
             if (sec < 10) {
                 str = str + "0" + sec.toString()
@@ -21,5 +21,4 @@ class Utils {
             return str
         }
     }
-
 }

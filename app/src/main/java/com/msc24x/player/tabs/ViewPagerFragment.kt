@@ -7,6 +7,7 @@ import Helpers.Utils
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.*
@@ -24,8 +25,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
 import com.msc24x.player.mediaplayer.PlayerService
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_view_pager.*
 import kotlinx.android.synthetic.main.fragment_view_pager.view.*
-import kotlinx.android.synthetic.main.motion_miniplayer.*
 import kotlinx.android.synthetic.main.motion_miniplayer.view.*
 
 class ViewPagerFragment : Fragment() {
@@ -42,8 +44,6 @@ class ViewPagerFragment : Fragment() {
             viewModel.currentArtist.value = PlayerService.getTrackArtist()
             viewModel.currentSong.value = PlayerService.getTrackTitle()
             viewModel.currentPosition.value = PlayerService.getCurrentPlayerPos()
-            /* THIS WILL PLAY THE SONG WHEN WE GET BACK INSIDE THE APP EVEN IF THE SERVICE WAS NOT
-            * PLAYING IT EARLIER TODO("onStart bug") */
             viewModel.currentUri.value = PlayerService.getCurrentUri()
         }
     }
@@ -116,17 +116,19 @@ class ViewPagerFragment : Fragment() {
 
             // Update Song Art (Image and color)
             viewModel.decodedArt.value = extractTrackBitmap(it)
-            viewModel.mutedColor.value = extractMutedColor(viewModel.decodedArt.value!!).rgb
+            viewModel.mutedColor.value = extractMutedColor(viewModel.decodedArt.value!!)
             view.imgCoverArt.setImageBitmap(viewModel.decodedArt.value)
 
             // Handle muted color change
             if (viewModel.mutedColor.value != null) {
-                updateUI_color(viewModel.mutedColor.value!!)
+                updateUI(viewModel.mutedColor.value!!, view)
             }
 
             // Keep track position thread alive
-            if (!trackPlayerPos.isAlive)
-                trackPlayerPos.start()
+            if (!trackPositionThread.isAlive) {
+                trackPositionThread.start()
+            }
+
         })
 
         view.btnOutline.setOnClickListener {
@@ -161,13 +163,13 @@ class ViewPagerFragment : Fragment() {
 
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
                     seekBar!!.isSelected = false
-                    seekTo(seekbar.progress)
+                    seekTo(view.seekbar.progress)
                 }
             }
         )
 
         viewModel.currentPosition.observe(viewLifecycleOwner, Observer {
-            if (!seekbar.isSelected) {
+            if (!view.seekbar.isSelected) {
                 view.seekbar.progress = viewModel.currentPosition.value!!
                 view.tvTimeCode.text = Utils.progressToString(viewModel.currentPosition.value!!)
             }
@@ -182,17 +184,17 @@ class ViewPagerFragment : Fragment() {
         }
     }
 
-    private var trackPlayerPos = Thread {
+    private var trackPositionThread = Thread {
         while (true) {
-            var msg = Message()
+            val msg = Message()
             msg.what = PlayerService.getCurrentPlayerPos()
             handler.sendMessage(msg)
             Thread.sleep(100)
         }
     }
 
-    private fun updateUI_color(color: Int) {
-        ContainerMiniPlayer.setBackgroundColor(color)
+    private fun updateUI(color: Int, view: View) {
+        view.ContainerMiniPlayer.setBackgroundColor(color)
         requireActivity().window.navigationBarColor = color
         requireActivity().window.statusBarColor = color
         (activity as AppCompatActivity?)!!.supportActionBar!!.setBackgroundDrawable(
@@ -222,11 +224,11 @@ class ViewPagerFragment : Fragment() {
         return art
     }
 
-    private fun extractMutedColor(art: Bitmap): Palette.Swatch {
+    private fun extractMutedColor(art: Bitmap): Int {
         val myPalette = Palette.from(art).generate()
         var muted = myPalette.mutedSwatch
         if (muted == null) muted = myPalette.darkVibrantSwatch
-        return muted!!
+        return muted!!.rgb
     }
 
     private fun play() {

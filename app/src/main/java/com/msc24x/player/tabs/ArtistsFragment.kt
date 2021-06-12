@@ -62,7 +62,6 @@ class ArtistsFragment : Fragment(), ArtistAdapter.OnItemClickListener {
                     artistsList.add(Artists(artist))
             }
         }
-        //songsList.removeAt(0)
         adapter.notifyDataSetChanged()
     }
 

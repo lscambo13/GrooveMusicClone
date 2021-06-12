@@ -150,7 +150,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
     private fun updateUri(id: Int) {
         val uri = songsList[id].uri
-        viewModel.currentUri.value = uri!!
+        viewModel.currentUri.value = uri
     }
 
     private fun playSelectedSong() {
