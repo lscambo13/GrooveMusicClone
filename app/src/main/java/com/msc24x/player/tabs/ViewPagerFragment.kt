@@ -31,11 +31,12 @@ import kotlinx.android.synthetic.main.motion_miniplayer.view.*
 class ViewPagerFragment : Fragment() {
 
     private val viewModel: CommonViewModel by activityViewModels()
-    var safeThread = true
+    private var fetchedDataFromService: Boolean = false
 
     override fun onStart() {
         super.onStart()
         if (PlayerService.isInitialized()) {
+            fetchedDataFromService = true
             viewModel.songLength.value = PlayerService.getSongLength()
             viewModel.busy.value = PlayerService.isPlaying()
             viewModel.currentArtist.value = PlayerService.getTrackArtist()
@@ -101,9 +102,15 @@ class ViewPagerFragment : Fragment() {
                 }
                 false -> {
                     view.tvTrackLength.text = Utils.progressToString(viewModel.songLength.value!!)
-                    view.iconPlay.visibility = View.INVISIBLE
-                    view.iconPause.visibility = View.VISIBLE
-                    viewModel.busy.value = true
+                    if (fetchedDataFromService) {
+                        fetchedDataFromService = false
+                        view.iconPlay.visibility = View.VISIBLE
+                        view.iconPause.visibility = View.INVISIBLE
+                    } else {
+                        view.iconPlay.visibility = View.INVISIBLE
+                        view.iconPause.visibility = View.VISIBLE
+                        viewModel.busy.value = true
+                    }
                 }
             }
 
