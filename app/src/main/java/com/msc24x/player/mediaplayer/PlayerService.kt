@@ -60,6 +60,32 @@ class PlayerService : Service() {
         fun isPlaying() = player.isPlaying
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        mediaSession = MediaSession(this, "MediaSession")
+        mediaStyle = MediaStyle().setMediaSession(mediaSession.sessionToken)
+        endSessionIntent = PendingIntent.getService(
+            this, 1, Intent(
+                this,
+                PlayerService::class.java
+            ).setAction(END_SESSION), 0
+        )
+
+        playIntent = PendingIntent.getService(
+            this, 1, Intent(
+                this,
+                PlayerService::class.java
+            ).setAction(PLAY), 0
+        )
+
+        pauseIntent = PendingIntent.getService(
+            this, 1, Intent(
+                this,
+                PlayerService::class.java
+            ).setAction(PAUSE), 0
+        )
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         safeInit()
         when (intent!!.action) {
@@ -74,6 +100,14 @@ class PlayerService : Service() {
         setupNotification()
         return START_STICKY
     }
+
+    override fun onDestroy() {
+        playerInit = false
+        mediaSession.release()
+        player.release()
+        super.onDestroy()
+    }
+
 
     override fun onBind(intent: Intent?): IBinder? {
         TODO("Not yet implemented")
@@ -173,6 +207,7 @@ class PlayerService : Service() {
     private fun play() {
         if (!player.isPlaying) {
             requestAudioFocus(true)
+            setSessionPlaying(true)
             player.start()
         }
     }
