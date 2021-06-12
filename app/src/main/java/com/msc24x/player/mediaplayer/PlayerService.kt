@@ -64,25 +64,74 @@ class PlayerService : Service() {
 
     private fun setupNotification() {
         val pendingIntent: PendingIntent =
-            Intent(this, PlayerService::class.java).let { notificationIntent ->
+            Intent(this, MainActivity::class.java).let { notificationIntent ->
                 PendingIntent.getActivity(this, 0, notificationIntent, 0)
             }
 
-        val channelId = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             createNotificationChannel("channelId", "channelName")
         } else {
             TODO("VERSION.SDK_INT < O")
         }
 
-        val notification: Notification = Notification.Builder(this, channelId)
-            .setContentTitle("BOP")
-            .setContentText("Songs")
-            .setSmallIcon(R.drawable.ic_play_indicator)
+
+        val actionEndSession = Notification.Action.Builder(
+            Icon.createWithResource(
+                this,
+                R.drawable.ic_cross
+            ), "end session", endSessionIntent
+        ).build()
+
+        val actionPause = Notification.Action.Builder(
+            Icon.createWithResource(
+                this,
+                R.drawable.ic_pausebtn
+            ), "pause", pauseIntent
+        ).build()
+
+        val actionPlay = Notification.Action.Builder(
+            Icon.createWithResource(
+                this,
+                R.drawable.ic_playbtn
+            ), "play", playIntent
+        ).build()
+
+        val notification: Notification = Notification.Builder(this, "channelId")
+            .setContentTitle(trackTitle)
+            .setContentText(trackArtist)
+            .setStyle(mediaStyle.setShowActionsInCompactView(0, 1, 2, 3))
+            .setSmallIcon(R.drawable.ic_music)
             .setContentIntent(pendingIntent)
-            .setTicker("this is ticker")
+            .setAutoCancel(false)
+            .setActions(actionEndSession, actionPlay, actionPause)
             .build()
 
+        mediaSession.setMetadata(
+            MediaMetadata.Builder()
+                .putString(MediaMetadata.METADATA_KEY_TITLE, trackTitle)
+                .putString(MediaMetadata.METADATA_KEY_ARTIST, trackArtist)
+                .putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, trackBitmap)
+                .putLong(MediaMetadata.METADATA_KEY_DURATION, trackLen.toLong())
+                .build()
+        )
+/*
+        playbackState = PlaybackState.Builder()
+            .setState(PlaybackState.STATE_PLAYING, player.currentPosition.toLong(), 1.0F)
+            .setActions(PlaybackState.ACTION_SEEK_TO or PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE)
+            .build()
+
+        mediaSession.setPlaybackState(playbackState)*/
+
+        mediaSession.setCallback(object : MediaSession.Callback() {
+            override fun onSeekTo(pos: Long) {
+                super.onSeekTo(pos)
+                seekTo(pos.toInt())
+            }
+        })
+
+
         startForeground(54165, notification)
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
