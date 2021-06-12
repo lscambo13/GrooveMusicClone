@@ -173,14 +173,30 @@ class PlayerService : Service() {
     private fun pause() {
         if (player.isPlaying) {
             player.pause()
+            setSessionPlaying(false)
             requestAudioFocus(false)
         }
     }
 
     private fun seekTo(intent: Intent) {
         val pos = intent.getIntExtra(SEEK_TO, -1)
-        if (pos != -1)
+        if (pos != -1) {
             player.seekTo(pos)
+            if (player.isPlaying)
+                setSessionPlaying(true)
+            else
+                setSessionPlaying(false)
+        }
+    }
+
+    private fun seekTo(pos: Int) {
+        if (pos != -1) {
+            player.seekTo(pos)
+            if (player.isPlaying)
+                setSessionPlaying(true)
+            else
+                setSessionPlaying(false)
+        }
     }
 
     private fun safeInit() {
@@ -189,6 +205,23 @@ class PlayerService : Service() {
         player = MediaPlayer()
         player.isLooping = true
         playerInit = true
+    }
+
+    private fun setSessionPlaying(isPlaying: Boolean) {
+        if (isPlaying) {
+            playbackState = PlaybackState.Builder()
+                .setState(PlaybackState.STATE_PLAYING, player.currentPosition.toLong(), 1.0F)
+                .setActions(PlaybackState.ACTION_SEEK_TO or PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE)
+                .build()
+            mediaSession.isActive = true
+        } else {
+            playbackState = PlaybackState.Builder()
+                .setState(PlaybackState.STATE_PAUSED, player.currentPosition.toLong(), 0F)
+                .setActions(PlaybackState.ACTION_SEEK_TO or PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE)
+                .build()
+            mediaSession.isActive = false
+        }
+        mediaSession.setPlaybackState(playbackState)
     }
 
     private fun requestAudioFocus(reqFocus: Boolean) {
