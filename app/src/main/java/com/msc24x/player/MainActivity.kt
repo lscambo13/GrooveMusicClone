@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val miniPlayer = findViewById<MotionLayout>(R.id.motion_miniplayer)
+        val miniPlayer = findViewById<MotionLayout>(R.id.included_motion_miniplayer)
         if (miniPlayer.currentState == miniPlayer.endState)
             miniPlayer.transitionToStart()
         else
