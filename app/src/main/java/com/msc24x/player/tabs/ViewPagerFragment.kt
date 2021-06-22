@@ -34,6 +34,20 @@ class ViewPagerFragment : Fragment() {
 
     private val viewModel: CommonViewModel by activityViewModels()
     private var fetchedDataFromService: Boolean = false
+    private val receiver: BroadcastReceiver = ServiceBroadcastReceiver()
+    private val playerServiceIntentFilter = IntentFilter()
+
+
+    inner class ServiceBroadcastReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent != null) {
+                when (intent.action) {
+                    PLAY -> play()
+                    PAUSE -> pause()
+                }
+            }
+        }
+    }
 
     override fun onStart() {
         super.onStart()
@@ -46,6 +60,23 @@ class ViewPagerFragment : Fragment() {
             viewModel.currentPosition.value = PlayerService.getCurrentPlayerPos()
             viewModel.currentUri.value = PlayerService.getCurrentUri()
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        playerServiceIntentFilter.addAction(PLAY)
+        playerServiceIntentFilter.addAction(PAUSE)
+        context?.registerReceiver(receiver, playerServiceIntentFilter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        context?.unregisterReceiver(receiver)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        context?.registerReceiver(receiver, playerServiceIntentFilter)
     }
 
     override fun onCreateView(
