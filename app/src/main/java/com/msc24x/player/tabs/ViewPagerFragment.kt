@@ -4,7 +4,10 @@ import Helpers.PAUSE
 import Helpers.PLAY
 import Helpers.SEEK_TO
 import Helpers.Utils
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -26,7 +29,6 @@ import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
 import com.msc24x.player.mediaplayer.PlayerService
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_view_pager.*
 import kotlinx.android.synthetic.main.fragment_view_pager.view.*
 import kotlinx.android.synthetic.main.motion_miniplayer.view.*
 
@@ -85,17 +87,8 @@ class ViewPagerFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_view_pager, container, false)
 
-        val fragmentList = arrayListOf<Fragment>(
-            SongsFragment(),
-            ArtistsFragment(),
-            AlbumsFragment()
-        )
-
-        val tabTitles = arrayListOf<String>(
-            "Songs",
-            "Artists",
-            "Albums"
-        )
+        val fragmentList = arrayListOf(SongsFragment(), ArtistsFragment(), AlbumsFragment())
+        val tabTitles = arrayListOf("Songs", "Artists", "Albums")
 
         val adapter = ViewPagerAdapter(
             fragmentList, childFragmentManager,
@@ -117,7 +110,6 @@ class ViewPagerFragment : Fragment() {
         viewModel.currentUri.observe(viewLifecycleOwner, Observer {
 
             // Display main song info
-            motion_miniplayer.visibility = View.VISIBLE
             view.tvSongName.text = viewModel.currentSong.value
             view.tvArtistName.text = viewModel.currentArtist.value
             view.seekbar.max = viewModel.songLength.value!!

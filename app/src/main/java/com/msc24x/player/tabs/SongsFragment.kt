@@ -118,7 +118,6 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
 
     override fun onItemClick(position: Int) {
-        val clickedItem = songsList[position]
         updateSong(position)
         updateArtist(position)
         updateDuration(position)
@@ -131,7 +130,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     fun updatePlayIndicator(id: Int) {
         rvSongs[id].isActivated = true
         rvSongs[id].isSelected = true
-        //TODO - - Play indicator
+     //TODO - - Play indicator
     }
 
     private fun updateDuration(id: Int) {
@@ -168,9 +167,6 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_songs, container, false)
-        //val tPad = requireActivity().blurAppBar.layoutParams.height
-        //val bPad = requireActivity().blurMiniPlayer.layoutParams.height
-        //view.rvSongs.setPadding(0, 0, 0, bPad)
         view.fragmentSongsPlaceholderText.visibility = GONE
         view.rvSongs.adapter = adapter
         view.rvSongs.layoutManager = LinearLayoutManager(context)
@@ -181,6 +177,5 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadMedia()
-        //println("loaded songs")
     }
 }

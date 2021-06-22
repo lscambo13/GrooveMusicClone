@@ -2,20 +2,23 @@ package com.msc24x.player.mediaplayer
 
 import Helpers.*
 import android.app.*
-import android.app.Notification.MediaStyle
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.drawable.Icon
 import android.media.*
-import android.media.session.MediaSession
-import android.media.session.PlaybackState
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.session.PlaybackStateCompat
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 import androidx.palette.graphics.Palette
 import com.msc24x.player.MainActivity
 import com.msc24x.player.R
@@ -205,7 +208,6 @@ class PlayerService : Service() {
             }
         })
 
-
         startForeground(54165, notification)
 
     }
@@ -217,7 +219,7 @@ class PlayerService : Service() {
             channelName, NotificationManager.IMPORTANCE_NONE
         )
         chan.lightColor = Color.BLUE
-        chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+        chan.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         service.createNotificationChannel(chan)
         return channelId
