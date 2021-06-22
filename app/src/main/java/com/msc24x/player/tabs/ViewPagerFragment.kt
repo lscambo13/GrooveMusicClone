@@ -231,7 +231,8 @@ class ViewPagerFragment : Fragment() {
         (activity as AppCompatActivity?)!!.supportActionBar!!.setBackgroundDrawable(
             color.toDrawable()
         )
-
+        requireActivity().materialToolbar.setTitleTextColor(Color.WHITE)
+        requireActivity().materialToolbar.setNavigationIconTint(Color.WHITE)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             requireActivity().window.navigationBarDividerColor = color
         }
