@@ -36,13 +36,19 @@ class PlayerService : Service() {
         private var trackLen: Int = -1
         private lateinit var trackBitmap: Bitmap
         private var trackColor: Int = 909088
-        private lateinit var playbackState: PlaybackState
+        private lateinit var playbackState: PlaybackStateCompat
 
         private val mmr = MediaMetadataRetriever()
         private var isInterrupted = false
         private lateinit var audioRequest: AudioFocusRequest
-        private lateinit var mediaSession: MediaSession
-        private lateinit var mediaStyle: MediaStyle
+
+        private lateinit var mediaSession: MediaSessionCompat
+        private lateinit var mediaStyle: androidx.media.app.NotificationCompat.MediaStyle
+
+        private lateinit var endSessionIntent: PendingIntent
+        private lateinit var playIntent: PendingIntent
+        private lateinit var pauseIntent: PendingIntent
+
 
         fun getCurrentPlayerPos(): Int {
             if (playerInit) {
@@ -62,8 +68,20 @@ class PlayerService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        mediaSession = MediaSession(this, "MediaSession")
-        mediaStyle = MediaStyle().setMediaSession(mediaSession.sessionToken)
+
+        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            createNotificationChannel(
+                "com.msc24x.player.notificationChannel",
+                "com.msc24x.player.notificationChannelName"
+            )
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+
+        mediaSession = MediaSessionCompat(this, "com.msc24x.player.mediaSession")
+        mediaStyle = androidx.media.app.NotificationCompat.MediaStyle()
+            .setMediaSession(mediaSession.sessionToken)
+
         endSessionIntent = PendingIntent.getService(
             this, 1, Intent(
                 this,
@@ -119,61 +137,53 @@ class PlayerService : Service() {
                 PendingIntent.getActivity(this, 0, notificationIntent, 0)
             }
 
-        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            createNotificationChannel("channelId", "channelName")
-        } else {
-            TODO("VERSION.SDK_INT < O")
-        }
 
-
-        val actionEndSession = Notification.Action.Builder(
-            Icon.createWithResource(
-                this,
-                R.drawable.ic_cross
-            ), "end session", endSessionIntent
+        val actionEndSession = NotificationCompat.Action.Builder(
+            R.drawable.ic_cross, "end session", endSessionIntent
         ).build()
 
-        val actionPause = Notification.Action.Builder(
-            Icon.createWithResource(
-                this,
-                R.drawable.ic_pausebtn
-            ), "pause", pauseIntent
-        ).build()
+        val actionPlayPause: NotificationCompat.Action = if (showPLayButton)
+            NotificationCompat.Action.Builder(
+                R.drawable.ic_playbtn,
+                "play",
+                PendingIntent.getBroadcast(applicationContext, 0, Intent().setAction(PLAY), 0)
+            ).build()
+        else
+            NotificationCompat.Action.Builder(
+                R.drawable.ic_pausebtn,
+                "pause",
+                PendingIntent.getBroadcast(applicationContext, 0, Intent().setAction(PAUSE), 0)
+            ).build()
 
-        val actionPlay = Notification.Action.Builder(
-            Icon.createWithResource(
-                this,
-                R.drawable.ic_playbtn
-            ), "play", playIntent
-        ).build()
-
-        val notification: Notification = Notification.Builder(this, "channelId")
-            .setContentTitle(trackTitle)
-            .setContentText(trackArtist)
-            .setStyle(mediaStyle.setShowActionsInCompactView(0, 1, 2, 3))
-            .setSmallIcon(R.drawable.ic_music)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(false)
-            .setActions(actionEndSession, actionPlay, actionPause)
-            .build()
+        val notification: Notification =
+            NotificationCompat.Builder(this, "com.msc24x.player.notificationChannel")
+                .setContentTitle(trackTitle)
+                .setContentText(trackArtist)
+                .setStyle(mediaStyle.setShowActionsInCompactView(0))
+                .setSmallIcon(R.drawable.ic_music)
+                .setLargeIcon(trackBitmap)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(false)
+                .addAction(actionPlayPause)
+                .addAction(actionEndSession)
+                .build()
 
         mediaSession.setMetadata(
-            MediaMetadata.Builder()
+            MediaMetadataCompat.Builder()
                 .putString(MediaMetadata.METADATA_KEY_TITLE, trackTitle)
                 .putString(MediaMetadata.METADATA_KEY_ARTIST, trackArtist)
                 .putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, trackBitmap)
                 .putLong(MediaMetadata.METADATA_KEY_DURATION, trackLen.toLong())
                 .build()
         )
-/*
-        playbackState = PlaybackState.Builder()
-            .setState(PlaybackState.STATE_PLAYING, player.currentPosition.toLong(), 1.0F)
-            .setActions(PlaybackState.ACTION_SEEK_TO or PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE)
-            .build()
 
-        mediaSession.setPlaybackState(playbackState)*/
+        mediaSession.setCallback(object : MediaSessionCompat.Callback() {
+            override fun onMediaButtonEvent(mediaButtonIntent: Intent): Boolean {
+                Toast.makeText(applicationContext, mediaButtonIntent.action, Toast.LENGTH_SHORT)
+                    .show()
+                return super.onMediaButtonEvent(mediaButtonIntent)
+            }
 
-        mediaSession.setCallback(object : MediaSession.Callback() {
             override fun onSeekTo(pos: Long) {
                 super.onSeekTo(pos)
                 seekTo(pos.toInt())
@@ -251,15 +261,15 @@ class PlayerService : Service() {
 
     private fun setSessionPlaying(isPlaying: Boolean) {
         if (isPlaying) {
-            playbackState = PlaybackState.Builder()
-                .setState(PlaybackState.STATE_PLAYING, player.currentPosition.toLong(), 1.0F)
-                .setActions(PlaybackState.ACTION_SEEK_TO or PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE)
+            playbackState = PlaybackStateCompat.Builder()
+                .setState(PlaybackStateCompat.STATE_PLAYING, player.currentPosition.toLong(), 1.0F)
+                .setActions(PlaybackStateCompat.ACTION_SEEK_TO or PlaybackStateCompat.ACTION_PLAY_PAUSE)
                 .build()
             mediaSession.isActive = true
         } else {
-            playbackState = PlaybackState.Builder()
-                .setState(PlaybackState.STATE_PAUSED, player.currentPosition.toLong(), 0F)
-                .setActions(PlaybackState.ACTION_SEEK_TO or PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE)
+            playbackState = PlaybackStateCompat.Builder()
+                .setState(PlaybackStateCompat.STATE_PAUSED, player.currentPosition.toLong(), 0F)
+                .setActions(PlaybackStateCompat.ACTION_SEEK_TO or PlaybackStateCompat.ACTION_PLAY_PAUSE)
                 .build()
             mediaSession.isActive = false
         }
