@@ -96,23 +96,19 @@ class ViewPagerFragment : Fragment() {
             when (viewModel.busy.value) {
                 true -> {
                     view.tvTrackLength.text = Utils.progressToString(viewModel.songLength.value!!)
-                    view.iconPlay.visibility = View.INVISIBLE
-                    view.iconPause.visibility = View.VISIBLE
-                    viewModel.busy.value = true
+                    setPlayBtnVisible(false)
                 }
                 false -> {
                     view.tvTrackLength.text = Utils.progressToString(viewModel.songLength.value!!)
                     if (fetchedDataFromService) {
                         fetchedDataFromService = false
-                        view.iconPlay.visibility = View.VISIBLE
-                        view.iconPause.visibility = View.INVISIBLE
+                        setPlayBtnVisible(true)
                     } else {
-                        view.iconPlay.visibility = View.INVISIBLE
-                        view.iconPause.visibility = View.VISIBLE
-                        viewModel.busy.value = true
+                        setPlayBtnVisible(false)
                     }
                 }
             }
+            viewModel.busy.value = true
 
             // Update Song Art (Image and color)
             viewModel.decodedArt.value = extractTrackBitmap(it)
@@ -134,14 +130,8 @@ class ViewPagerFragment : Fragment() {
         view.btnOutline.setOnClickListener {
             if (viewModel.busy.value == true) {
                 pause()
-                view.iconPlay.visibility = View.VISIBLE
-                view.iconPause.visibility = View.INVISIBLE
-                viewModel.busy.value = false
             } else {
-                view.iconPlay.visibility = View.INVISIBLE
-                view.iconPause.visibility = View.VISIBLE
                 play()
-                viewModel.busy.value = true
             }
         }
 
@@ -175,6 +165,16 @@ class ViewPagerFragment : Fragment() {
             }
         })
         return view
+    }
+
+    private fun setPlayBtnVisible(makeVisible: Boolean) {
+        if (makeVisible) {
+            view?.iconPlay?.visibility = View.VISIBLE
+            view?.iconPause?.visibility = View.INVISIBLE
+        } else {
+            view?.iconPlay?.visibility = View.INVISIBLE
+            view?.iconPause?.visibility = View.VISIBLE
+        }
     }
 
 
@@ -232,15 +232,19 @@ class ViewPagerFragment : Fragment() {
     }
 
     private fun play() {
+        setPlayBtnVisible(false)
         val intent = Intent(context, PlayerService::class.java)
         intent.action = PLAY
         requireActivity().startService(intent)
+        viewModel.busy.value = true
     }
 
     private fun pause() {
+        setPlayBtnVisible(true)
         val intent = Intent(context, PlayerService::class.java)
         intent.action = PAUSE
         requireActivity().startService(intent)
+        viewModel.busy.value = false
     }
 
     private fun seekTo(pos: Int) {
