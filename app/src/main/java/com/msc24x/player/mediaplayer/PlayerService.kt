@@ -23,9 +23,19 @@ import com.msc24x.player.R
 
 class PlayerService : Service() {
 
-    private lateinit var endSessionIntent: PendingIntent
-    private lateinit var playIntent: PendingIntent
-    private lateinit var pauseIntent: PendingIntent
+    inner class ServiceBroadcastReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent != null) {
+                when (intent.action) {
+                    PLAY -> play()
+                    PAUSE -> pause()
+                }
+            }
+        }
+    }
+
+    private val receiver = ServiceBroadcastReceiver()
+    private val notificationIntentFilter = IntentFilter()
 
     companion object {
         private lateinit var player: MediaPlayer
@@ -66,6 +76,10 @@ class PlayerService : Service() {
         fun isPlaying() = player.isPlaying
     }
 
+    override fun onBind(intent: Intent?): IBinder? {
+        TODO("Not yet implemented")
+    }
+
     override fun onCreate() {
         super.onCreate()
 
@@ -102,6 +116,11 @@ class PlayerService : Service() {
                 PlayerService::class.java
             ).setAction(PAUSE), 0
         )
+
+        notificationIntentFilter.addAction(PLAY)
+        notificationIntentFilter.addAction(PAUSE)
+
+        registerReceiver(receiver, notificationIntentFilter)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -115,7 +134,6 @@ class PlayerService : Service() {
             INIT -> safeInit()
         }
 
-        setupNotification()
         return START_STICKY
     }
 
@@ -123,15 +141,12 @@ class PlayerService : Service() {
         playerInit = false
         mediaSession.release()
         player.release()
+        unregisterReceiver(receiver)
         super.onDestroy()
     }
 
 
-    override fun onBind(intent: Intent?): IBinder? {
-        TODO("Not yet implemented")
-    }
-
-    private fun setupNotification() {
+    private fun setupNotification(showPLayButton: Boolean) {
         val pendingIntent: PendingIntent =
             Intent(this, MainActivity::class.java).let { notificationIntent ->
                 PendingIntent.getActivity(this, 0, notificationIntent, 0)
@@ -219,6 +234,7 @@ class PlayerService : Service() {
             requestAudioFocus(true)
             setSessionPlaying(true)
             player.start()
+            setupNotification(false)
         }
     }
 
@@ -227,6 +243,7 @@ class PlayerService : Service() {
             player.pause()
             setSessionPlaying(false)
             requestAudioFocus(false)
+            setupNotification(true)
         }
     }
 
