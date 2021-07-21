@@ -1,11 +1,16 @@
 package com.msc24x.player.tabs
 
+import Helpers.PAUSE
+import Helpers.PLAY
+import Helpers.SEEK_TO
+import Helpers.Utils
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.*
@@ -17,16 +22,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.palette.graphics.Palette
 import com.google.android.material.tabs.TabLayoutMediator
 import com.msc24x.player.CommonViewModel
-import com.msc24x.player.Helpers.PAUSE
-import com.msc24x.player.Helpers.PLAY
-import com.msc24x.player.Helpers.SEEK_TO
-import com.msc24x.player.Helpers.Utils
 import com.msc24x.player.R
-import com.msc24x.player.databinding.FragmentViewPagerBinding
 import com.msc24x.player.mediaplayer.PlayerService
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_view_pager.view.*
+import kotlinx.android.synthetic.main.motion_miniplayer.view.*
 
 class ViewPagerFragment : Fragment() {
 
@@ -34,7 +38,7 @@ class ViewPagerFragment : Fragment() {
     private var fetchedDataFromService: Boolean = false
     private val receiver: BroadcastReceiver = ServiceBroadcastReceiver()
     private val playerServiceIntentFilter = IntentFilter()
-    private var fragmentViewPagerBinding: FragmentViewPagerBinding? = null
+
 
     inner class ServiceBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -51,7 +55,6 @@ class ViewPagerFragment : Fragment() {
         super.onStart()
         if (PlayerService.isInitialized()) {
             fetchedDataFromService = true
-
             viewModel.songLength.value = PlayerService.getSongLength()
             viewModel.busy.value = PlayerService.isPlaying()
             viewModel.currentArtist.value = PlayerService.getTrackArtist()
@@ -83,8 +86,6 @@ class ViewPagerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_view_pager, container, false)
-        val binding = FragmentViewPagerBinding.bind(view)
-        fragmentViewPagerBinding = binding
 
         val fragmentList = arrayListOf(SongsFragment(), ArtistsFragment(), AlbumsFragment())
         val tabTitles = arrayListOf("Songs", "Artists", "Albums")
@@ -94,9 +95,9 @@ class ViewPagerFragment : Fragment() {
             lifecycle
         )
 
-        val tabLayout = binding.tabLayout
-        val viewPager = binding.viewPagerMain
-        binding.viewPagerMain.adapter = adapter
+        val tabLayout = view.tabLayout
+        val viewPager = view.viewPagerMain
+        view.viewPagerMain.adapter = adapter
 
         TabLayoutMediator(
             tabLayout,
@@ -106,25 +107,22 @@ class ViewPagerFragment : Fragment() {
             viewPager.setCurrentItem(tab.position, true)
         }.attach()
 
-        viewModel.currentUri.observe(viewLifecycleOwner, {
+        viewModel.currentUri.observe(viewLifecycleOwner, Observer {
 
             // Display main song info
-            binding.includedMotionMiniplayer.tvSongName.text = viewModel.currentSong.value
-            binding.includedMotionMiniplayer.tvArtistName.text = viewModel.currentArtist.value
-            binding.includedMotionMiniplayer.seekbar.max = viewModel.songLength.value!!
-            binding.includedMotionMiniplayer.tvTrackLength.text =
-                Utils.progressToString(binding.includedMotionMiniplayer.seekbar.max)
+            view.tvSongName.text = viewModel.currentSong.value
+            view.tvArtistName.text = viewModel.currentArtist.value
+            view.seekbar.max = viewModel.songLength.value!!
+            view.tvTrackLength.text = Utils.progressToString(view.seekbar.max)
 
             // Handle Uri change
             when (viewModel.busy.value) {
                 true -> {
-                    binding.includedMotionMiniplayer.tvTrackLength.text =
-                        Utils.progressToString(viewModel.songLength.value!!)
+                    view.tvTrackLength.text = Utils.progressToString(viewModel.songLength.value!!)
                     setPlayBtnVisible(false)
                 }
                 false -> {
-                    binding.includedMotionMiniplayer.tvTrackLength.text =
-                        Utils.progressToString(viewModel.songLength.value!!)
+                    view.tvTrackLength.text = Utils.progressToString(viewModel.songLength.value!!)
                     if (fetchedDataFromService) {
                         fetchedDataFromService = false
                         setPlayBtnVisible(true)
@@ -138,11 +136,11 @@ class ViewPagerFragment : Fragment() {
             // Update Song Art (Image and color)
             viewModel.decodedArt.value = extractTrackBitmap(it)
             viewModel.mutedColor.value = extractMutedColor(viewModel.decodedArt.value!!)
-            binding.includedMotionMiniplayer.imgCoverArt.setImageBitmap(viewModel.decodedArt.value)
+            view.imgCoverArt.setImageBitmap(viewModel.decodedArt.value)
 
             // Handle muted color change
             if (viewModel.mutedColor.value != null) {
-                updateUI(viewModel.mutedColor.value!!)
+                updateUI(viewModel.mutedColor.value!!, view)
             }
 
             // Keep track position thread alive
@@ -152,8 +150,7 @@ class ViewPagerFragment : Fragment() {
 
         })
 
-
-        binding.includedMotionMiniplayer.btnOutline.setOnClickListener {
+        view.btnOutline.setOnClickListener {
             if (viewModel.busy.value == true) {
                 pause()
             } else {
@@ -161,7 +158,7 @@ class ViewPagerFragment : Fragment() {
             }
         }
 
-        binding.includedMotionMiniplayer.seekbar.setOnSeekBarChangeListener(
+        view.seekbar.setOnSeekBarChangeListener(
             object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(
                     seekBar: SeekBar?,
@@ -169,8 +166,7 @@ class ViewPagerFragment : Fragment() {
                     fromUser: Boolean
                 ) {
                     if (fromUser) {
-                        binding.includedMotionMiniplayer.tvTimeCode.text =
-                            Utils.progressToString(progress)
+                        view.tvTimeCode.text = Utils.progressToString(progress)
                     }
                 }
 
@@ -179,33 +175,28 @@ class ViewPagerFragment : Fragment() {
                 }
 
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                    seekTo(binding.includedMotionMiniplayer.seekbar.progress)
                     seekBar!!.isSelected = false
+                    seekTo(view.seekbar.progress)
                 }
             }
         )
 
-        viewModel.currentPosition.observe(viewLifecycleOwner, {
-            if (!binding.includedMotionMiniplayer.seekbar.isSelected) {
-                binding.includedMotionMiniplayer.seekbar.progress =
-                    viewModel.currentPosition.value!!
-                binding.includedMotionMiniplayer.tvTimeCode.text =
-                    Utils.progressToString(viewModel.currentPosition.value!!)
+        viewModel.currentPosition.observe(viewLifecycleOwner, Observer {
+            if (!view.seekbar.isSelected) {
+                view.seekbar.progress = viewModel.currentPosition.value!!
+                view.tvTimeCode.text = Utils.progressToString(viewModel.currentPosition.value!!)
             }
         })
-
         return view
     }
 
     private fun setPlayBtnVisible(makeVisible: Boolean) {
         if (makeVisible) {
-            fragmentViewPagerBinding?.includedMotionMiniplayer?.iconPlay?.visibility = View.VISIBLE
-            fragmentViewPagerBinding?.includedMotionMiniplayer?.iconPause?.visibility =
-                View.INVISIBLE
+            view?.iconPlay?.visibility = View.VISIBLE
+            view?.iconPause?.visibility = View.INVISIBLE
         } else {
-            fragmentViewPagerBinding?.includedMotionMiniplayer?.iconPlay?.visibility =
-                View.INVISIBLE
-            fragmentViewPagerBinding?.includedMotionMiniplayer?.iconPause?.visibility = View.VISIBLE
+            view?.iconPlay?.visibility = View.INVISIBLE
+            view?.iconPause?.visibility = View.VISIBLE
         }
     }
 
@@ -225,15 +216,15 @@ class ViewPagerFragment : Fragment() {
         }
     }
 
-    private fun updateUI(color: Int) {
-        fragmentViewPagerBinding?.includedMotionMiniplayer?.ContainerMiniPlayer?.setBackgroundColor(
-            color
-        )
+    private fun updateUI(color: Int, view: View) {
+        view.ContainerMiniPlayer.setBackgroundColor(color)
         requireActivity().window.navigationBarColor = color
         requireActivity().window.statusBarColor = color
         (activity as AppCompatActivity?)!!.supportActionBar!!.setBackgroundDrawable(
             color.toDrawable()
         )
+        requireActivity().materialToolbar.setTitleTextColor(Color.WHITE)
+        requireActivity().materialToolbar.setNavigationIconTint(Color.WHITE)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             requireActivity().window.navigationBarDividerColor = color
         }

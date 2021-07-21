@@ -14,11 +14,13 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
 import com.msc24x.player.R
 import com.msc24x.player.adapters.ArtistAdapter
-import com.msc24x.player.databinding.FragmentArtistsBinding
+import com.msc24x.player.data.Artists
+import kotlinx.android.synthetic.main.fragment_artists.view.*
+
 
 class ArtistsFragment : Fragment(), ArtistAdapter.OnItemClickListener {
 
-    var artistsList = mutableListOf<String>()
+    var artistsList = mutableListOf<Artists>()
     private val adapter = ArtistAdapter(artistsList, this)
 
 
@@ -56,8 +58,8 @@ class ArtistsFragment : Fragment(), ArtistAdapter.OnItemClickListener {
                     null -> artist = "Unknown"
                 }
 
-                if (!artistsList.contains(artist))
-                    artistsList.add(artist)
+                if (!artistsList.contains(Artists(artist)))
+                    artistsList.add(Artists(artist))
             }
         }
         adapter.notifyDataSetChanged()
@@ -71,17 +73,16 @@ class ArtistsFragment : Fragment(), ArtistAdapter.OnItemClickListener {
     ): View? {
         val view = layoutInflater.inflate(R.layout.fragment_artists, container, false)
         val viewPagerMain = activity?.findViewById<ViewPager2>(R.id.viewPagerMain)
-        val binding = FragmentArtistsBinding.bind(view)
-        binding.fragmentArtistsPlaceholderText.setOnClickListener {
+        view.fragmentArtistsPlaceholderText.setOnClickListener {
             viewPagerMain?.currentItem = 2
         }
 
         //val bPad = requireActivity().blurMiniPlayer.layoutParams.height
         //view.rvArtists.setPadding(0, 0, 0, bPad)
 
-        binding.fragmentArtistsPlaceholderText.visibility = View.GONE
-        binding.rvArtists.adapter = adapter
-        binding.rvArtists.layoutManager = GridLayoutManager(requireContext(), 3)
+        view.fragmentArtistsPlaceholderText.visibility = View.GONE
+        view.rvArtists.adapter = adapter
+        view.rvArtists.layoutManager = GridLayoutManager(requireContext(), 3)
 
         return view
     }

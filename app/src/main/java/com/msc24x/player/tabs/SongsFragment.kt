@@ -1,5 +1,7 @@
 package com.msc24x.player.tabs
 
+import Helpers.PLAY_SONG
+import Helpers.TRACK_URI
 import android.content.ContentUris
 import android.content.Intent
 import android.net.Uri
@@ -16,20 +18,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.msc24x.player.CommonViewModel
-import com.msc24x.player.Helpers.PLAY_SONG
-import com.msc24x.player.Helpers.TRACK_URI
 import com.msc24x.player.R
 import com.msc24x.player.adapters.SongAdapter
 import com.msc24x.player.data.Songs
-import com.msc24x.player.databinding.FragmentSongsBinding
 import com.msc24x.player.mediaplayer.PlayerService
+import kotlinx.android.synthetic.main.fragment_songs.*
+import kotlinx.android.synthetic.main.fragment_songs.view.*
 import java.util.concurrent.TimeUnit
 
 
 class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
     private val viewModel: CommonViewModel by activityViewModels()
-    private lateinit var binding: FragmentSongsBinding
 
     // populate the songs list
     var songsList = mutableListOf<Songs>()
@@ -128,8 +128,8 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     }
 
     fun updatePlayIndicator(id: Int) {
-        binding.rvSongs[id].isActivated = true
-        binding.rvSongs[id].isSelected = true
+        rvSongs[id].isActivated = true
+        rvSongs[id].isSelected = true
         //TODO - - Play indicator
     }
 
@@ -167,10 +167,9 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_songs, container, false)
-        binding = FragmentSongsBinding.bind(view)
-        binding.fragmentSongsPlaceholderText.visibility = GONE
-        binding.rvSongs.adapter = adapter
-        binding.rvSongs.layoutManager = LinearLayoutManager(context)
+        view.fragmentSongsPlaceholderText.visibility = GONE
+        view.rvSongs.adapter = adapter
+        view.rvSongs.layoutManager = LinearLayoutManager(context)
         return view
     }
 
