@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.msc24x.player.R
-import kotlinx.android.synthetic.main.fragment_albums.view.*
+import com.msc24x.player.databinding.FragmentAlbumsBinding
 
 class AlbumsFragment : Fragment() {
     override fun onCreateView(
@@ -16,8 +16,10 @@ class AlbumsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = layoutInflater.inflate(R.layout.fragment_albums, container, false)
+        val binding = FragmentAlbumsBinding.bind(view)
+
         val viewPagerMain = activity?.findViewById<ViewPager2>(R.id.viewPagerMain)
-        view.placeholder.setOnClickListener {
+        binding.placeholder.setOnClickListener {
             viewPagerMain?.currentItem = 0
         }
         return view

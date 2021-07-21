@@ -5,24 +5,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.msc24x.player.R
-import com.msc24x.player.data.Artists
-import kotlinx.android.synthetic.main.list_item_artists.view.*
+import com.msc24x.player.databinding.ListItemSongsBinding
 
 
 class ArtistAdapter(
-    var artists: List<Artists>,
+    var artists: List<String>,
     val listener: OnItemClickListener
 ) : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
+
+    private lateinit var binding: ListItemSongsBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.list_item_artists, parent, false)
+        binding = ListItemSongsBinding.bind(view)
         return ArtistViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ArtistViewHolder, position: Int) {
         holder.itemView.apply {
-            tvListArtistName.text = artists[position].ArtistName
+            binding.tvListArtistName.text = artists[position]
         }
     }
 

@@ -9,14 +9,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.app.ActivityCompat
 import androidx.navigation.Navigation
-import kotlinx.android.synthetic.main.activity_main.*
-
+import com.msc24x.player.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    private var mainActivityBinding: ActivityMainBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        mainActivityBinding = binding
+        setContentView(binding.root)
+
 
         ActivityCompat.requestPermissions(
             this,
@@ -24,17 +28,17 @@ class MainActivity : AppCompatActivity() {
             111
         )
 
-        setSupportActionBar(materialToolbar)
-        materialToolbar.setNavigationOnClickListener {
-            drawerLayout.open()
+        setSupportActionBar(binding.materialToolbar)
+        binding.materialToolbar.setNavigationOnClickListener {
+            binding.drawerLayout.open()
         }
 
-        navigationView.setNavigationItemSelectedListener {
+        binding.navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menuHome -> {
                     Navigation.findNavController(this, R.id.fragment)
                         .navigate(R.id.action_settingsFragment_to_viewPagerFragment)
-                    materialToolbar.title = getString(R.string.title_activity_main)
+                    binding.materialToolbar.title = getString(R.string.title_activity_main)
                 }
                 R.id.menuRecent -> {
                     Toast.makeText(applicationContext, "Recent", Toast.LENGTH_SHORT).show()
@@ -45,13 +49,14 @@ class MainActivity : AppCompatActivity() {
                 R.id.menuSettings -> {
                     Navigation.findNavController(this, R.id.fragment)
                         .navigate(R.id.action_viewPagerFragment_to_settingsFragment)
-                    materialToolbar.title = getString(R.string.title_fragment_settings)
+                    binding.materialToolbar.title = getString(R.string.title_fragment_settings)
                 }
             }
-            drawerLayout.close()
+            binding.drawerLayout.close()
             true
         }
     }
+
 
     override fun onBackPressed() {
         val miniPlayer = findViewById<MotionLayout>(R.id.included_motion_miniplayer)
