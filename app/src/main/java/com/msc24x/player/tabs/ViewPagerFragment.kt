@@ -41,6 +41,21 @@ class ViewPagerFragment : Fragment() {
     private val receiver: BroadcastReceiver = ServiceBroadcastReceiver()
     private val playerServiceIntentFilter = IntentFilter()
 
+    private var handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            viewModel.currentPosition.value = msg.what
+        }
+    }
+
+    private var trackPositionThread = Thread {
+        while (true) {
+            val msg = Message()
+            msg.what = PlayerService.getCurrentPlayerPos()
+            handler.sendMessage(msg)
+            Thread.sleep(100)
+        }
+    }
+
 
     inner class ServiceBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -111,6 +126,8 @@ class ViewPagerFragment : Fragment() {
 
         viewModel.currentUri.observe(viewLifecycleOwner, Observer {
 
+            viewModel.busy.value = true
+
             // Display main song info
             view.tvSongName.text = viewModel.currentSong.value
             view.tvArtistName.text = viewModel.currentArtist.value
@@ -133,7 +150,6 @@ class ViewPagerFragment : Fragment() {
                     }
                 }
             }
-            viewModel.busy.value = true
 
             // Update Song Art (Image and color)
             viewModel.decodedArt.value = extractTrackBitmap(it)
@@ -181,8 +197,8 @@ class ViewPagerFragment : Fragment() {
                 }
 
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                    seekBar!!.isSelected = false
                     seekTo(view.seekbar.progress)
+                    seekBar!!.isSelected = false
                 }
             }
         )
@@ -193,6 +209,7 @@ class ViewPagerFragment : Fragment() {
                 view.tvTimeCode.text = Utils.progressToString(viewModel.currentPosition.value!!)
             }
         })
+
         return view
     }
 
@@ -203,22 +220,6 @@ class ViewPagerFragment : Fragment() {
         } else {
             view?.iconPlay?.visibility = View.INVISIBLE
             view?.iconPause?.visibility = View.VISIBLE
-        }
-    }
-
-
-    private var handler = object : Handler(Looper.getMainLooper()) {
-        override fun handleMessage(msg: Message) {
-            viewModel.currentPosition.value = msg.what
-        }
-    }
-
-    private var trackPositionThread = Thread {
-        while (true) {
-            val msg = Message()
-            msg.what = PlayerService.getCurrentPlayerPos()
-            handler.sendMessage(msg)
-            Thread.sleep(100)
         }
     }
 
@@ -252,13 +253,6 @@ class ViewPagerFragment : Fragment() {
             )
         }
         return art
-    }
-
-    private fun extractMutedColor(art: Bitmap): Int {
-        val myPalette = Palette.from(art).generate()
-        var muted = myPalette.mutedSwatch
-        if (muted == null) muted = myPalette.darkVibrantSwatch
-        return muted!!.rgb
     }
 
     private fun play() {
