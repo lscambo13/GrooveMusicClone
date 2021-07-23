@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.msc24x.player.R
-import com.msc24x.player.data.Songs
+import com.msc24x.player.data.database.Track
 import kotlinx.android.synthetic.main.list_item_songs.view.*
 
 
 class SongAdapter(
-    var songs: List<Songs>,
+    var songs: List<Track>,
     val listener: OnItemClickListener
 ) : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
 
@@ -23,10 +23,10 @@ class SongAdapter(
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         holder.itemView.apply {
-            tvListSongName.text = songs[position].SongTitle
-            val listArtist = songs[position].ArtistName + " • " + songs[position].AlbumName
+            tvListSongName.text = songs[position].title
+            val listArtist = songs[position].artist_name + " • " + songs[position].album_name
             tvListArtistName.text = listArtist
-            tvListDuration.text = Utils.progressToString(songs[position].Duration)
+            tvListDuration.text = Utils.progressToString(songs[position].duration.toInt())
         }
     }
 

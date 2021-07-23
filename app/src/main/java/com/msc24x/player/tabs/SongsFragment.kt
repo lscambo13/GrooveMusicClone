@@ -1,7 +1,7 @@
 package com.msc24x.player.tabs
 
-import Helpers.PLAY_SONG
-import Helpers.TRACK_URI
+import Helpers.Constants.PLAY_SONG
+import Helpers.Constants.TRACK_URI
 import android.content.ContentUris
 import android.content.Intent
 import android.net.Uri
@@ -20,10 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
 import com.msc24x.player.adapters.SongAdapter
-import com.msc24x.player.data.Songs
+import com.msc24x.player.data.database.Track
 import com.msc24x.player.mediaplayer.PlayerService
 import kotlinx.android.synthetic.main.fragment_songs.*
 import kotlinx.android.synthetic.main.fragment_songs.view.*
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -32,9 +33,10 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     private val viewModel: CommonViewModel by activityViewModels()
 
     // populate the songs list
-    var songsList = mutableListOf<Songs>()
+    var trackList = mutableListOf<Track>()
+    private val playlistName = "songs_playlist"
 
-    private val adapter = SongAdapter(songsList, this)
+    private val adapter = SongAdapter(trackList, this)
 
     private val collection: Uri =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -67,7 +69,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
     @RequiresApi(Build.VERSION_CODES.R)
     private fun loadMedia() {
-
+        var trackId: Int = 0
         val query = requireContext().contentResolver.query(
             collection,
             projection,
@@ -87,30 +89,27 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
             while (cursor.moveToNext()) {
 
                 val id = cursor.getLong(idColumn)
-                var song = cursor.getString(nameColumn)
                 val fileName = cursor.getString(fileNameColumn)
-                var album = cursor.getString(albumColumn)
+                val song = cursor.getString(nameColumn) ?: fileName
+                val album = cursor.getString(albumColumn) ?: "Unknown"
                 val duration = cursor.getInt(durationColumn)
-                var artist = cursor.getString(artistColumn)
-
-                when (song) {
-                    null -> song = fileName
-                }
-                when (album) {
-                    null -> album = "Unknown"
-                }
-
-                when (artist) {
-                    null -> artist = "Unknown"
-                }
-
+                val artist = cursor.getString(artistColumn) ?: "Unknown"
                 val contentUri: Uri = ContentUris.withAppendedId(
                     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                     id
                 )
                 // Stores column values and the contentUri in a local object
                 // that represents the media file.
-                songsList.add(Songs(contentUri, song, artist, album, duration))
+                trackList.add(
+                    Track(
+                        trackId++,
+                        contentUri.toString(),
+                        song,
+                        artist,
+                        album,
+                        duration.toLong()
+                    )
+                )//Songs(contentUri, song, artist, album, duration))
             }
         }
         adapter.notifyDataSetChanged()
@@ -134,22 +133,21 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     }
 
     private fun updateDuration(id: Int) {
-        viewModel.songLength.value = songsList[id].Duration
+        viewModel.songLength.value = trackList[id].duration.toInt()
     }
 
     private fun updateSong(id: Int) {
-        val song = songsList[id].SongTitle
+        val song = trackList[id].title
         viewModel.currentSong.value = song
     }
 
     private fun updateArtist(id: Int) {
-        val artist = songsList[id].ArtistName
+        val artist = trackList[id].artist_name
         viewModel.currentArtist.value = artist
     }
 
     private fun updateUri(id: Int) {
-        val uri = songsList[id].uri
-        viewModel.currentUri.value = uri
+        viewModel.currentUri.value = Uri.parse(trackList[id].uri)
     }
 
     private fun playSelectedSong() {
