@@ -1,6 +1,15 @@
 package com.msc24x.player.mediaplayer
 
-import Helpers.*
+import Helpers.Constants.END_SESSION
+import Helpers.Constants.INIT
+import Helpers.Constants.NEXT
+import Helpers.Constants.PAUSE
+import Helpers.Constants.PLAY
+import Helpers.Constants.PLAY_SONG
+import Helpers.Constants.PREV
+import Helpers.Constants.SEEK_TO
+import Helpers.Constants.TRACK_URI
+import Helpers.Utils.Companion.extractMutedColor
 import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -19,9 +28,9 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.palette.graphics.Palette
 import com.msc24x.player.MainActivity
 import com.msc24x.player.R
+import com.msc24x.player.data.database.Track
 
 
 class PlayerService : Service() {
@@ -29,9 +38,12 @@ class PlayerService : Service() {
     inner class ServiceBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent != null) {
+                println(intent.action)
                 when (intent.action) {
                     PLAY -> play()
                     PAUSE -> pause()
+                    NEXT -> playNext(1)
+                    PREV -> playNext(-1)
                 }
             }
         }
@@ -68,6 +80,7 @@ class PlayerService : Service() {
 
         private lateinit var mediaSession: MediaSessionCompat
         private lateinit var mediaStyle: androidx.media.app.NotificationCompat.MediaStyle
+        private lateinit var playbackState: PlaybackStateCompat
 
         private lateinit var endSessionIntent: PendingIntent
         private lateinit var playIntent: PendingIntent
@@ -156,6 +169,8 @@ class PlayerService : Service() {
             PAUSE -> pause()
             SEEK_TO -> seekTo(intent)
             END_SESSION -> stopSelf()
+            NEXT -> playNext(1)
+            PREV -> playNext(-1)
             INIT -> safeInit()
         }
 
@@ -247,9 +262,16 @@ class PlayerService : Service() {
         return channelId
     }
 
+
     private fun playSong(intent: Intent) {
         pause()
-        setUri(intent)
+        setUri(intent.getStringExtra(TRACK_URI))
+        play()
+    }
+
+    private fun playSong(uri: String) {
+        pause()
+        setUri(uri)
         play()
     }
 
@@ -268,6 +290,17 @@ class PlayerService : Service() {
             setSessionPlaying(false)
             requestAudioFocus(false)
             setupNotification(true)
+        }
+    }
+
+    private fun playNext(direction: Int) {
+        println("playnext()")
+        if (Playlist.isSet) {
+            val newTrackId = Playlist.currentTrack.id + direction
+            println("new id" + newTrackId)
+            if (newTrackId >= 0 && newTrackId < Playlist.size)
+                playSong(Playlist.trackPlaylist[newTrackId].uri)
+            println("id after change " + Playlist.currentTrack.id)
         }
     }
 
@@ -353,9 +386,11 @@ class PlayerService : Service() {
         }
     }
 
+    private fun setUri(uri: String?) {
+        if (uri == null)
+            return
 
-    private fun setUri(intent: Intent) {
-        val newTrackUri = Uri.parse(intent.getStringExtra(TRACK_URI))
+        val newTrackUri = Uri.parse(uri)
         try {
             if (newTrackUri == trackUri)
                 return
@@ -375,6 +410,14 @@ class PlayerService : Service() {
         if (trackArtist == "null") trackArtist = "Unknown"
         trackBitmap = extractTrackBitmap(trackUri)
         trackColor = extractMutedColor(trackBitmap)
+
+        if (Playlist.isSet) {
+            Playlist.currentTrack = Playlist.trackPlaylist.find {
+                it.uri == trackUri.toString()
+            }!!
+
+            println("id in playlist is " + Playlist.currentTrack.id)
+        }
 
     }
 
@@ -396,17 +439,4 @@ class PlayerService : Service() {
         return art
     }
 
-    private fun extractMutedColor(art: Bitmap): Int {
-        val myPalette = Palette.from(art).generate()
-        var muted = myPalette.mutedSwatch
-        if (muted == null) muted = myPalette.darkVibrantSwatch
-        return muted!!.rgb
-    }
-
-
-    /*private fun extractStrings(uri: Uri) : List<String>{
-        val mmr = MediaMetadataRetriever()
-        mmr.setDataSource(applicationContext, uri)
-        //mmr.extractMetadata(MediaMetadata.)
-    }*/
 }
