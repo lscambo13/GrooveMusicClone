@@ -43,13 +43,24 @@ class PlayerService : Service() {
     companion object {
         private lateinit var player: MediaPlayer
         private var playerInit = false
+
+        private object Playlist {
+            var isSet = false
+
+            lateinit var name: String
+            lateinit var currentTrack: Track
+            var currentTrackIndex: Int = -1
+            lateinit var trackPlaylist: MutableList<Track>
+            var size = 0
+
+        }
+
         private lateinit var trackUri: Uri
         private lateinit var trackTitle: String
         private lateinit var trackArtist: String
         private var trackLen: Int = -1
         private lateinit var trackBitmap: Bitmap
         private var trackColor: Int = 909088
-        private lateinit var playbackState: PlaybackStateCompat
 
         private val mmr = MediaMetadataRetriever()
         private var isInterrupted = false
@@ -62,6 +73,17 @@ class PlayerService : Service() {
         private lateinit var playIntent: PendingIntent
         private lateinit var pauseIntent: PendingIntent
 
+
+        fun setTrackPlaylist(playlist: MutableList<Track>, name: String) {
+            if (Playlist.isSet)
+                if (Playlist.name == name)
+                    return
+
+            Playlist.trackPlaylist = playlist
+            Playlist.name = name
+            Playlist.isSet = true
+            Playlist.size = playlist.size
+        }
 
         fun getCurrentPlayerPos(): Int {
             if (playerInit) {
