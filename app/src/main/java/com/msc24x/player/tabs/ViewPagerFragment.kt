@@ -1,9 +1,12 @@
 package com.msc24x.player.tabs
 
-import Helpers.PAUSE
-import Helpers.PLAY
-import Helpers.SEEK_TO
+import Helpers.Constants.NEXT
+import Helpers.Constants.PAUSE
+import Helpers.Constants.PLAY
+import Helpers.Constants.PREV
+import Helpers.Constants.SEEK_TO
 import Helpers.Utils
+import Helpers.Utils.Companion.extractMutedColor
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -23,7 +26,6 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.palette.graphics.Palette
 import com.google.android.material.tabs.TabLayoutMediator
 import com.msc24x.player.CommonViewModel
 import com.msc24x.player.R
@@ -158,6 +160,10 @@ class ViewPagerFragment : Fragment() {
             }
         }
 
+        view.iconNext.setOnClickListener { next() }
+
+        view.iconPrev.setOnClickListener { prev() }
+
         view.seekbar.setOnSeekBarChangeListener(
             object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(
@@ -259,6 +265,22 @@ class ViewPagerFragment : Fragment() {
         setPlayBtnVisible(false)
         val intent = Intent(context, PlayerService::class.java)
         intent.action = PLAY
+        requireActivity().startService(intent)
+        viewModel.busy.value = true
+    }
+
+    private fun next() {
+        setPlayBtnVisible(false)
+        val intent = Intent(context, PlayerService::class.java)
+        intent.action = NEXT
+        requireActivity().startService(intent)
+        viewModel.busy.value = true
+    }
+
+    private fun prev() {
+        setPlayBtnVisible(false)
+        val intent = Intent(context, PlayerService::class.java)
+        intent.action = PREV
         requireActivity().startService(intent)
         viewModel.busy.value = true
     }

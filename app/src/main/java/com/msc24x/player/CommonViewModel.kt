@@ -4,9 +4,13 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.msc24x.player.data.database.Track
 
 
 class CommonViewModel : ViewModel() {
+
+    var trackPlaylist = mutableListOf<Track>()
+    var currentTrack: Track? = null
 
     val currentSong = MutableLiveData<String>()
     val currentArtist = MutableLiveData<String>()

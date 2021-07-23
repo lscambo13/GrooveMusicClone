@@ -117,6 +117,12 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
 
     override fun onItemClick(position: Int) {
+        if (viewModel.trackPlaylist.isEmpty())
+            viewModel.trackPlaylist = trackList as ArrayList<Track>
+        viewModel.currentTrack = trackList[position]
+
+        PlayerService.setTrackPlaylist(trackList, playlistName)
+
         updateSong(position)
         updateArtist(position)
         updateDuration(position)
