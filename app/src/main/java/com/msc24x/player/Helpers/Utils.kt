@@ -1,4 +1,4 @@
-package Helpers
+package com.msc24x.player.Helpers
 
 import android.graphics.Bitmap
 import android.graphics.Color

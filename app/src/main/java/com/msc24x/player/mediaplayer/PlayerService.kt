@@ -1,15 +1,5 @@
 package com.msc24x.player.mediaplayer
 
-import Helpers.Constants.END_SESSION
-import Helpers.Constants.INIT
-import Helpers.Constants.NEXT
-import Helpers.Constants.PAUSE
-import Helpers.Constants.PLAY
-import Helpers.Constants.PLAY_SONG
-import Helpers.Constants.PREV
-import Helpers.Constants.SEEK_TO
-import Helpers.Constants.TRACK_URI
-import Helpers.Utils.Companion.extractMutedColor
 import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -28,6 +18,16 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.msc24x.player.Helpers.Constants.END_SESSION
+import com.msc24x.player.Helpers.Constants.INIT
+import com.msc24x.player.Helpers.Constants.NEXT
+import com.msc24x.player.Helpers.Constants.PAUSE
+import com.msc24x.player.Helpers.Constants.PLAY
+import com.msc24x.player.Helpers.Constants.PLAY_SONG
+import com.msc24x.player.Helpers.Constants.PREV
+import com.msc24x.player.Helpers.Constants.SEEK_TO
+import com.msc24x.player.Helpers.Constants.TRACK_URI
+import com.msc24x.player.Helpers.Utils.Companion.extractMutedColor
 import com.msc24x.player.MainActivity
 import com.msc24x.player.R
 import com.msc24x.player.data.database.Track

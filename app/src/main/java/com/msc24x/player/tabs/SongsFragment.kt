@@ -1,7 +1,5 @@
 package com.msc24x.player.tabs
 
-import Helpers.Constants.PLAY_SONG
-import Helpers.Constants.TRACK_URI
 import android.content.ContentUris
 import android.content.Intent
 import android.net.Uri
@@ -18,6 +16,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.msc24x.player.CommonViewModel
+import com.msc24x.player.Helpers.Constants.PLAY_SONG
+import com.msc24x.player.Helpers.Constants.TRACK_URI
 import com.msc24x.player.R
 import com.msc24x.player.adapters.SongAdapter
 import com.msc24x.player.data.database.Track

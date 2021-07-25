@@ -1,12 +1,5 @@
 package com.msc24x.player.tabs
 
-import Helpers.Constants.NEXT
-import Helpers.Constants.PAUSE
-import Helpers.Constants.PLAY
-import Helpers.Constants.PREV
-import Helpers.Constants.SEEK_TO
-import Helpers.Utils
-import Helpers.Utils.Companion.extractMutedColor
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -28,6 +21,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayoutMediator
 import com.msc24x.player.CommonViewModel
+import com.msc24x.player.Helpers.Constants.NEXT
+import com.msc24x.player.Helpers.Constants.PAUSE
+import com.msc24x.player.Helpers.Constants.PLAY
+import com.msc24x.player.Helpers.Constants.PREV
+import com.msc24x.player.Helpers.Constants.SEEK_TO
+import com.msc24x.player.Helpers.Utils
+import com.msc24x.player.Helpers.Utils.Companion.extractMutedColor
 import com.msc24x.player.R
 import com.msc24x.player.mediaplayer.PlayerService
 import kotlinx.android.synthetic.main.activity_main.*

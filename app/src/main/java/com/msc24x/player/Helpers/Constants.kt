@@ -1,4 +1,4 @@
-package Helpers
+package com.msc24x.player.Helpers
 
 object Constants {
     const val PLAY = "com.msc24x.player.action.PLAY"

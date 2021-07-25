@@ -1,10 +1,10 @@
 package com.msc24x.player.adapters
 
-import Helpers.Utils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.msc24x.player.Helpers.Utils
 import com.msc24x.player.R
 import com.msc24x.player.data.database.Track
 import kotlinx.android.synthetic.main.list_item_songs.view.*
