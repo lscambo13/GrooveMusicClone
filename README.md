@@ -23,7 +23,7 @@ Here's how the app's major components interact and communicate with each other.
 ### [Download the latest pre-release build](app/release/GrooveMusicClone-app-release-09.apk)
 ---
 ![](raw/bop_promo_card_1.png)
-![](raw/bop_promo_card_2.png)
+![](raw/bop_promo_card_02.png)
 
 
 
