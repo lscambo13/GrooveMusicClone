@@ -22,10 +22,8 @@ Here's how the app's major components interact and communicate with each other.
 
 ### [Download the latest pre-release build](app/release/GrooveMusicClone-app-release-09.apk)
 ---
-![](raw/Screenshot_20210814-120354_Trebuchet.png)
-![](raw/Screenshot_20210814-120256_Trebuchet.png)
-![](raw/Screenshot_20210814-120307_Trebuchet.png)
-![](raw/Screenshot_20210814-120329_Trebuchet.png)
-![](raw/Screenshot_20210814-120344_Trebuchet.png)
+![](raw/bop_promo_card_1.png)
+![](raw/bop_promo_card_2.png)
+
 
 
