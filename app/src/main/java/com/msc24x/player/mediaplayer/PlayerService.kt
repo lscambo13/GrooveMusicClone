@@ -73,7 +73,7 @@ class PlayerService : Service() {
         /*private lateinit var trackUri: Uri
         private lateinit var trackTitle: String
         private lateinit var trackArtist: String
-        private var trackLen: Int = -1
+        private var trackLen: Int = -1*/
         private lateinit var trackBitmap: Bitmap
         private var trackColor: Int = 909088
 
@@ -88,6 +88,8 @@ class PlayerService : Service() {
         private lateinit var endSessionIntent: PendingIntent
         private lateinit var playIntent: PendingIntent
         private lateinit var pauseIntent: PendingIntent
+        private lateinit var prevIntent: PendingIntent
+        private lateinit var nextIntent: PendingIntent
 
 
         fun setTrackPlaylist(playlist: MutableList<Track>, name: String) {
@@ -109,11 +111,14 @@ class PlayerService : Service() {
             }
         }
 
-        fun getTrackTitle(): String = trackTitle
-        fun getTrackArtist(): String = trackArtist
+        fun getCurrentTrack(): Track = currentTrack
+
+        //fun getTrackTitle(): String = currentTrack.title
+        //fun getTrackArtist(): String = currentTrack.artist_name
         fun isInitialized(): Boolean = playerInit
-        fun getCurrentUri(): Uri = trackUri
-        fun getSongLength(): Int = trackLen
+
+        //fun getCurrentUri(): Uri = currentTrack.uri
+        //fun getSongLength(): Int = currentTrack.duration.
         fun isPlaying() = player.isPlaying
     }
 
@@ -131,32 +136,14 @@ class PlayerService : Service() {
             )
         } else {
             TODO("VERSION.SDK_INT < O")
+
         }
 
         mediaSession = MediaSessionCompat(this, "com.msc24x.player.mediaSession")
         mediaStyle = androidx.media.app.NotificationCompat.MediaStyle()
             .setMediaSession(mediaSession.sessionToken)
 
-        endSessionIntent = PendingIntent.getService(
-            this, 1, Intent(
-                this,
-                PlayerService::class.java
-            ).setAction(END_SESSION), 0
-        )
-
-        playIntent = PendingIntent.getService(
-            this, 1, Intent(
-                this,
-                PlayerService::class.java
-            ).setAction(PLAY), 0
-        )
-
-        pauseIntent = PendingIntent.getService(
-            this, 1, Intent(
-                this,
-                PlayerService::class.java
-            ).setAction(PAUSE), 0
-        )
+        initializeIntents()
 
         notificationIntentFilter.addAction(PLAY)
         notificationIntentFilter.addAction(PAUSE)
@@ -200,6 +187,14 @@ class PlayerService : Service() {
             R.drawable.ic_cross, "end session", endSessionIntent
         ).build()
 
+        val actionPrev = NotificationCompat.Action.Builder(
+            R.drawable.ic_prevbtn, "prev track", prevIntent
+        ).build()
+
+        val actionNext = NotificationCompat.Action.Builder(
+            R.drawable.ic_nextbtn, "next track", nextIntent
+        ).build()
+
         val actionPlayPause: NotificationCompat.Action = if (showPLayButton)
             NotificationCompat.Action.Builder(
                 R.drawable.ic_playbtn,
@@ -215,23 +210,25 @@ class PlayerService : Service() {
 
         val notification: Notification =
             NotificationCompat.Builder(this, "com.msc24x.player.notificationChannel")
-                .setContentTitle(trackTitle)
-                .setContentText(trackArtist)
-                .setStyle(mediaStyle.setShowActionsInCompactView(0))
+                .setContentTitle(currentTrack.title)
+                .setContentText(currentTrack.artist_name)
+                .setStyle(mediaStyle.setShowActionsInCompactView(0, 1, 2))
                 .setSmallIcon(R.drawable.ic_music)
                 .setLargeIcon(trackBitmap)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(false)
+                .addAction(actionPrev)
                 .addAction(actionPlayPause)
+                .addAction(actionNext)
                 .addAction(actionEndSession)
                 .build()
 
         mediaSession.setMetadata(
             MediaMetadataCompat.Builder()
-                .putString(MediaMetadata.METADATA_KEY_TITLE, trackTitle)
-                .putString(MediaMetadata.METADATA_KEY_ARTIST, trackArtist)
+                .putString(MediaMetadata.METADATA_KEY_TITLE, currentTrack.title)
+                .putString(MediaMetadata.METADATA_KEY_ARTIST, currentTrack.artist_name)
                 .putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, trackBitmap)
-                .putLong(MediaMetadata.METADATA_KEY_DURATION, trackLen.toLong())
+                .putLong(MediaMetadata.METADATA_KEY_DURATION, currentTrack.duration)
                 .build()
         )
 
@@ -396,34 +393,46 @@ class PlayerService : Service() {
         if (uri == null)
             return
 
-        val newTrackUri = Uri.parse(uri)
         try {
-            if (newTrackUri == trackUri)
+            if (uri == currentTrack.uri)
                 return
         } catch (e: UninitializedPropertyAccessException) {
         }
 
+        val trackUri = Uri.parse(uri)
+
+        player.stop()
         player.reset()
-        trackUri = newTrackUri
-        player = MediaPlayer.create(applicationContext, trackUri)
+        player = MediaPlayer.create(applicationContext, Uri.parse(uri))
         player.isLooping = true
 
-        // MetaData
-        mmr.setDataSource(this, trackUri)
-        trackLen = player.duration
-        trackTitle = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE).toString()
-        trackArtist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST).toString()
-        if (trackArtist == "null") trackArtist = "Unknown"
+        if (Playlist.isSet)
+            currentTrack = Playlist.trackPlaylist.find { it.uri == uri }!!
+        else {
+            mmr.setDataSource(this, trackUri)
+
+            val trackTitle =
+                mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE).toString()
+            var trackArtist =
+                mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST).toString()
+            var trackAlbum =
+                mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM).toString()
+            if (trackArtist == "null") trackArtist = "Unknown"
+            if (trackAlbum == "null") trackAlbum = "Unknown"
+
+
+            currentTrack = Track(
+                0,
+                uri,
+                trackTitle,
+                trackArtist,
+                trackAlbum,
+                player.duration.toLong()
+            )
+        }
+
         trackBitmap = extractTrackBitmap(trackUri)
         trackColor = extractMutedColor(trackBitmap)
-
-        if (Playlist.isSet) {
-            Playlist.currentTrack = Playlist.trackPlaylist.find {
-                it.uri == trackUri.toString()
-            }!!
-
-            println("id in playlist is " + Playlist.currentTrack.id)
-        }
 
     }
 
@@ -443,6 +452,43 @@ class PlayerService : Service() {
             )
         }
         return art
+    }
+
+    private fun initializeIntents() {
+        endSessionIntent = PendingIntent.getService(
+            this, 1, Intent(
+                this,
+                PlayerService::class.java
+            ).setAction(END_SESSION), 0
+        )
+
+        playIntent = PendingIntent.getService(
+            this, 1, Intent(
+                this,
+                PlayerService::class.java
+            ).setAction(PLAY), 0
+        )
+
+        pauseIntent = PendingIntent.getService(
+            this, 1, Intent(
+                this,
+                PlayerService::class.java
+            ).setAction(PAUSE), 0
+        )
+
+        prevIntent = PendingIntent.getService(
+            this, 1, Intent(
+                this,
+                PlayerService::class.java
+            ).setAction(PREV), 0
+        )
+
+        nextIntent = PendingIntent.getService(
+            this, 1, Intent(
+                this,
+                PlayerService::class.java
+            ).setAction(NEXT), 0
+        )
     }
 
 }
