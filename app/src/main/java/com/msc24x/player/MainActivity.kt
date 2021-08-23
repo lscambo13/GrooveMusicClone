@@ -3,15 +3,16 @@ package com.msc24x.player
 import android.Manifest
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.app.ActivityCompat
 import androidx.navigation.Navigation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

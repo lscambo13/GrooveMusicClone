@@ -137,7 +137,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
         //TODO - - Play indicator
     }
 
-    private fun updateDuration(id: Int) {
+    /*private fun updateDuration(id: Int) {
         viewModel.songLength.value = trackList[id].duration.toInt()
     }
 
@@ -153,7 +153,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
     private fun updateUri(id: Int) {
         viewModel.currentUri.value = Uri.parse(trackList[id].uri)
-    }
+    }*/
 
     private fun playSelectedSong() {
         val intent = Intent(context, PlayerService::class.java)
