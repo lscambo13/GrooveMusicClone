@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.msc24x.player.CommonViewModel
 import com.msc24x.player.Helpers.Constants.PLAY_SONG
@@ -33,7 +34,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     private val viewModel: CommonViewModel by activityViewModels()
 
     // populate the songs list
-    var trackList = mutableListOf<Track>()
+    private var trackList = mutableListOf<Track>()
     private val playlistName = "songs_playlist"
 
     private val adapter = SongAdapter(trackList, this)
@@ -117,19 +118,17 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
 
     override fun onItemClick(position: Int) {
-        if (viewModel.trackPlaylist.isEmpty())
-            viewModel.trackPlaylist = trackList as ArrayList<Track>
-        viewModel.currentTrack = trackList[position]
+        viewModel.isPlaying.value = true
+        viewModel.currentTrack.value = trackList[position]
 
         PlayerService.setTrackPlaylist(trackList, playlistName)
-
+        /*
         updateSong(position)
         updateArtist(position)
         updateDuration(position)
-        updateUri(position)
+        updateUri(position)*/
         adapter.notifyItemChanged(position)
         playSelectedSong()
-        viewModel.busy.value = true
     }
 
     fun updatePlayIndicator(id: Int) {
@@ -159,9 +158,9 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     private fun playSelectedSong() {
         val intent = Intent(context, PlayerService::class.java)
         intent.action = PLAY_SONG
-        intent.putExtra(TRACK_URI, viewModel.currentUri.value.toString())
+        intent.putExtra(TRACK_URI, viewModel.currentTrack.value?.uri)
         requireActivity().startService(intent)
-        viewModel.busy.value = true
+        viewModel.isPlaying.value = true
     }
 
 
@@ -174,6 +173,11 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
         view.fragmentSongsPlaceholderText.visibility = GONE
         view.rvSongs.adapter = adapter
         view.rvSongs.layoutManager = LinearLayoutManager(context)
+
+        viewModel.tracks.observe(viewLifecycleOwner, Observer {
+            adapter.songs = it
+        })
+
         return view
     }
 
