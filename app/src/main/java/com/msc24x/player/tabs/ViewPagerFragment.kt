@@ -11,14 +11,17 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.*
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.tabs.TabLayoutMediator
 import com.msc24x.player.CommonViewModel
 import com.msc24x.player.Helpers.Constants.NEXT
@@ -26,14 +29,18 @@ import com.msc24x.player.Helpers.Constants.PAUSE
 import com.msc24x.player.Helpers.Constants.PLAY
 import com.msc24x.player.Helpers.Constants.PREV
 import com.msc24x.player.Helpers.Constants.SEEK_TO
+import com.msc24x.player.Helpers.Constants.TRACK_CHANGED
 import com.msc24x.player.Helpers.Utils
 import com.msc24x.player.Helpers.Utils.Companion.extractMutedColor
 import com.msc24x.player.R
 import com.msc24x.player.mediaplayer.PlayerService
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_view_pager.view.*
 import kotlinx.android.synthetic.main.motion_miniplayer.view.*
 
+
+@AndroidEntryPoint
 class ViewPagerFragment : Fragment() {
 
     private val viewModel: CommonViewModel by activityViewModels()
@@ -60,9 +67,12 @@ class ViewPagerFragment : Fragment() {
     inner class ServiceBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent != null) {
+                println(intent.action.toString())
+
                 when (intent.action) {
                     PLAY -> play()
                     PAUSE -> pause()
+                    TRACK_CHANGED -> fetchDataFromService()
                 }
             }
         }
@@ -71,13 +81,7 @@ class ViewPagerFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         if (PlayerService.isInitialized()) {
-            fetchedDataFromService = true
-            viewModel.songLength.value = PlayerService.getSongLength()
-            viewModel.busy.value = PlayerService.isPlaying()
-            viewModel.currentArtist.value = PlayerService.getTrackArtist()
-            viewModel.currentSong.value = PlayerService.getTrackTitle()
-            viewModel.currentPosition.value = PlayerService.getCurrentPlayerPos()
-            viewModel.currentUri.value = PlayerService.getCurrentUri()
+            fetchDataFromService()
         }
     }
 
@@ -85,7 +89,9 @@ class ViewPagerFragment : Fragment() {
         super.onCreate(savedInstanceState)
         playerServiceIntentFilter.addAction(PLAY)
         playerServiceIntentFilter.addAction(PAUSE)
-        context?.registerReceiver(receiver, playerServiceIntentFilter)
+        playerServiceIntentFilter.addAction(TRACK_CHANGED)
+        LocalBroadcastManager.getInstance(requireContext())
+            .registerReceiver(receiver, playerServiceIntentFilter)
     }
 
     override fun onPause() {
@@ -124,56 +130,45 @@ class ViewPagerFragment : Fragment() {
             viewPager.setCurrentItem(tab.position, true)
         }.attach()
 
-        viewModel.currentUri.observe(viewLifecycleOwner, Observer {
+        viewModel.currentTrack.observe(viewLifecycleOwner, Observer {
 
-            viewModel.busy.value = true
+            println("track changed")
+
+            val currentTrack = viewModel.currentTrack.value ?: return@Observer
 
             // Display main song info
-            view.tvSongName.text = viewModel.currentSong.value
-            view.tvArtistName.text = viewModel.currentArtist.value
-            view.seekbar.max = viewModel.songLength.value!!
+            view.tvSongName.text = currentTrack.title
+            view.tvArtistName.text = currentTrack.artist_name
+            view.seekbar.max = currentTrack.duration.toInt()
             view.tvTrackLength.text = Utils.progressToString(view.seekbar.max)
 
+
             // Handle Uri change
-            when (viewModel.busy.value) {
-                true -> {
-                    view.tvTrackLength.text = Utils.progressToString(viewModel.songLength.value!!)
-                    setPlayBtnVisible(false)
-                }
-                false -> {
-                    view.tvTrackLength.text = Utils.progressToString(viewModel.songLength.value!!)
-                    if (fetchedDataFromService) {
-                        fetchedDataFromService = false
-                        setPlayBtnVisible(true)
-                    } else {
-                        setPlayBtnVisible(false)
-                    }
-                }
+            when (viewModel.isPlaying.value) {
+                true -> setPlayBtnVisible(false)
+                false -> setPlayBtnVisible(true)
             }
 
             // Update Song Art (Image and color)
-            viewModel.decodedArt.value = extractTrackBitmap(it)
+            viewModel.decodedArt.value = extractTrackBitmap(Uri.parse(it.uri))
             viewModel.mutedColor.value = extractMutedColor(viewModel.decodedArt.value!!)
             view.imgCoverArt.setImageBitmap(viewModel.decodedArt.value)
 
             // Handle muted color change
-            if (viewModel.mutedColor.value != null) {
+            if (viewModel.mutedColor.value != null)
                 updateUI(viewModel.mutedColor.value!!, view)
-            }
 
             // Keep track position thread alive
-            if (!trackPositionThread.isAlive) {
+            if (!trackPositionThread.isAlive)
                 trackPositionThread.start()
-            }
 
         })
 
         view.btnOutline.setOnClickListener {
-            if (viewModel.busy.value == true) {
+            if (viewModel.isPlaying.value == true)
                 pause()
-            } else {
+            else
                 play()
-            }
         }
 
         view.iconNext.setOnClickListener { next() }
@@ -255,12 +250,19 @@ class ViewPagerFragment : Fragment() {
         return art
     }
 
+    private fun fetchDataFromService() {
+        fetchedDataFromService = true
+        viewModel.isPlaying.value = PlayerService.isPlaying()
+        viewModel.currentPosition.value = PlayerService.getCurrentPlayerPos()
+        viewModel.currentTrack.value = PlayerService.getCurrentTrack()
+    }
+
     private fun play() {
         setPlayBtnVisible(false)
         val intent = Intent(context, PlayerService::class.java)
         intent.action = PLAY
         requireActivity().startService(intent)
-        viewModel.busy.value = true
+        viewModel.isPlaying.value = true
     }
 
     private fun next() {
@@ -268,7 +270,7 @@ class ViewPagerFragment : Fragment() {
         val intent = Intent(context, PlayerService::class.java)
         intent.action = NEXT
         requireActivity().startService(intent)
-        viewModel.busy.value = true
+        viewModel.isPlaying.value = true
     }
 
     private fun prev() {
@@ -276,7 +278,7 @@ class ViewPagerFragment : Fragment() {
         val intent = Intent(context, PlayerService::class.java)
         intent.action = PREV
         requireActivity().startService(intent)
-        viewModel.busy.value = true
+        viewModel.isPlaying.value = true
     }
 
     private fun pause() {
@@ -284,7 +286,7 @@ class ViewPagerFragment : Fragment() {
         val intent = Intent(context, PlayerService::class.java)
         intent.action = PAUSE
         requireActivity().startService(intent)
-        viewModel.busy.value = false
+        viewModel.isPlaying.value = false
     }
 
     private fun seekTo(pos: Int) {
