@@ -18,6 +18,7 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.msc24x.player.Helpers.Constants.END_SESSION
 import com.msc24x.player.Helpers.Constants.INIT
 import com.msc24x.player.Helpers.Constants.NEXT
@@ -26,11 +27,13 @@ import com.msc24x.player.Helpers.Constants.PLAY
 import com.msc24x.player.Helpers.Constants.PLAY_SONG
 import com.msc24x.player.Helpers.Constants.PREV
 import com.msc24x.player.Helpers.Constants.SEEK_TO
+import com.msc24x.player.Helpers.Constants.TRACK_CHANGED
 import com.msc24x.player.Helpers.Constants.TRACK_URI
 import com.msc24x.player.Helpers.Utils.Companion.extractMutedColor
 import com.msc24x.player.MainActivity
 import com.msc24x.player.R
 import com.msc24x.player.data.database.Track
+import com.msc24x.player.tabs.ViewPagerFragment
 
 
 class PlayerService : Service() {
@@ -60,14 +63,14 @@ class PlayerService : Service() {
             var isSet = false
 
             lateinit var name: String
-            lateinit var currentTrack: Track
-            var currentTrackIndex: Int = -1
             lateinit var trackPlaylist: MutableList<Track>
             var size = 0
 
         }
 
-        private lateinit var trackUri: Uri
+        private lateinit var currentTrack: Track
+
+        /*private lateinit var trackUri: Uri
         private lateinit var trackTitle: String
         private lateinit var trackArtist: String
         private var trackLen: Int = -1
@@ -294,13 +297,16 @@ class PlayerService : Service() {
     }
 
     private fun playNext(direction: Int) {
-        println("playnext()")
         if (Playlist.isSet) {
-            val newTrackId = Playlist.currentTrack.id + direction
-            println("new id" + newTrackId)
-            if (newTrackId >= 0 && newTrackId < Playlist.size)
-                playSong(Playlist.trackPlaylist[newTrackId].uri)
-            println("id after change " + Playlist.currentTrack.id)
+
+            var newTrackId = (currentTrack.id + direction) % Playlist.size
+            if (newTrackId < 0)
+                newTrackId = Playlist.size - 1
+
+            playSong(Playlist.trackPlaylist[newTrackId].uri)
+            println("sending broadcast")
+            LocalBroadcastManager.getInstance(this)
+                .sendBroadcast(Intent(this, ViewPagerFragment::class.java).setAction(TRACK_CHANGED))
         }
     }
 

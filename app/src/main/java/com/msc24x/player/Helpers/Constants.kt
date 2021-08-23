@@ -10,5 +10,6 @@ object Constants {
     const val SEEK_TO = "com.msc24x.player.action.SEEK_TO"
     const val TRACK_URI = "com.msc24x.player.action.TRACK_URI"
     const val END_SESSION = "com.msc24x.player.action.END_SESSION"
+    const val TRACK_CHANGED = "com.msc24x.player.action.TRACK_CHANGED"
     const val SET_PLAYLIST = "com.msc24x.player.action.SET_PLAYLIST"
 }
