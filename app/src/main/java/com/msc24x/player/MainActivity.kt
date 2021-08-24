@@ -3,17 +3,61 @@ package com.msc24x.player
 import android.Manifest
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.app.ActivityCompat
 import androidx.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
-
+import kotlinx.android.synthetic.main.motion_miniplayer.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    private val commonViewModel: CommonViewModel by viewModels()
+    private lateinit var activityMainSearchView: SearchView
+
+
+    override fun onStart() {
+        super.onStart()
+        motion_miniplayer.setTransitionListener(object : MotionLayout.TransitionListener {
+            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+                if (motionLayout != null) {
+                    if (motionLayout.currentState == motion_miniplayer.endState) {
+
+                        showSearchView(false)
+                    }
+                }
+            }
+
+            override fun onTransitionStarted(
+                motionLayout: MotionLayout?,
+                startId: Int,
+                endId: Int
+            ) {
+            }
+
+            override fun onTransitionChange(
+                motionLayout: MotionLayout?,
+                startId: Int,
+                endId: Int,
+                progress: Float
+            ) {
+            }
+
+            override fun onTransitionTrigger(
+                motionLayout: MotionLayout?,
+                triggerId: Int,
+                positive: Boolean,
+                progress: Float
+            ) {
+            }
+        })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +73,9 @@ class MainActivity : AppCompatActivity() {
         materialToolbar.setNavigationOnClickListener {
             drawerLayout.open()
         }
+
+
+
 
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
@@ -55,10 +102,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val miniPlayer = findViewById<MotionLayout>(R.id.motion_miniplayer)
-        if (miniPlayer.currentState == miniPlayer.endState)
-            miniPlayer.transitionToStart()
-        else
+        showSearchView(false)
+
+        if (!showMiniPlayer(false))
             super.onBackPressed()
     }
 
@@ -69,11 +115,62 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menuSearch -> Toast.makeText(applicationContext, "Search", Toast.LENGTH_LONG)
-                .show()
+            R.id.menuSearch -> {
+                println("search clicked")
+
+                showMiniPlayer(false)
+
+
+                activityMainSearchView = item.actionView as SearchView
+
+                activityMainSearchView.setOnQueryTextListener(object :
+                    SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        showSearchView(true)
+                        return true
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        println("query changed")
+                        commonViewModel.searchQuery.value = newText.orEmpty()
+
+                        return true
+                    }
+                })
+
+            }
         }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showSearchView(flag: Boolean) {
+        if (this::activityMainSearchView.isInitialized)
+        //activityMainSearchView.isIconified = !flag
+            if (!flag) {
+                invalidateOptionsMenu()
+            }
+
+    }
+
+    private fun showMiniPlayer(show: Boolean): Boolean {
+        val miniPlayer = findViewById<MotionLayout>(R.id.motion_miniplayer)
+
+        when (miniPlayer.currentState) {
+            miniPlayer.endState ->
+                if (!show)
+                    miniPlayer.transitionToStart()
+                else
+                    return false
+            miniPlayer.startState ->
+                if (show)
+                    miniPlayer.transitionToEnd()
+                else
+                    return false
+        }
+
         return true
     }
+
 }
 
 
