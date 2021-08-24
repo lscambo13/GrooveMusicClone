@@ -10,11 +10,7 @@ import android.graphics.Color
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.*
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.widget.SearchView
+import android.view.*
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toDrawable
@@ -37,6 +33,7 @@ import com.msc24x.player.mediaplayer.PlayerService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_view_pager.view.*
+import kotlinx.android.synthetic.main.motion_miniplayer.*
 import kotlinx.android.synthetic.main.motion_miniplayer.view.*
 
 
@@ -83,6 +80,7 @@ class ViewPagerFragment : Fragment() {
         if (PlayerService.isInitialized()) {
             fetchDataFromService()
         }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,6 +127,12 @@ class ViewPagerFragment : Fragment() {
             tab.text = tabTitles[position]
             viewPager.setCurrentItem(tab.position, true)
         }.attach()
+
+
+
+
+
+
 
         viewModel.currentTrack.observe(viewLifecycleOwner, Observer {
 
@@ -222,6 +226,7 @@ class ViewPagerFragment : Fragment() {
         view.ContainerMiniPlayer.setBackgroundColor(color)
         requireActivity().window.navigationBarColor = color
         requireActivity().window.statusBarColor = color
+
         (activity as AppCompatActivity?)!!.supportActionBar!!.setBackgroundDrawable(
             color.toDrawable()
         )

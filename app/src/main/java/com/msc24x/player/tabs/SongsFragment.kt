@@ -25,7 +25,6 @@ import com.msc24x.player.data.database.Track
 import com.msc24x.player.mediaplayer.PlayerService
 import kotlinx.android.synthetic.main.fragment_songs.*
 import kotlinx.android.synthetic.main.fragment_songs.view.*
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 

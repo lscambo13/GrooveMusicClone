@@ -168,9 +168,10 @@ class PlayerService : Service() {
     }
 
     override fun onDestroy() {
+        if (playerInit)
+            player.reset()
         playerInit = false
         mediaSession.release()
-        player.release()
         unregisterReceiver(receiver)
         super.onDestroy()
     }
