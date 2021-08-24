@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TrackDao {
 
-    @Query(value = "SELECT * FROM tracks WHERE title LIKE '%'|:search|'%'")
+    @Query(value = "SELECT * FROM tracks WHERE title LIKE '%'||:search||'%'")
     fun getAllTracks(search: String): Flow<List<Track>>
 
     @Insert
