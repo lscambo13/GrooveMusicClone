@@ -174,8 +174,10 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
         view.rvSongs.adapter = adapter
         view.rvSongs.layoutManager = LinearLayoutManager(context)
 
-        viewModel.tracks.observe(viewLifecycleOwner, Observer {
-            adapter.songs = it
+
+        viewModel.searchQuery.observe(viewLifecycleOwner, Observer {
+            adapter.songs = refineList(trackList, it)
+            adapter.notifyDataSetChanged()
         })
 
         return view
@@ -185,5 +187,19 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadMedia()
+    }
+
+    private fun refineList(list: List<Track>, search: String): List<Track> {
+        val refinedList = mutableListOf<Track>()
+        list.forEach {
+            if (it.title.contains(search, true) || it.artist_name.contains(
+                    search,
+                    true
+                ) || it.album_name.contains(search, true)
+            )
+                refinedList.add(it)
+        }
+        println(refinedList.size)
+        return refinedList
     }
 }

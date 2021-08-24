@@ -4,11 +4,8 @@ import android.graphics.Bitmap
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import com.msc24x.player.data.database.Track
 import com.msc24x.player.data.database.TrackDao
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
 
 
 class CommonViewModel @ViewModelInject constructor(private val trackDao: TrackDao) : ViewModel() {
@@ -16,12 +13,7 @@ class CommonViewModel @ViewModelInject constructor(private val trackDao: TrackDa
     //var trackPlaylist = mutableListOf<Track>()
     val currentTrack = MutableLiveData<Track>()
 
-    val searchQuery = MutableStateFlow("")
-    val tracksFlow = searchQuery.flatMapLatest {
-        trackDao.getAllTracks(it)
-    }
-    val tracks = tracksFlow.asLiveData()
-
+    val searchQuery = MutableLiveData<String>("")
 
     val currentPosition = MutableLiveData<Int>()
     val isPlaying = MutableLiveData<Boolean>()
