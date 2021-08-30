@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/motion_miniplayer"
-    android:visibility="visible"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="bottom"
+    android:visibility="visible"
     app:layoutDescription="@xml/motion_miniplayer_scene">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,11 +17,13 @@
         android:background="@color/bgColor"
         android:clickable="true"
         android:focusable="true"
+        android:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1" />
+
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imgCoverArt"
@@ -277,6 +279,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias=".95" />
-
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

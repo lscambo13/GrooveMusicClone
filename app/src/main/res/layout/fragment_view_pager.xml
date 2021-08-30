@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+            app:layout_scrollFlags="enterAlways">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
@@ -34,11 +34,11 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:tabBackground="@drawable/inset_tab_bg"
                 app:tabGravity="start"
+                app:tabMinWidth="100dp"
                 app:tabIndicator="@drawable/inset_tab_indicator"
                 app:tabIndicatorColor="@color/variableAccent"
                 app:tabIndicatorFullWidth="true"
                 app:tabIndicatorHeight="32dp"
-                app:tabMinWidth="100dp"
                 app:tabMode="scrollable"
                 app:tabPaddingEnd="20dp"
                 app:tabPaddingStart="20dp"
