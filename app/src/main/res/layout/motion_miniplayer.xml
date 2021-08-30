@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="84dp"
         android:layout_margin="0dp"
-        android:background="@drawable/miniplayer_bg"
+        android:background="@color/bgColor"
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -51,7 +51,7 @@
         android:text="@string/example_song_name"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-        android:textColor="@color/textWhite"
+        android:textColor="@color/text"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/seekbar"
         app:layout_constraintEnd_toEndOf="@id/space_songinfo_end"
@@ -73,7 +73,7 @@
         android:text="@string/example_artist_name"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="@color/textWhite"
+        android:textColor="@color/text"
         android:textStyle="normal"
         app:layout_constraintBottom_toTopOf="@id/seekbar"
         app:layout_constraintEnd_toEndOf="@id/space_songinfo_end"
@@ -105,7 +105,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/btnOutline"
             app:layout_constraintEnd_toEndOf="@+id/btnOutline"
             app:layout_constraintStart_toStartOf="@+id/btnOutline"
-            app:layout_constraintTop_toTopOf="@+id/btnOutline" />
+            app:layout_constraintTop_toTopOf="@+id/btnOutline"
+            app:tint="@color/text" />
 
         <com.msc24x.player.IconTextView
             android:id="@+id/iconPause"
@@ -117,7 +118,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/btnOutline"
             app:layout_constraintEnd_toEndOf="@+id/btnOutline"
             app:layout_constraintStart_toStartOf="@+id/btnOutline"
-            app:layout_constraintTop_toTopOf="@+id/btnOutline" />
+            app:layout_constraintTop_toTopOf="@+id/btnOutline"
+            app:tint="@color/text" />
 
         <com.msc24x.player.IconTextView
             android:id="@+id/iconNext"
@@ -133,7 +135,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iconMore"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias=".5" />
+            app:layout_constraintVertical_bias=".5"
+            app:tint="@color/text" />
 
         <com.msc24x.player.IconTextView
             android:id="@+id/iconPrev"
@@ -149,7 +152,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnOutline"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias=".5" />
+            app:layout_constraintVertical_bias=".5"
+            app:tint="@color/text" />
 
         <com.msc24x.player.IconTextView
             android:id="@+id/iconMore"
@@ -196,7 +200,7 @@
         android:singleLine="true"
         android:text="@string/_2_43"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-        android:textColor="@color/textWhite"
+        android:textColor="@color/text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias=".005"
@@ -218,6 +222,9 @@
         app:layout_constraintEnd_toStartOf="@id/tvTrackLength"
         app:layout_constraintStart_toEndOf="@id/tvTimeCode"
         app:layout_constraintTop_toTopOf="parent"
+        android:progressBackgroundTint="@color/textGray"
+        android:progressTint="@color/text"
+        android:thumbTint="@color/text"
         app:layout_constraintVertical_bias=".995" />
 
     <TextView
@@ -229,7 +236,7 @@
         android:singleLine="true"
         android:text="@string/_6_26"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        android:textColor="@color/textWhite"
+        android:textColor="@color/text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias=".990"

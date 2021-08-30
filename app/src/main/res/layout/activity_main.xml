@@ -30,14 +30,16 @@
                     android:id="@+id/materialToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?android:attr/actionBarSize"
-                    android:background="@color/colorPrimary"
+                    android:background="@color/bgColor"
                     android:paddingTop="0dp"
                     app:layout_anchor="@+id/appBarLayout"
                     app:layout_anchorGravity="center"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_scrollFlags="noScroll"
+                    android:foregroundTint="@color/text"
                     app:menu="@menu/menu"
-                    app:navigationIcon="@drawable/ic_hamburger"
+                    app:navigationIcon="@drawable/ic_fluent_navigation_20_selector"
+                    app:navigationIconTint="@color/text"
                     app:title="@string/title_activity_main"
                     app:titleTextAppearance="@style/AppBar" />
 
