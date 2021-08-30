@@ -34,6 +34,7 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
     // populate the songs list
     private var trackList = mutableListOf<Track>()
+    private var searchedTrackList = listOf<Track>()
     private val playlistName = "songs_playlist"
 
     private val adapter = SongAdapter(trackList, this)
@@ -175,7 +176,8 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
 
         viewModel.searchQuery.observe(viewLifecycleOwner, Observer {
-            adapter.songs = refineList(trackList, it)
+            searchedTrackList = refineList(trackList, it)
+            adapter.songs = searchedTrackList
             adapter.notifyDataSetChanged()
         })
 
