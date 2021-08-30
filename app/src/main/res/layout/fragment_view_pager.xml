@@ -22,29 +22,33 @@
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
-                style="@style/TabLayout"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="32dp"
+                android:layout_gravity="start"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:background="@color/bgColor"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                app:tabGravity="start"
-                app:tabIndicatorFullWidth="false"
-                app:tabMode="scrollable"
                 android:elevation="0dp"
-
-                app:tabTextColor="@color/text"
-                app:tabUnboundedRipple="false" />
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:tabBackground="@drawable/inset_tab_bg"
+                app:tabGravity="start"
+                app:tabIndicator="@drawable/inset_tab_indicator"
+                app:tabIndicatorColor="@color/variableAccent"
+                app:tabIndicatorFullWidth="true"
+                app:tabIndicatorHeight="32dp"
+                app:tabMinWidth="100dp"
+                app:tabMode="scrollable"
+                app:tabPaddingEnd="20dp"
+                app:tabPaddingStart="20dp"
+                app:tabRippleColor="@color/transparent"
+                app:tabSelectedTextColor="@color/text"
+                app:tabTextAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                app:tabTextColor="@color/text" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:background="?android:attr/listDivider" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager2.widget.ViewPager2
