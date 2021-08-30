@@ -6,7 +6,7 @@
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start"
         motion:duration="250">
-        <KeyFrameSet />
+
         <OnClick
             motion:clickAction="transitionToEnd"
             motion:targetId="@+id/ContainerMiniPlayer" />
@@ -28,14 +28,13 @@
             android:id="@+id/ContainerMiniPlayer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="8dp"
             android:visibility="visible"
-
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintVertical_bias="1" />
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:layout_constraintVertical_bias="0.0" />
         <Constraint
             android:id="@+id/imgCoverArt"
             android:layout_width="256dp"
@@ -46,7 +45,7 @@
             motion:layout_constraintHorizontal_bias=".5"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintVertical_bias=".35" />
+            motion:layout_constraintVertical_bias=".15" />
         <Constraint
             android:id="@+id/seekbar"
             android:layout_width="0dp"
@@ -95,7 +94,7 @@
             android:scaleY="1.35"
             motion:layout_constraintBottom_toTopOf="@+id/seekbar"
             motion:layout_constraintEnd_toEndOf="@id/space_songinfo_end"
-            motion:layout_constraintHorizontal_bias=".5"
+            motion:layout_constraintHorizontal_bias=".65"
             motion:layout_constraintStart_toStartOf="@id/space_songinfo_start"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintVertical_bias=".7" />
@@ -107,9 +106,9 @@
             android:scaleY="1.5"
             motion:layout_constraintBottom_toTopOf="@+id/seekbar"
             motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintHorizontal_bias=".625"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintHorizontal_bias="0.5"
             motion:layout_constraintVertical_bias=".94" />
         <Constraint
             android:id="@+id/tvArtistName"
@@ -145,6 +144,8 @@
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintVertical_bias=".95" />
     </ConstraintSet>
+
+
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start" />
