@@ -232,18 +232,24 @@ class ViewPagerFragment : Fragment() {
     }
 
     private fun updateUI(color: Int, view: View) {
-        view.ContainerMiniPlayer.setBackgroundColor(color)
-        requireActivity().window.navigationBarColor = color
-        requireActivity().window.statusBarColor = color
+        //view.ContainerMiniPlayer.setBackgroundColor(color)
+        //requireActivity().window.navigationBarColor = color
+        //requireActivity().window.statusBarColor = color
 
-        (activity as AppCompatActivity?)!!.supportActionBar!!.setBackgroundDrawable(
-            color.toDrawable()
-        )
-        requireActivity().materialToolbar.setTitleTextColor(Color.WHITE)
-        requireActivity().materialToolbar.setNavigationIconTint(Color.WHITE)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            requireActivity().window.navigationBarDividerColor = color
-        }
+//        (activity as AppCompatActivity?)!!.supportActionBar!!.setBackgroundDrawable(
+//            color.toDrawable()
+//        )
+
+        tabLayout.setSelectedTabIndicatorColor(color)
+        //tabLayout.setTabTextColors(Color.BLACK, color)
+        tabLayout.selectTab(tabLayout.getTabAt(tabLayout.selectedTabPosition), true)
+
+
+        //requireActivity().materialToolbar.setTitleTextColor(Color.WHITE)
+        //requireActivity().materialToolbar.setNavigationIconTint(Color.WHITE)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//            requireActivity().window.navigationBarDividerColor = color
+//        }
     }
 
     private fun extractTrackBitmap(uri: Uri): Bitmap {
