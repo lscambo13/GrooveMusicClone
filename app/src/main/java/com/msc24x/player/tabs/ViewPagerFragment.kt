@@ -61,7 +61,7 @@ class ViewPagerFragment : Fragment() {
             val msg = Message()
             msg.what = PlayerService.getCurrentPlayerPos()
             handler.sendMessage(msg)
-            Thread.sleep(100)
+            Thread.sleep(500)
         }
     }
 
