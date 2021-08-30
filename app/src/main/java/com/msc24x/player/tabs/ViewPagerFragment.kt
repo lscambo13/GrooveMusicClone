@@ -6,14 +6,17 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
+import android.media.AudioManager
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.os.*
-import android.view.*
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.SeekBar
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -31,10 +34,12 @@ import com.msc24x.player.Helpers.Utils.Companion.extractMutedColor
 import com.msc24x.player.R
 import com.msc24x.player.mediaplayer.PlayerService
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_view_pager.*
 import kotlinx.android.synthetic.main.fragment_view_pager.view.*
-import kotlinx.android.synthetic.main.motion_miniplayer.*
 import kotlinx.android.synthetic.main.motion_miniplayer.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -88,6 +93,7 @@ class ViewPagerFragment : Fragment() {
         playerServiceIntentFilter.addAction(PLAY)
         playerServiceIntentFilter.addAction(PAUSE)
         playerServiceIntentFilter.addAction(TRACK_CHANGED)
+        playerServiceIntentFilter.addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
         LocalBroadcastManager.getInstance(requireContext())
             .registerReceiver(receiver, playerServiceIntentFilter)
     }
@@ -116,8 +122,10 @@ class ViewPagerFragment : Fragment() {
             lifecycle
         )
 
+
         val tabLayout = view.tabLayout
         val viewPager = view.viewPagerMain
+
         view.viewPagerMain.adapter = adapter
 
         TabLayoutMediator(
@@ -130,20 +138,14 @@ class ViewPagerFragment : Fragment() {
 
 
 
-
-
-
-
         viewModel.currentTrack.observe(viewLifecycleOwner, Observer {
 
             println("track changed")
 
-            val currentTrack = viewModel.currentTrack.value ?: return@Observer
-
             // Display main song info
-            view.tvSongName.text = currentTrack.title
-            view.tvArtistName.text = currentTrack.artist_name
-            view.seekbar.max = currentTrack.duration.toInt()
+            view.tvSongName.text = it.title
+            view.tvArtistName.text = it.artist_name
+            view.seekbar.max = it.duration.toInt()
             view.tvTrackLength.text = Utils.progressToString(view.seekbar.max)
 
 
@@ -154,18 +156,25 @@ class ViewPagerFragment : Fragment() {
             }
 
             // Update Song Art (Image and color)
-            viewModel.decodedArt.value = extractTrackBitmap(Uri.parse(it.uri))
-            viewModel.mutedColor.value = extractMutedColor(viewModel.decodedArt.value!!)
-            view.imgCoverArt.setImageBitmap(viewModel.decodedArt.value)
-
-            // Handle muted color change
-            if (viewModel.mutedColor.value != null)
-                updateUI(viewModel.mutedColor.value!!, view)
+            CoroutineScope(Dispatchers.Default).launch {
+                viewModel.decodedArt.postValue(extractTrackBitmap(Uri.parse(it.uri)))
+            }
 
             // Keep track position thread alive
             if (!trackPositionThread.isAlive)
                 trackPositionThread.start()
 
+        })
+
+        viewModel.decodedArt.observe(viewLifecycleOwner, Observer {
+            CoroutineScope(Dispatchers.Default).launch {
+                viewModel.mutedColor.postValue(extractMutedColor(it))
+            }
+            view.imgCoverArt.setImageBitmap(it)
+        })
+
+        viewModel.mutedColor.observe(viewLifecycleOwner, Observer {
+            updateUI(it, view)
         })
 
         view.btnOutline.setOnClickListener {

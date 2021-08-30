@@ -11,7 +11,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -23,14 +22,19 @@ import com.msc24x.player.R
 import com.msc24x.player.adapters.SongAdapter
 import com.msc24x.player.data.database.Track
 import com.msc24x.player.mediaplayer.PlayerService
-import kotlinx.android.synthetic.main.fragment_songs.*
 import kotlinx.android.synthetic.main.fragment_songs.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 
 class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
     private val viewModel: CommonViewModel by activityViewModels()
+
+    private lateinit var onItemClickJob: Job
 
     // populate the songs list
     private var trackList = mutableListOf<Track>()
@@ -118,49 +122,25 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
 
 
     override fun onItemClick(position: Int) {
-        viewModel.isPlaying.value = true
-        viewModel.currentTrack.value = trackList[position]
 
-        PlayerService.setTrackPlaylist(trackList, playlistName)
-        /*
-        updateSong(position)
-        updateArtist(position)
-        updateDuration(position)
-        updateUri(position)*/
-        adapter.notifyItemChanged(position)
-        playSelectedSong()
+        if (this::onItemClickJob.isInitialized)
+            onItemClickJob.cancel()
+
+        onItemClickJob = CoroutineScope(Dispatchers.Default).launch {
+            PlayerService.setTrackPlaylist(trackList, playlistName)
+            playSong(searchedTrackList[position].uri)
+            viewModel.isPlaying.postValue(true)
+            viewModel.currentTrack.postValue(searchedTrackList[position])
+        }
+
+
     }
 
-    fun updatePlayIndicator(id: Int) {
-        rvSongs[id].isActivated = true
-        rvSongs[id].isSelected = true
-        //TODO - - Play indicator
-    }
-
-    /*private fun updateDuration(id: Int) {
-        viewModel.songLength.value = trackList[id].duration.toInt()
-    }
-
-    private fun updateSong(id: Int) {
-        val song = trackList[id].title
-        viewModel.currentSong.value = song
-    }
-
-    private fun updateArtist(id: Int) {
-        val artist = trackList[id].artist_name
-        viewModel.currentArtist.value = artist
-    }
-
-    private fun updateUri(id: Int) {
-        viewModel.currentUri.value = Uri.parse(trackList[id].uri)
-    }*/
-
-    private fun playSelectedSong() {
+    private fun playSong(uri: String) {
         val intent = Intent(context, PlayerService::class.java)
         intent.action = PLAY_SONG
-        intent.putExtra(TRACK_URI, viewModel.currentTrack.value?.uri)
+        intent.putExtra(TRACK_URI, uri)
         requireActivity().startService(intent)
-        viewModel.isPlaying.value = true
     }
 
 
@@ -180,6 +160,8 @@ class SongsFragment : Fragment(), SongAdapter.OnItemClickListener {
             adapter.songs = searchedTrackList
             adapter.notifyDataSetChanged()
         })
+
+
 
         return view
     }
