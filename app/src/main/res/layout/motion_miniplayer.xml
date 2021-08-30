@@ -154,23 +154,22 @@
             app:layout_constraintVertical_bias=".5"
             app:tint="@color/text" />
 
-        <com.msc24x.player.IconTextView
-            android:id="@+id/iconMore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="2dp"
-            android:background="?android:actionBarItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:rotation="90"
-            android:text="@string/icon_more"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/textWhite"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias=".5" />
+        <!--        <ImageView
+                    android:id="@+id/iconMore"
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginBottom="2dp"
+                    android:alpha="0"
+                    android:background="?android:actionBarItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/ic_fluent_more_vertical_20_selector"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias=".5"
+                    app:tint="@color/textWhite" />-->
 
         <ImageButton
             android:id="@+id/btnOutline"
