@@ -184,26 +184,26 @@ class PlayerService : Service() {
 
 
         val actionEndSession = NotificationCompat.Action.Builder(
-            R.drawable.ic_cross, "end session", endSessionIntent
+            R.drawable.ic_fluent_dismiss_20_selector, "end session", endSessionIntent
         ).build()
 
         val actionPrev = NotificationCompat.Action.Builder(
-            R.drawable.ic_prevbtn, "prev track", prevIntent
+            R.drawable.ic_fluent_previous_20_selector, "prev track", prevIntent
         ).build()
 
         val actionNext = NotificationCompat.Action.Builder(
-            R.drawable.ic_nextbtn, "next track", nextIntent
+            R.drawable.ic_fluent_next_20_selector, "next track", nextIntent
         ).build()
 
         val actionPlayPause: NotificationCompat.Action = if (showPLayButton)
             NotificationCompat.Action.Builder(
-                R.drawable.ic_playbtn,
+                R.drawable.ic_fluent_play_20_selector,
                 "play",
                 PendingIntent.getBroadcast(applicationContext, 0, Intent().setAction(PLAY), 0)
             ).build()
         else
             NotificationCompat.Action.Builder(
-                R.drawable.ic_pausebtn,
+                R.drawable.ic_fluent_pause_20_selector,
                 "pause",
                 PendingIntent.getBroadcast(applicationContext, 0, Intent().setAction(PAUSE), 0)
             ).build()
@@ -212,8 +212,8 @@ class PlayerService : Service() {
             NotificationCompat.Builder(this, "com.msc24x.player.notificationChannel")
                 .setContentTitle(currentTrack.title)
                 .setContentText(currentTrack.artist_name)
-                .setStyle(mediaStyle.setShowActionsInCompactView(0, 1, 2))
-                .setSmallIcon(R.drawable.ic_music)
+                .setStyle(mediaStyle.setShowActionsInCompactView(1, 2))
+                .setSmallIcon(R.drawable.ic_fluent_play_circle_16_regular)
                 .setLargeIcon(trackBitmap)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(false)
