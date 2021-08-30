@@ -332,8 +332,10 @@ class PlayerService : Service() {
         if (playerInit)
             return
         player = MediaPlayer()
-        player.isLooping = true
         playerInit = true
+        player.isLooping = false
+
+
     }
 
     private fun setSessionPlaying(isPlaying: Boolean) {
@@ -359,8 +361,11 @@ class PlayerService : Service() {
 
             // Abandon the focus if not requesting focus with the exact same audioRequest
             if (!reqFocus)
-                mAudioManager.abandonAudioFocusRequest(audioRequest)
+                mAudioManager.abandonAudioFocusRequest(audioRequest!!)
             else {
+
+                audioRequest?.let { mAudioManager.abandonAudioFocusRequest(it) }
+
                 audioRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
                     .setAudioAttributes(
                         AudioAttributes.Builder()
@@ -384,7 +389,7 @@ class PlayerService : Service() {
                             }
                         }
                     }.build()
-                mAudioManager.requestAudioFocus(audioRequest)
+                mAudioManager.requestAudioFocus(audioRequest!!)
             }
         }
     }
@@ -404,7 +409,13 @@ class PlayerService : Service() {
         player.stop()
         player.reset()
         player = MediaPlayer.create(applicationContext, Uri.parse(uri))
-        player.isLooping = true
+        player.isLooping = false
+        player.setOnCompletionListener {
+            println("track completed")
+            playNext(1)
+            println(player.isPlaying)
+
+        }
 
         if (Playlist.isSet)
             currentTrack = Playlist.trackPlaylist.find { it.uri == uri }!!
