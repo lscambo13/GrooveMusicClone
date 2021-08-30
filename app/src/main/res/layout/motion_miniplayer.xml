@@ -94,61 +94,58 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias=".985">
 
-        <com.msc24x.player.IconTextView
+        <ImageButton
             android:id="@+id/iconPlay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/icon_play"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-            android:textColor="@color/textWhite"
+            android:background="@color/transparent"
+            android:scaleType="center"
             android:visibility="invisible"
+            android:src="@drawable/ic_fluent_play_20_selector"
             app:layout_constraintBottom_toBottomOf="@+id/btnOutline"
             app:layout_constraintEnd_toEndOf="@+id/btnOutline"
             app:layout_constraintStart_toStartOf="@+id/btnOutline"
             app:layout_constraintTop_toTopOf="@+id/btnOutline"
             app:tint="@color/text" />
 
-        <com.msc24x.player.IconTextView
+        <ImageButton
             android:id="@+id/iconPause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/icon_pause"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/textWhite"
+            android:background="@color/transparent"
+            android:scaleType="center"
+            android:src="@drawable/ic_fluent_pause_20_selector"
             app:layout_constraintBottom_toBottomOf="@+id/btnOutline"
             app:layout_constraintEnd_toEndOf="@+id/btnOutline"
             app:layout_constraintStart_toStartOf="@+id/btnOutline"
             app:layout_constraintTop_toTopOf="@+id/btnOutline"
             app:tint="@color/text" />
 
-        <com.msc24x.player.IconTextView
+        <ImageButton
             android:id="@+id/iconNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:background="?android:actionBarItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:text="@string/icon_next"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/textWhite"
+            android:scaleType="center"
+
+            android:src="@drawable/ic_fluent_next_20_selector"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iconMore"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias=".5"
             app:tint="@color/text" />
 
-        <com.msc24x.player.IconTextView
+        <ImageButton
             android:id="@+id/iconPrev"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:background="?android:actionBarItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:text="@string/icon_prev"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/textWhite"
+            android:scaleType="center"
+            android:src="@drawable/ic_fluent_previous_20_selector"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnOutline"
             app:layout_constraintTop_toTopOf="parent"
@@ -177,11 +174,10 @@
             android:id="@+id/btnOutline"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:layout_marginEnd="10dp"
             android:background="?android:actionBarItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_outline"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iconNext"
