@@ -1,42 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_marginStart="12dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginBottom="4dp"
+    android:clickable="true"
+    android:contextClickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/cardColor"
+    app:cardElevation="1dp"
+    app:contentPadding="16dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/bgColor"
-        android:clickable="false"
-        android:focusable="false"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp">
+        android:layout_height="match_parent">
 
-        <!--  Overriding android ids results automatic persistence / setting of title -->
         <TextView
             android:id="@android:id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="false"
-            android:fontFamily="@font/segoeui"
+            android:layout_toStartOf="@id/sum"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textAppearance="@style/TextAppearance.AppCompat.Menu"
             android:textColor="@color/text"
-            tools:text="Sending usage data" />
+            tools:ignore="NewApi"
+            tools:text="Title" />
 
-        <LinearLayout
-            android:id="@android:id/widget_frame"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@android:id/title"
-            android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp" />
-        <!-- TODO - - Custom switch -->
+            android:layout_toStartOf="@id/sum"
+            android:clickable="false"
+            android:focusable="false">
+
+            <!--  Overriding android ids results automatic persistence / setting of title -->
+            <TextView
+                android:id="@android:id/summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                android:textColor="@color/textGray"
+                tools:ignore="NewApi"
+                tools:text="Sending usage data" />
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/sum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingStart="8dp"
+            android:paddingEnd="12dp">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@android:id/switch_widget"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:thumb="@drawable/custom_thumb"
+                app:track="@drawable/custom_track"
+                tools:ignore="NewApi" />
+
+        </LinearLayout>
     </RelativeLayout>
 
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>
+

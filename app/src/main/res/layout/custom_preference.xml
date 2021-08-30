@@ -24,10 +24,10 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@android:id/icon"
             android:fontFamily="@font/segoeui"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            android:textColor="@color/variableAccent"
+            android:textColor="@color/text"
             tools:text="Sending usage data" />
     </RelativeLayout>
 

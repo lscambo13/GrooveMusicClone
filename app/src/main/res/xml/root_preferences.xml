@@ -1,35 +1,28 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:layout="@layout/custom_preference_category"
-        android:title="@string/find_music">
+
         <Preference
             android:key="pref_key_push"
-            android:layout="@layout/custom_preference"
-            android:title="@string/find_music_description" />
-    </PreferenceCategory>
+            android:layout="@layout/custom_preference_category"
+            android:summary="@string/find_music_description"
+            android:title="@string/find_music" />
 
-    <PreferenceCategory
-        android:layout="@layout/custom_preference_category"
-        android:title="@string/audio_fx">
+
         <Preference
-            android:key="pref_key_push"
-            android:layout="@layout/custom_preference"
-            android:title="@string/equalizer" />
-    </PreferenceCategory>
+            android:layout="@layout/custom_preference_category"
 
-    <PreferenceCategory
-        android:layout="@layout/custom_preference_category"
-        android:title="@string/media_info">
+            android:key="pref_key_push"
+            android:summary="@string/equalizer"
+            android:title="@string/audio_fx" />
+
+
         <SwitchPreferenceCompat
+            android:summary="@string/media_retriever_description"
             android:key="pref_key_push"
             android:layout="@layout/custom_switch_preference"
-            android:title="@string/media_retriever_description" />
-    </PreferenceCategory>
+            android:title="@string/media_info" />
 
-    <PreferenceCategory
-        android:layout="@layout/custom_preference_category"
-        android:title="@string/display_artist_art">
+
         <SwitchPreferenceCompat
             android:key="pref_key_push"
             android:layout="@layout/custom_switch_preference"
@@ -38,11 +31,8 @@
             android:key="pref_key_push"
             android:layout="@layout/custom_switch_preference"
             android:title="@string/art_as_wallpaper_description" />
-    </PreferenceCategory>
 
-    <PreferenceCategory
-        android:layout="@layout/custom_preference_category"
-        android:title="@string/app">
+
         <Preference
             android:key="pref_key_push"
             android:layout="@layout/custom_preference"
@@ -59,6 +49,6 @@
             android:key="pref_key_push"
             android:layout="@layout/custom_preference"
             android:title="@string/sign_in_help" />
-    </PreferenceCategory>
+
 
 </PreferenceScreen>
