@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#171717</color>
-    <color name="colorPrimaryAlpha">#99171717</color>
+    <color name="colorPrimary">#202020</color>
+    <!--    <color name="colorPrimaryAlpha">#99171717</color>-->
     <color name="colorPrimaryDark">#171717</color>
     <color name="text">#FFFFFF</color>
-    <color name="textInverted">#000000</color>
+    <color name="textInverted">#1B1B1B</color>
     <color name="textWhite">#ffffff</color>
-    <color name="textBlack">#000000</color>
+    <color name="textBlack">#1B1B1B</color>
+    <color name="textGray">#CCCCCC</color>
     <color name="progressEmpty">#80FFFFFF</color>
     <color name="progressFilled">#ffffff</color>
     <color name="transparent">#00000000</color>
-    <color name="colorAccent">#59F3FF</color>
-    <color name="bgColor">#000000</color>
-    <color name="variableAccentAlpha">#999E4B31</color>
+    <!--    <color name="colorAccent">#59F3FF</color>-->
+    <color name="bgColor">#202020</color>
+    <!--    <color name="variableAccentAlpha">#999E4B31</color>-->
     <color name="variableAccent">#775548</color>
     <color name="highlightGrey">#333333</color>
     <color name="pressedGrey">#474747</color>
+    <color name="cardColor">#2b2b2b</color>
+    <color name="cardOutline">#1D1D1D</color>
+    <color name="btOutline">#32FFFFFF</color>
+
 </resources>
