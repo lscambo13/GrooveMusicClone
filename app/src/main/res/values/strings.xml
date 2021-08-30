@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Bop</string>
-    <string name="title_activity_main">MY MUSIC</string>
+    <string name="title_activity_main">Library</string>
     <string name="search">Search</string>
     <string name="title_activity_songs">Songs</string>
     <string name="title_activity_artists">Artists</string>
     <string name="title_activity_albums">Albums</string>
-    <string name="title_fragment_settings">SETTINGS</string>
+    <string name="title_fragment_settings">Settings</string>
 
     <!-- Segoe MDL2 -->
     <string name="icon_play">&#xEE4A;</string>
@@ -45,4 +45,6 @@
     <string name="_2_43">2:43</string>
     <string name="unreleased">Unreleased</string>
     <string name="bop">Bop</string>
+    <string name="queue">Queue</string>
+    <string name="menuNow">Now Playing</string>
 </resources>
