@@ -44,9 +44,7 @@ class PlayerService : Service() {
                 println(intent.action)
                 when (intent.action) {
                     PLAY -> play()
-                    PAUSE -> pause()
-                    NEXT -> playNext(1)
-                    PREV -> playNext(-1)
+                    PAUSE, AudioManager.ACTION_AUDIO_BECOMING_NOISY -> pause()
                 }
             }
         }
@@ -79,7 +77,7 @@ class PlayerService : Service() {
 
         private val mmr = MediaMetadataRetriever()
         private var isInterrupted = false
-        private lateinit var audioRequest: AudioFocusRequest
+        private var audioRequest: AudioFocusRequest? = null
 
         private lateinit var mediaSession: MediaSessionCompat
         private lateinit var mediaStyle: androidx.media.app.NotificationCompat.MediaStyle
@@ -147,6 +145,7 @@ class PlayerService : Service() {
 
         notificationIntentFilter.addAction(PLAY)
         notificationIntentFilter.addAction(PAUSE)
+        notificationIntentFilter.addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
 
         registerReceiver(receiver, notificationIntentFilter)
     }

@@ -68,7 +68,7 @@ class ViewPagerFragment : Fragment() {
 
                 when (intent.action) {
                     PLAY -> play()
-                    PAUSE -> pause()
+                    PAUSE, AudioManager.ACTION_AUDIO_BECOMING_NOISY -> pause()
                     TRACK_CHANGED -> fetchDataFromService()
                 }
             }
